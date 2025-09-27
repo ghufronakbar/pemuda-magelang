@@ -1,7 +1,11 @@
 import { getDetailArticle } from "@/actions/article";
 import { notFound } from "next/navigation";
-import { ArticleDetail } from "./(components)/article-detail";
+import {
+  ArticleDetail,
+  ArticleDetailProps,
+} from "./(components)/article-detail";
 import { ArticleStatusEnum } from "@prisma/client";
+import { auth } from "@/auth";
 
 interface Params {
   params: Promise<{
@@ -11,7 +15,7 @@ interface Params {
 
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
-  const article = await getDetailArticle(slug)();
+  const { data: article } = await getDetailArticle(slug, null)();
   return {
     title: article?.title,
     description: article?.content,
@@ -30,13 +34,24 @@ export async function generateMetadata({ params }: Params) {
 
 const DetailArtikelPage = async ({ params }: Params) => {
   const { slug } = await params;
-  const article = await getDetailArticle(slug)();
+  const user = await auth();
+  const { data: article, likedStatus } = await getDetailArticle(slug, user)();
 
   if (!article || article.status !== ArticleStatusEnum.published) {
     return notFound();
   }
 
-  return <ArticleDetail article={article} className="py-26" />;
+  const mappedArticle: ArticleDetailProps["article"] = {
+    ...article,
+    likedStatus: likedStatus,
+    comments: article.comments,
+    user: {
+      ...article.user,
+      talent: article.user.talent ?? null,
+    },
+  };
+
+  return <ArticleDetail article={mappedArticle} className="py-26" />;
 };
 
 export default DetailArtikelPage;

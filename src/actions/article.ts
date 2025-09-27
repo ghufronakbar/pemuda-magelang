@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { generateSlug } from "@/lib/helper";
 import { ArticleInputSchema } from "@/validator/article";
 import { ArticleStatusEnum } from "@prisma/client";
+import { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 
 // GET ALL PUBLISHED ARTICLES
@@ -35,23 +36,55 @@ const makeGetArticles = () =>
 export const getArticles = makeGetArticles();
 
 // GET DETAIL ARTICLE BY SLUG
-const _getDetailArticle = async (slug: string) => {
+const _getDetailArticle = async (slug: string, session: Session | null) => {
   const article = await db.article.findUnique({
     where: { slug },
     include: {
+      _count: true,
       user: {
         include: {
           talent: true,
         },
       },
+      comments: {
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
-  return article;
+  let likedStatus: "yes" | "yet" | "unauthenticated" = session?.user.id
+    ? "yet"
+    : "unauthenticated";
+  if (article) {
+    await db.article.update({
+      where: { id: article?.id },
+      data: { views: article?.views + 1 },
+    });
+    article.views = article.views + 1;
+    const like = await db.articleUserLike.findFirst({
+      where: {
+        articleId: article?.id,
+        userId: session?.user.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+    likedStatus = like ? "yes" : "yet";
+  }
+  return {
+    data: article,
+    likedStatus: likedStatus,
+  };
 };
 
-const makeGetDetailArticle = (slug: string) =>
+const makeGetDetailArticle = (slug: string, session: Session | null) =>
   unstable_cache(
-    async () => _getDetailArticle(slug),
+    async () => _getDetailArticle(slug, session),
     [`detail-article:${slug}`, "v1"],
     { tags: [`detail-article:${slug}`], revalidate: 300 }
   );
@@ -166,3 +199,125 @@ const _createUpdateArticle = async (formData: FormData) => {
 };
 
 export const createUpdateArticle = _createUpdateArticle;
+
+// LIKE ARTICLE
+const _likeArticle = async (formData: FormData) => {
+  const user = await auth();
+  const slug = formData.get("slug");
+  if (!user) {
+    return {
+      ok: false,
+      error: "Harus login terlebih dahulu",
+      result: undefined,
+    };
+  }
+  if (!slug) {
+    return { ok: false, error: "Slug tidak ditemukan", result: undefined };
+  }
+  const article = await db.article.findUnique({
+    where: { slug: slug as string },
+    select: {
+      id: true,
+      articleUserLikes: {
+        where: {
+          userId: user.user.id,
+        },
+      },
+    },
+  });
+  if (!article) {
+    return { ok: false, error: "Artikel tidak ditemukan", result: undefined };
+  }
+  if (article.articleUserLikes.length > 0) {
+    await db.articleUserLike.delete({
+      where: {
+        id: article.articleUserLikes[0].id,
+      },
+    });
+    revalidateTag(`detail-article:${slug}`);
+    revalidateTag("published-articles");
+    revalidateTag(`detail-article:${slug}`);
+    return { ok: true, result: "unlike", error: null };
+  } else {
+    await db.articleUserLike.create({
+      data: {
+        articleId: article.id,
+        userId: user.user.id,
+      },
+    });
+    revalidateTag(`detail-article:${slug}`);
+    revalidateTag("published-articles");
+    revalidateTag(`detail-article:${slug}`);
+    return { ok: true, result: "like", error: null };
+  }
+};
+
+export const likeArticle = _likeArticle;
+
+// COMMENT ARTICLE
+const _commentArticle = async (formData: FormData) => {
+  const user = await auth();
+  const slug = formData.get("slug");
+  const content = formData.get("content");
+  if (!user) {
+    return {
+      ok: false,
+      error: "Harus login terlebih dahulu",
+      result: undefined,
+    };
+  }
+  if (!slug) {
+    return { ok: false, error: "Slug tidak ditemukan", result: undefined };
+  }
+  if (!content) {
+    return { ok: false, error: "Konten tidak ditemukan", result: undefined };
+  }
+  const article = await db.article.findUnique({
+    where: { slug: slug as string },
+  });
+  if (!article) {
+    return { ok: false, error: "Artikel tidak ditemukan", result: undefined };
+  }
+  await db.comment.create({
+    data: {
+      articleId: article.id,
+      userId: user.user.id,
+      content: content as string,
+    },
+  });
+  revalidateTag(`detail-article:${slug}`);
+  revalidateTag("published-articles");
+  revalidateTag(`detail-article:${slug}`);
+  return { ok: true, result: "comment", error: null };
+};
+
+export const commentArticle = _commentArticle;
+
+// DELETE COMMENT ARTICLE
+const _deleteCommentArticle = async (formData: FormData) => {
+  const commentId = formData.get("commentId");
+  if (!commentId) {
+    return {
+      ok: false,
+      error: "Comment ID tidak ditemukan",
+      result: undefined,
+    };
+  }
+  const comment = await db.comment.delete({
+    where: { id: commentId as string },
+    select: {
+      article: {
+        select: {
+          slug: true,
+          id: true,
+        },
+      },
+    },
+  });
+  revalidateTag(`detail-article:${comment.article.slug}`);
+  revalidateTag("published-articles");
+  revalidateTag(`detail-article:${comment.article.id}`);
+  return { ok: true, result: "delete comment", error: null };
+};
+
+export const deleteCommentArticle = _deleteCommentArticle;

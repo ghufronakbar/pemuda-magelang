@@ -3,21 +3,38 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import type { Article, User, Talent } from "@prisma/client";
+import type { Article, User, Talent, Comment } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import RichTextStyles from "@/components/editor/rich-text-styles";
+import { ActionButtonArticle } from "./action-button-article";
+import { likeArticle } from "@/actions/article";
+import { toast } from "sonner";
+import CommentSection from "./comment-section";
+import { formatIDDate, getInitials } from "@/lib/helper";
 
+export interface CommentWithUser extends Comment {
+  user: User;
+}
 export interface ArticleDetailProps {
   article: Article & {
+    comments: CommentWithUser[];
     user: User & {
       talent: Talent | null;
+    };
+    likedStatus: "yes" | "yet" | "unauthenticated";
+    _count: {
+      articleUserLikes: number;
+      comments: number;
     };
   };
   className?: string;
 }
 
-export function ArticleDetail({ article, className }: ArticleDetailProps) {
+export async function ArticleDetail({
+  article,
+  className,
+}: ArticleDetailProps) {
   const {
     title,
     thumbnailImage,
@@ -34,66 +51,97 @@ export function ArticleDetail({ article, className }: ArticleDetailProps) {
   const authorInitials = getInitials(authorName);
   const authorRoleOrProfession =
     user.talent?.profession ?? capitalize(user.role);
-  const publishedDate = formatDate(createdAt);
+  const publishedDate = formatIDDate(createdAt);
   const reading = readingTimeFromHtml(content);
+
+  const handleLikeArticle = async (formData: FormData) => {
+    "use server";
+    formData.append("slug", article.slug);
+    const result = await likeArticle(formData);
+    if (result.result) {
+      switch (result.result) {
+        case "like":
+          toast?.success?.("Artikel berhasil disukai");
+          break;
+        case "unlike":
+          toast?.success?.("Artikel berhasil tidak disukai");
+          break;
+      }
+    } else if (result.error) {
+      console.log(result.error);
+      // toast.error("Terjadi kesalahan");
+    }
+  };
 
   return (
     <section
       className={cn("mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8", className)}
     >
       {/* Header */}
-      <section className="mb-6">
-        {user.talent ? (
-          <Link href={`/talenta/${user.talent?.slug}`}>
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="rounded-full">
-                {category}
-              </Badge>
-            </div>
-            <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-              {title}
-            </h1>
+      <section className="mb-6 w-full flex flex-row justify-between">
+        <div className="flex items-center gap-3">
+          {user.talent ? (
+            <Link href={`/talenta/${user.talent?.slug}`}>
+              <div className="mb-3 flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="rounded-full">
+                  {category}
+                </Badge>
+              </div>
+              <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
+                {title}
+              </h1>
 
-            <div className="mt-4 flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={authorAvatar} alt={authorName} />
-                <AvatarFallback>{authorInitials}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <div className="truncate text-sm font-medium">{authorName}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
-                  {views}x dibaca
+              <div className="mt-4 flex items-center gap-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={authorAvatar} alt={authorName} />
+                  <AvatarFallback>{authorInitials}</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-medium">
+                    {authorName}
+                  </div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
+                    {views}x dibaca
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div>
+              <div className="mb-3 flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="rounded-full">
+                  {category}
+                </Badge>
+              </div>
+              <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
+                {title}
+              </h1>
+
+              <div className="mt-4 flex items-center gap-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={authorAvatar} alt={authorName} />
+                  <AvatarFallback>{authorInitials}</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-medium">
+                    {authorName}
+                  </div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
+                    {views}x dibaca
+                  </div>
                 </div>
               </div>
             </div>
-          </Link>
-        ) : (
-          <div>
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="rounded-full">
-                {category}
-              </Badge>
-            </div>
-            <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-              {title}
-            </h1>
-
-            <div className="mt-4 flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={authorAvatar} alt={authorName} />
-                <AvatarFallback>{authorInitials}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <div className="truncate text-sm font-medium">{authorName}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
-                  {views}x dibaca
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <ActionButtonArticle
+            article={article}
+            onLikeArticle={handleLikeArticle}
+          />
+        </div>
       </section>
 
       {/* Thumbnail */}
@@ -134,33 +182,13 @@ export function ArticleDetail({ article, className }: ArticleDetailProps) {
           </div>
         </>
       ) : null}
+      <CommentSection article={article} className="mt-6" />
     </section>
   );
 }
 
-/* ========== Helpers ========== */
-
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/);
-  const a = parts[0]?.[0] ?? "";
-  const b = parts.length > 1 ? parts[parts.length - 1][0] ?? "" : "";
-  return (a + b).toUpperCase();
-}
-
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-function formatDate(d: Date | string) {
-  try {
-    return new Intl.DateTimeFormat("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "2-digit",
-    }).format(new Date(d));
-  } catch {
-    return "";
-  }
 }
 
 // Estimasi waktu baca (200 wpm)
