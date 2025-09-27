@@ -12,7 +12,7 @@ export interface HeroSectionProps {
   ctaPrimary?: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
   heroImage?: string | null; // gambar ilustrasi/kolase kanan (opsional)
-  stats?: { label: string; value: string }[];
+  stats?: { key: string; value: string }[];
   className?: string;
 }
 
@@ -74,10 +74,10 @@ export function HeroSection({
             <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {stats.map((s) => (
                 <div
-                  key={s.label}
+                  key={s.key}
                   className="rounded-lg border bg-background/60 p-4"
                 >
-                  <dt className="text-xs text-muted-foreground">{s.label}</dt>
+                  <dt className="text-xs text-muted-foreground">{s.key}</dt>
                   <dd className="mt-1 text-lg font-semibold sm:text-xl">
                     {s.value}
                   </dd>
@@ -115,7 +115,7 @@ export function HeroSection({
 }
 
 const DEFAULT_STATS: NonNullable<HeroSectionProps["stats"]> = [
-  { label: "Talenta tergabung", value: "1.2K+" },
-  { label: "Program aktif", value: "12" },
-  { label: "Kolaborasi/bulan", value: "80+" },
+  { key: "Talenta tergabung", value: "1.2K+" },
+  { key: "Program aktif", value: "12" },
+  { key: "Kolaborasi/bulan", value: "80+" },
 ];

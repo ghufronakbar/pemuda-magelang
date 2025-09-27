@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type * as React from "react";
 import { Users, Handshake, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { AboutItem } from "@prisma/client";
+import { iconEnum } from "@/enum/icon-enum";
 
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
@@ -16,7 +18,10 @@ export interface AboutSectionProps {
   title?: string;
   description?: string;
   image?: string | null;
-  highlights?: { title: string; description: string; icon?: IconType }[];
+  highlights?: Omit<
+    AboutItem,
+    "id" | "createdAt" | "updatedAt" | "appDataId"
+  >[];
   ctaPrimary?: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
   className?: string;
@@ -73,16 +78,16 @@ export function AboutSection({
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {highlights.map((h) => (
-              <Card key={h.title} className="border-muted">
+            {highlights.map((h, index) => (
+              <Card key={index} className="border-muted">
                 <CardContent className="flex gap-3 p-4">
-                  {h.icon ? (
-                    <h.icon className="mt-0.5 h-5 w-5 text-primary" />
-                  ) : null}
+                  {h.icon
+                    ? iconEnum.getIcon(h.icon, "mt-0.5 h-5 w-5 text-primary")
+                    : null}
                   <div>
-                    <h3 className="text-sm font-medium">{h.title}</h3>
+                    <h3 className="text-sm font-medium">{h.key}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {h.description}
+                      {h.value}
                     </p>
                   </div>
                 </CardContent>
@@ -140,26 +145,26 @@ export function AboutSection({
 
 const DEFAULT_HIGHLIGHTS: NonNullable<AboutSectionProps["highlights"]> = [
   {
-    title: "Komunitas Talenta",
-    description:
+    key: "Komunitas Talenta",
+    value:
       "Jaringan lintas disiplin: teknologi, seni, desain, musik, film, dan penulisan.",
-    icon: Users,
+    icon: "users",
   },
   {
-    title: "Kolaborasi Nyata",
-    description:
+    key: "Kolaborasi Nyata",
+    value:
       "Dari proyek komunitas hingga program kota—wadah untuk berkolaborasi.",
-    icon: Handshake,
+    icon: "handshake",
   },
   {
-    title: "Fokus Kota Magelang",
-    description:
+    key: "Fokus Kota Magelang",
+    value:
       "Inisiatif lokal untuk dampak yang terasa—tumbuh dari daerah, untuk daerah.",
-    icon: MapPin,
+    icon: "mapPin",
   },
   {
-    title: "Portofolio & Eksposur",
-    description: "Bangun profil, tampilkan karya, dan raih kesempatan baru.",
-    icon: Sparkles,
+    key: "Portofolio & Eksposur",
+    value: "Bangun profil, tampilkan karya, dan raih kesempatan baru.",
+    icon: "sparkles",
   },
 ];

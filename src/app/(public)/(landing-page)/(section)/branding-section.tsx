@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export interface BrandingSectionProps {
   title: string;
-  url: string; // URL YouTube: watch?v=..., youtu.be/..., atau shorts/...
+  url: string | null; // URL YouTube: watch?v=..., youtu.be/..., atau shorts/...
   description?: string; // opsional: teks di sisi kanan
   className?: string;
   ctaHref?: string; // opsional
@@ -17,26 +17,26 @@ export interface BrandingSectionProps {
 
 export function BrandingSection({
   title,
-  url,
+  url = "https://www.youtube.com/watch?v=z-JqZQy0Qyo",
   description = "Pemuda Magelang adalah wadah kolaborasi talenta—temukan komunitas, bangun portofolio, dan bertumbuh bersama lewat program dan kegiatan yang relevan.",
   ctaHref,
   ctaLabel = "Pelajari Selengkapnya",
   className,
 }: BrandingSectionProps) {
-  const src = React.useMemo(() => toYouTubeEmbed(url), [url]);
+  const src = React.useMemo(() => toYouTubeEmbed(url || ""), [url]);
 
   return (
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
     >
       {/* White container with split layout */}
-      <div className="relative overflow-visible rounded-2xl border bg-white shadow-sm dark:bg-card">
+      <div className="relative overflow-visible rounded-2xl border bg-white shadow-sm">
         <div className="grid grid-cols-1 items-center gap-6 p-4 sm:p-6 lg:grid-cols-12 lg:gap-8 lg:p-8">
           {/* Left: Video (sticks out to the left on larger screens) */}
           <div className="lg:col-span-7">
             <div
               className={cn(
-                "relative aspect-video w-full overflow-hidden rounded-xl border bg-black shadow",
+                "relative aspect-video w-full overflow-hidden rounded-xl border bg-black shadow"
                 // sengaja keluar kiri: kecil di sm, lebih besar di lg
                 // "-ml-2 sm:-ml-4 lg:-ml-16"
               )}

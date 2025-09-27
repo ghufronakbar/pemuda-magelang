@@ -1,0 +1,52 @@
+/* ——— Viewer overrides: bikin spasi antar paragraf lebih longgar ——— */
+.simple-editor-content {
+  /* samakan/tweak baseline agar mirip editor */
+  --rte-leading: 1.8; /* line-height paragraf */
+  --rte-paragraph-gap: 1rem; /* jarak antar paragraf (enter 1x) */
+
+  /* hentikan margin-collapsing dengan parent (atas/bawah) */
+  display: flow-root;
+  /* opsional: sedikit padding supaya top margin paragraf pertama tidak “nempel” */
+  padding-top: 0.0625rem;
+}
+
+/* Spasi vertikal garis pemisah (HR) di viewer */
+.simple-editor-content div[data-type="horizontalRule"] {
+  /* 2x jarak paragraf = terasa seperti “2 enter” */
+  margin-block: calc(var(--rte-paragraph-gap, 0.9rem) * 2);
+}
+
+/* Reset margin default & pakai gap berbasis variable di atas */
+.simple-editor-content p {
+  margin: 0;
+  line-height: var(--rte-leading);
+}
+
+/* Jarak antar paragraf normal (enter 1x) */
+.simple-editor-content p + p {
+  margin-top: var(--rte-paragraph-gap);
+}
+
+/* Paragraf kosong yang kita preserve lewat &nbsp; (enter 2x/3x) */
+.simple-editor-content p[data-empty="true"] {
+  min-height: calc(var(--rte-leading) * 1em);
+}
+
+/* Spasi antar block lain biar konsisten juga */
+.simple-editor-content
+  :where(h1, h2, h3, h4, h5, h6, ul, ol, blockquote, pre, figure, hr)
+  + :where(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote, pre, figure) {
+  margin-top: 1rem; /* boleh disamakan dengan var(--rte-paragraph-gap) kalau mau */
+}
+
+/* Di dalam list, paragraf jangan punya margin ekstra */
+.simple-editor-content li p {
+  margin: 0;
+}
+
+.simple-editor-content img {
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

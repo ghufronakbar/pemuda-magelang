@@ -134,9 +134,9 @@ const DUMMY_MENUS: MenuItem[] = [
     description: "Program dukungan & kolaborasi untuk ekosistem kreatif.",
   },
   {
-    title: "Forum Diskusi",
-    href: "/diskusi",
+    title: "Detak",
+    href: "/detak",
     icon: FiMessageSquare,
-    description: "Diskusi, tanya-jawab, dan pengumuman komunitas.",
+    description: "Kolom opini berbagai topik.",
   },
 ];

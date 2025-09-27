@@ -36,7 +36,7 @@ export function HubCard({
     <Card
       className={cn(
         "overflow-hidden transition-all",
-        status === "active" && "hover:-translate-y-0.5 hover:shadow-lg",
+        "hover:-translate-y-0.5 hover:shadow-lg",
         className
       )}
     >
@@ -50,8 +50,7 @@ export function HubCard({
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
             className={cn(
               "object-cover",
-              status === "active" &&
-                "transition-transform duration-300 group-hover:scale-[1.02]"
+              "transition-transform duration-300 group-hover:scale-[1.02]"
             )}
             priority={false}
           />
@@ -89,35 +88,24 @@ export function HubCard({
       <CardContent />
 
       <CardFooter className="justify-end">
-        {status === "active" ? (
-          <Button asChild size="sm">
-            <Link href={slug} aria-label={`Buka program ${title}`}>
-              Lihat Program
-            </Link>
-          </Button>
-        ) : (
-          <Button size="sm" variant="outline" disabled>
-            {status === "soon" ? "Segera Hadir" : "Tidak Aktif"}
-          </Button>
-        )}
+        <Button asChild size="sm">
+          <Link href={"/zhub/" + slug} aria-label={`Buka program ${title}`}>
+            Lihat Program
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
 
-  // Seluruh card bisa diklik jika status active
-  if (status === "active") {
-    return (
-      <Link
-        href={slug}
-        aria-label={`Buka program ${title}`}
-        className="group block"
-      >
-        {cardBody}
-      </Link>
-    );
-  }
-
-  return <div className="block">{cardBody}</div>;
+  return (
+    <Link
+      href={"/zhub/" + slug}
+      aria-label={`Buka program ${title}`}
+      className="group block"
+    >
+      {cardBody}
+    </Link>
+  );
 }
 
 /* ---------- Helpers ---------- */

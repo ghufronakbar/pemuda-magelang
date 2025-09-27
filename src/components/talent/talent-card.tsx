@@ -53,7 +53,11 @@ export function TalentCard({
       <div className="relative">
         <div className="absolute -top-8 left-4">
           <Avatar className="h-16 w-16 ring-2 ring-background shadow-sm">
-            <AvatarImage src={profileImage ?? ""} alt={name} className="object-cover"/>
+            <AvatarImage
+              src={profileImage ?? ""}
+              alt={name}
+              className="object-cover"
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </div>
@@ -78,7 +82,7 @@ export function TalentCard({
           {/* Ruang kecil untuk status singkat / tagline jika dibutuhkan */}
         </div>
         <Button asChild size="sm" className="ml-auto">
-          <Link href={slug} aria-label={`Lihat profil ${name}`}>
+          <Link href={"/talenta/" + slug} aria-label={`Lihat profil ${name}`}>
             Lihat Profil
           </Link>
         </Button>

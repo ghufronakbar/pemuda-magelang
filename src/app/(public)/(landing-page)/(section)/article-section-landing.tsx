@@ -12,7 +12,7 @@ import {
 export interface ArticleLandingSectionProps {
   title?: string;
   description?: string;
-  articles?: ArticleCardProps[]; // assumed unsorted
+  articles: ArticleCardProps[]; // assumed unsorted
   limit?: number;
   viewAllHref?: string;
   className?: string;
@@ -26,15 +26,7 @@ export function ArticleSectionLanding({
   viewAllHref = "/artikel",
   className,
 }: ArticleLandingSectionProps) {
-  const source = articles?.length ? articles : DUMMY_ARTICLES;
-
-  // sort by publishedAt desc, lalu batasi
-  const data = [...source]
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    )
-    .slice(0, typeof limit === "number" ? limit : undefined);
+  const data = articles.slice(0, typeof limit === "number" ? limit : undefined);
 
   return (
     <section className={cn("relative overflow-hidden", className)}>
@@ -89,91 +81,3 @@ export function ArticleSectionLanding({
     </section>
   );
 }
-
-/* ================= Dummy Data ================= */
-const DUMMY_ARTICLES: ArticleCardProps[] = [
-  {
-    title: "Kickoff Pemuda Magelang 2025: Arah & Program",
-    thumbnail:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-    category: "Community",
-    content:
-      "<p>Rangkuman kickoff tahun ini, fokus pada kolaborasi lintas-komunitas dan showcase karya bulanan.</p>",
-    tags: ["community", "kickoff", "program"],
-    author: {
-      name: "Dimas Arief",
-      image:
-        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=600&auto=format&fit=crop",
-      profession: "Product Manager",
-    },
-    slug: "/artikel/kickoff-2025",
-    publishedAt: new Date("2025-03-12"),
-  },
-  {
-    title: "Portofolio Kreator: Cara Tampil Mengesankan",
-    thumbnail:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
-    category: "Career",
-    content:
-      "<p>Kiat menyusun portofolio yang rapi, terukur, dan relevan untuk peluang kolaborasi baru.</p>",
-    tags: ["portfolio", "tips", "career"],
-    author: {
-      name: "Alya Putri",
-      image: null,
-      profession: "Product Designer",
-    },
-    slug: "/artikel/portofolio-kreator",
-    publishedAt: new Date("2025-03-05"),
-  },
-  {
-    title: "Belajar Produksi Audio untuk Video Pendek",
-    thumbnail:
-      "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop",
-    category: "Music",
-    content:
-      "<p>Dari rekaman hingga mixing ringan: workflow praktis untuk membuat video pendek terdengar profesional.</p>",
-    tags: ["audio", "video", "workflow"],
-    author: {
-      name: "Raka Wijaya",
-      image:
-        "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=600&auto=format&fit=crop",
-      profession: "Cinematographer",
-    },
-    slug: "/artikel/produksi-audio-video-pendek",
-    publishedAt: new Date("2025-02-18"),
-  },
-  {
-    title: "Galeri Karya: Kurasi Edisi Februari",
-    thumbnail:
-      "https://images.unsplash.com/photo-1519183071298-a2962be96f83?q=80&w=1200&auto=format&fit=crop",
-    category: "Showcase",
-    content:
-      "<p>Karya-karya pilihan dari komunitas dengan berbagai medium: foto, ilustrasi, dan musik.</p>",
-    tags: ["showcase", "gallery"],
-    author: {
-      name: "Nadia Anindya",
-      image:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop",
-      profession: "Art Director",
-    },
-    slug: "/artikel/kurasi-februari",
-    publishedAt: new Date("2025-02-10"),
-  },
-  {
-    title: "Menemukan Tim untuk Hackathon Lokal",
-    thumbnail:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
-    category: "Technology",
-    content:
-      "<p>Strategi cepat membangun tim lintas keahlian untuk mengikuti hackathon tingkat kota.</p>",
-    tags: ["hackathon", "team", "tech"],
-    author: {
-      name: "Bima Ardiansyah",
-      image:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop",
-      profession: "Software Engineer",
-    },
-    slug: "/artikel/tim-hackathon-kota",
-    publishedAt: new Date("2025-01-28"),
-  },
-];

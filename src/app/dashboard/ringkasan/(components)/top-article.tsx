@@ -1,0 +1,121 @@
+"use client";
+
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
+import { Table, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { articleStatusEnum } from "@/enum/article-status-enum";
+import { cn } from "@/lib/utils";
+import { ArticleStatusEnum, Role } from "@prisma/client";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { FaExternalLinkAlt, FaExternalLinkSquareAlt } from "react-icons/fa";
+import { FiExternalLink } from "react-icons/fi";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
+
+export interface TopArticleCardProps {
+  data: {
+    id: string;
+    slug: string;
+    title: string;
+    thumbnail: string;
+    category: string;
+    views: number;
+    likes: number;
+    comments: number;
+    status: ArticleStatusEnum;
+    publishedAt: Date;
+    type: "detak" | "gerak";
+  }[];
+  className?: string;
+}
+
+export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role !== Role.user;
+  const slicedData = data.slice(0, 3);
+  const length = slicedData.length;
+
+  return (
+    <Card className={className}>
+      <CardHeader>
+        <CardTitle>{"Artikel Terpopuler"}</CardTitle>
+        <CardDescription>
+          {isAdmin
+            ? "Artikel terpopuler yang terdaftar"
+            : "Artikel terpopuler yang anda tulis"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <Table>
+          <TableHead></TableHead>
+          <TableHead>Judul</TableHead>
+          <TableHead>Kategori</TableHead>
+          <TableHead>Dibaca</TableHead>
+          <TableHead>Dikomentari</TableHead>
+          <TableHead>Disukai</TableHead>
+          <TableHead>Status</TableHead>
+          {slicedData.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                <Image
+                  src={item.thumbnail}
+                  alt={item.title}
+                  width={50}
+                  height={50}
+                  className="w-10 h-10 object-cover rounded-md"
+                />
+              </TableCell>
+              <TableCell className="max-w-40 truncate">{item.title}</TableCell>
+              <TableCell>{item.category}</TableCell>
+              <TableCell>{item.views}</TableCell>
+              <TableCell>{item.comments}</TableCell>
+              <TableCell>{item.likes}</TableCell>
+              <TableCell>
+                <Badge
+                  className={cn(
+                    articleStatusEnum.getColor(item.status),
+                    "text-xs"
+                  )}
+                >
+                  {articleStatusEnum.getLabel(item.status)}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Link
+                  href={`/artikel/${item.slug}`}
+                  target="_blank"
+                  className="cursor-pointer"
+                >
+                  <FiExternalLink className="w-4 h-4" />
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+        {length === 0 && (
+          <div className="flex flex-col gap-4 items-center justify-center min-h-40">
+            <p className="text-sm text-muted-foreground">Belum ada artikel.</p>
+            <Button asChild variant="outline">
+              <Link
+                href={`/dashboard/${isAdmin ? "gerak" : "detak"}/buat-artikel`}
+              >
+                <div className="flex items-center gap-2">
+                  <Pencil className="w-4 h-4" />
+                  Tulis artikel
+                </div>
+              </Link>
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};

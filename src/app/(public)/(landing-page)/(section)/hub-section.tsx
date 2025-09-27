@@ -12,11 +12,12 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { CheckCircle2, Clock, PowerOff } from "lucide-react";
+import { $Enums, HubStatusEnum } from "@prisma/client";
 
 export interface HubSectionProps {
   title?: string;
   description?: string;
-  hubs?: HubCardProps[];
+  hubs: HubCardProps[];
   limit?: number;
   viewAllHref?: string;
   className?: string;
@@ -30,10 +31,7 @@ export function HubSection({
   viewAllHref,
   className,
 }: HubSectionProps) {
-  const data = (hubs?.length ? hubs : DUMMY_HUBS).slice(
-    0,
-    typeof limit === "number" ? limit : undefined
-  );
+  const data = hubs.slice(0, typeof limit === "number" ? limit : undefined);
 
   return (
     <section className={cn("relative overflow-hidden", className)}>
@@ -90,68 +88,12 @@ export function HubSection({
   );
 }
 
-/* ================= Dummy Data ================= */
-const DUMMY_HUBS: HubCardProps[] = [
-  {
-    title: "Dukungan Organisasi Kebudayaan",
-    description:
-      "Penguatan kapasitas & pendanaan untuk organisasi kebudayaan daerah.",
-    image:
-      "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop",
-    slug: "/zhub/dukungan-institusional",
-    status: "active",
-  },
-  {
-    title: "Manajemen Organisasi Seni",
-    description:
-      "Pelatihan tata kelola, fundraising, dan kelangsungan program.",
-    image:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-    slug: "/zhub/manajemen-organisasi-seni",
-    status: "soon",
-  },
-  {
-    title: "Residensi Seniman Nusantara",
-    description:
-      "Residensi lintas daerah untuk kolaborasi & pertukaran pengetahuan.",
-    image:
-      "https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?q=80&w=1200&auto=format&fit=crop",
-    slug: "/zhub/residensi-seniman",
-    status: "soon",
-  },
-  {
-    title: "Kolaborasi Komunitas Lokal",
-    description: "Proyek seni berbasis komunitas dengan pendampingan mentor.",
-    image:
-      "https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop",
-    slug: "/zhub/kolaborasi-komunitas",
-    status: "active",
-  },
-  {
-    title: "Arsip Digital Warisan Budaya",
-    description:
-      "Digitalisasi arsip budaya untuk pelestarian dan akses publik.",
-    image:
-      "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop",
-    slug: "/zhub/arsip-digital",
-    status: "inactive",
-  },
-  {
-    title: "Pemetaan Cagar Budaya",
-    description:
-      "Pemetaan lokasi cagar budaya sebagai bahan kebijakan pelestarian.",
-    image: null,
-    slug: "/zhub/pemetaan-cagar-budaya",
-    status: "active",
-  },
-];
-
 export interface HubCardProps {
   title: string;
   description: string;
   image: string | null;
   slug: string;
-  status: "active" | "inactive" | "soon";
+  status: $Enums.HubStatusEnum;
   className?: string;
 }
 
@@ -213,12 +155,12 @@ export function HubCard({
       <CardFooter className="justify-end">
         <Button
           size="sm"
-          variant={status === "active" ? "default" : "outline"}
-          disabled={status !== "active"}
+          variant={status === HubStatusEnum.active ? "default" : "outline"}
+          disabled={status !== HubStatusEnum.active}
         >
-          {status === "active"
+          {status === HubStatusEnum.active
             ? "Lihat Program"
-            : status === "soon"
+            : status === HubStatusEnum.soon
             ? "Segera Hadir"
             : "Tidak Aktif"}
         </Button>
@@ -226,8 +168,8 @@ export function HubCard({
     </Card>
   );
 
-  return status === "active" ? (
-    <Link href={slug} className="block">
+  return status === HubStatusEnum.active ? (
+    <Link href={"/zhub/" + slug} className="block">
       {content}
     </Link>
   ) : (

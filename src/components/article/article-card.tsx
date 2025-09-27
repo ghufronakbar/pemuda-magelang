@@ -45,7 +45,7 @@ export function ArticleCard({
 
   return (
     <Link
-      href={slug}
+      href={"/artikel/" + slug}
       aria-label={`Baca artikel: ${title}`}
       className="group block"
     >

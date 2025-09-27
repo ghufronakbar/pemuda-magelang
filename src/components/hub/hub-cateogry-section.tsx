@@ -17,8 +17,8 @@ export function HubCategorySection({ title, items }: HubCategorySectionProps) {
 
       {data.length > 0 ? (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {data.map((hub) => (
-            <HubCard key={hub.slug} {...hub} />
+          {data.map((hub, index) => (
+            <HubCard key={hub.slug + index} {...hub} />
           ))}
         </div>
       ) : (

@@ -40,7 +40,7 @@ export function GalleryCard({
 
   return (
     <Link
-      href={slug}
+      href={"/galeri/" + slug}
       aria-label={`Buka produk ${title}`}
       className="group block"
     >

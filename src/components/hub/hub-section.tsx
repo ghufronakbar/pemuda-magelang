@@ -11,7 +11,7 @@ export interface HubSectionProps {
   title?: string;
   description?: string;
   /** Array kategori berisi item HubCardProps[] */
-  categories?: HubCategorySectionProps[];
+  categories: HubCategorySectionProps[];
   /** Batasi jumlah item per kategori (opsional) */
   limitPerCategory?: number;
   /** Tautan "Lihat semua" (opsional) */
@@ -27,7 +27,7 @@ export function HubSection({
   viewAllHref,
   className,
 }: HubSectionProps) {
-  const data = categories?.length ? categories : DUMMY_HUB_CATEGORIES;
+  const data = categories;
 
   return (
     <section className={cn("space-y-6", className)}>
@@ -53,7 +53,7 @@ export function HubSection({
 
       {/* Daftar kategori (tiap kategori punya container sendiri dari HubCategorySection) */}
       <div className="space-y-10">
-        {data.map((cat) => {
+        {data.map((cat, index) => {
           const sliced: HubCategorySectionProps = {
             title: cat.title,
             items:
@@ -61,7 +61,7 @@ export function HubSection({
                 ? cat.items.slice(0, limitPerCategory)
                 : cat.items,
           };
-          return <HubCategorySection key={cat.title} {...sliced} />;
+          return <HubCategorySection key={cat.title + index} {...sliced} />;
         })}
       </div>
 
@@ -78,76 +78,3 @@ export function HubSection({
     </section>
   );
 }
-
-/* ================= Dummy Data ================= */
-
-const DUMMY_HUB_CATEGORIES: HubCategorySectionProps[] = [
-  {
-    title: "Dukungan Institusional",
-    items: [
-      {
-        title: "Dukungan Institusional Organisasi Kebudayaan",
-        description:
-          "Penguatan kapasitas & pendanaan untuk organisasi kebudayaan di berbagai daerah.",
-        image:
-          "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop",
-        slug: "/zhub/dukungan-institusional",
-        status: "active",
-      },
-      {
-        title: "Program Manajemen Organisasi Seni",
-        description:
-          "Pelatihan manajemen program, fundraising, hingga tata kelola berkelanjutan.",
-        image:
-          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-        slug: "/zhub/manajemen-organisasi-seni",
-        status: "soon",
-      },
-    ],
-  },
-  {
-    title: "Residensi & Kolaborasi",
-    items: [
-      {
-        title: "Residensi Seniman Nusantara",
-        description:
-          "Fasilitasi residensi lintas daerah untuk kolaborasi & pertukaran pengetahuan.",
-        image:
-          "https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?q=80&w=1200&auto=format&fit=crop",
-        slug: "/zhub/residensi-seniman",
-        status: "soon",
-      },
-      {
-        title: "Kolaborasi Komunitas Lokal",
-        description:
-          "Pengembangan proyek seni berbasis komunitas dengan pendampingan mentor.",
-        image:
-          "https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop",
-        slug: "/zhub/kolaborasi-komunitas",
-        status: "active",
-      },
-    ],
-  },
-  {
-    title: "Arsip & Pelestarian",
-    items: [
-      {
-        title: "Arsip Digital Warisan Budaya",
-        description:
-          "Digitalisasi arsip budaya untuk pelestarian dan akses publik yang lebih luas.",
-        image:
-          "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop",
-        slug: "/zhub/arsip-digital",
-        status: "inactive",
-      },
-      {
-        title: "Pemetaan Cagar Budaya",
-        description:
-          "Inisiatif pemetaan lokasi cagar budaya sebagai bahan kebijakan pelestarian.",
-        image: null,
-        slug: "/zhub/pemetaan-cagar-budaya",
-        status: "active",
-      },
-    ],
-  },
-];

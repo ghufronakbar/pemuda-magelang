@@ -4,6 +4,10 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { APP_NAME, LOGO } from "@/constants";
+import { cn } from "@/lib/utils";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,6 +17,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+
 import {
   Sheet,
   SheetContent,
@@ -20,90 +25,67 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu } from "lucide-react";
-import { APP_NAME, LOGO } from "@/constants";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Menu, LayoutDashboard, LogOut } from "lucide-react";
+import { Session } from "next-auth";
 
 interface LinkItem {
   title: string;
   href: string | null;
-  items: {
-    title: string;
-    href: string;
-    description: string | null;
-  }[];
+  items: { title: string; href: string; description: string | null }[];
 }
 
-const LINK_ITEMS: LinkItem[] = [
-  {
-    title: "Beranda",
-    href: "/",
-    items: [],
-  },
-  {
-    title: "Galeri",
-    href: "/galeri",
-    items: [],
-  },
-  {
-    title: "Talenta",
-    href: "/talenta",
-    items: [],
-  },
+export const LINK_ITEMS: LinkItem[] = [
+  { title: "Beranda", href: "/", items: [] },
+  { title: "Galeri", href: "/galeri", items: [] },
+  { title: "Talenta", href: "/talenta", items: [] },
   {
     title: "Townhall",
     href: null,
     items: [
       {
-        title: "Forum Diskusi",
-        href: "/diskusi",
-        description: "Forum diskusi untuk membahas berbagai topik.",
+        title: "Detak",
+        href: "/detak",
+        description: "Kolom opini berbagai topik.",
       },
       {
-        title: "Artikel",
-        href: "/artikel",
-        description: "Artikel untuk membahas berbagai topik.",
+        title: "Gerak",
+        href: "/gerak",
+        description: "Jurnal giat kepemudaan.",
       },
     ],
   },
-  {
-    title: "Zhub",
-    href: "/zhub",
-    items: [],
-  },
-  // {
-  //   title: "Zhub",
-  //   href: null,
-  //   items: [
-  //     {
-  //       title: "Program Layanan Produksi Kegiatan Kebudayaan",
-  //       href: "/program-abc-todo-nanti-ini-dinamis",
-  //       description: null,
-  //     },
-  //     {
-  //       title: "Program Layanan Produksi Kegiatan Kebudayaan",
-  //       href: "/program-abc-todo-nanti-ini-dinamis",
-  //       description: null,
-  //     },
-  //     {
-  //       title: "Program Layanan Produksi Kegiatan Kebudayaan",
-  //       href: "/program-abc-todo-nanti-ini-dinamis",
-  //       description: null,
-  //     },
-  //   ],
-  // },
+  { title: "Zhub", href: "/zhub", items: [] },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  session: Session | null;
+}
+
+export function Navbar({ session }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
+
+  const dashboardHref = "/dashboard";
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -167,134 +149,285 @@ export function Navbar() {
           </NavigationMenu>
         </nav>
 
-        {/* Right: User avatar */}
-        <div className="hidden md:flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+        {/* Right: User area (desktop) */}
+        <div className="hidden items-center gap-3 md:flex">
+          {session?.user ? (
+            <UserMenuDesktop
+              name={session.user.name ?? ""}
+              email={session.user.email ?? ""}
+              image={session.user.image ?? ""}
+              dashboardHref={dashboardHref}
+              pathname={pathname}
+            />
+          ) : (
+            <Button asChild variant="outline">
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
         </div>
 
         {/* Mobile: hamburger */}
         <div className="md:hidden">
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <button
-                aria-label="Buka menu"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent"
-              >
-                <Menu className="h-5 w-5" />
-              </button>
-            </SheetTrigger>
-
-            <SheetContent side="left" className="w-[85%] p-0">
-              <SheetHeader className="items-start border-b px-4 pb-3 pt-4">
-                <SheetTitle className="flex items-center gap-2">
-                  <Image
-                    src={LOGO}
-                    alt="Logo"
-                    width={28}
-                    height={28}
-                    className="h-7 w-7"
-                  />
-                  <span className="text-base font-semibold">Menu</span>
-                </SheetTitle>
-              </SheetHeader>
-
-              <div className="overflow-y-auto p-2">
-                <ul className="space-y-1">
-                  {LINK_ITEMS.map((item, idx) => {
-                    // Simple link
-                    if (item.href && item.items.length === 0) {
-                      const active = pathname === item.href;
-                      return (
-                        <li key={`m-${idx}`}>
-                          <Link
-                            href={item.href}
-                            onClick={() => setOpen(false)}
-                            className={cn(
-                              "block rounded-md px-4 py-3 text-sm hover:bg-accent",
-                              active && "bg-accent text-primary"
-                            )}
-                          >
-                            {item.title}
-                          </Link>
-                        </li>
-                      );
-                    }
-
-                    // With children -> Accordion
-                    return (
-                      <li key={`m-${idx}`}>
-                        <Accordion type="single" collapsible>
-                          <AccordionItem
-                            value={`item-${idx}`}
-                            className="border-b-0"
-                          >
-                            <AccordionTrigger className="px-4 py-3 text-sm hover:no-underline">
-                              {item.title}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <ul className="pb-2">
-                                {item.items.map((child, i) => {
-                                  const active = pathname === child.href;
-                                  return (
-                                    <li key={`m-${idx}-${i}`}>
-                                      <Link
-                                        href={child.href}
-                                        onClick={() => setOpen(false)}
-                                        className={cn(
-                                          "block px-8 py-2.5 text-sm hover:bg-accent",
-                                          active && "bg-accent text-primary"
-                                        )}
-                                      >
-                                        <div className="font-medium">
-                                          {child.title}
-                                        </div>
-                                        {child.description && (
-                                          <p className="text-muted-foreground text-xs">
-                                            {child.description}
-                                          </p>
-                                        )}
-                                      </Link>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      </li>
-                    );
-                  })}
-
-                  {/* Mobile avatar row */}
-                  <li className="mt-2 border-t px-4 pt-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9">
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt="User"
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm">
-                        <div className="font-medium">John Doe</div>
-                        <div className="text-muted-foreground">
-                          john@example.com
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu
+            open={open}
+            setOpen={setOpen}
+            pathname={pathname}
+            dashboardHref={dashboardHref}
+            session={session}
+          />
         </div>
       </div>
     </header>
   );
 }
+
+/* ================= Desktop: User Menu ================= */
+
+function UserMenuDesktop({
+  name,
+  email,
+  image,
+  dashboardHref,
+  pathname,
+}: {
+  name: string;
+  email: string;
+  image: string;
+  dashboardHref: string;
+  pathname: string | null;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const initials = (name || email || "U").slice(0, 1).toUpperCase();
+
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger
+        className="group flex items-center gap-2 rounded-full p-1 outline-none transition"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        aria-label="Buka menu pengguna"
+      >
+        <p className="hidden text-sm font-medium sm:block">{name || email}</p>
+        <Avatar className="h-9 w-9 ring-1 ring-border transition group-hover:ring-primary/40">
+          <AvatarImage src={image} alt={name} />
+          <AvatarFallback>{initials}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        className="w-56"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        <DropdownMenuLabel className="flex items-center gap-2">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={image} alt={name} />
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <div className="truncate text-sm font-medium">
+              {name || "Pengguna"}
+            </div>
+            <div className="truncate text-xs text-muted-foreground">
+              {email}
+            </div>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem asChild>
+          <Link
+            href={dashboardHref}
+            className="flex w-full items-center gap-2"
+            target="_blank"
+          >
+            <LayoutDashboard className="h-4 w-4" />
+
+            <span>Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className="text-destructive focus:text-destructive"
+          onClick={() => signOut({ callbackUrl: pathname ?? "/login" })}
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Keluar</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/* ================= Mobile: Sheet ================= */
+
+function MobileMenu({
+  open,
+  setOpen,
+  pathname,
+  dashboardHref,
+  session,
+}: {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+  pathname: string | null;
+  dashboardHref: string;
+  session: Session | null;
+}) {
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <button
+          aria-label="Buka menu"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </SheetTrigger>
+
+      <SheetContent side="left" className="w-[85%] p-0">
+        <SheetHeader className="items-start border-b px-4 pb-3 pt-4">
+          <SheetTitle className="flex items-center gap-2">
+            <Image
+              src={LOGO}
+              alt="Logo"
+              width={28}
+              height={28}
+              className="h-7 w-7"
+            />
+            <span className="text-base font-semibold">Menu</span>
+          </SheetTitle>
+        </SheetHeader>
+
+        <div className="overflow-y-auto p-2">
+          <ul className="space-y-1">
+            {LINK_ITEMS.map((item, idx) => {
+              // Simple link
+              if (item.href && item.items.length === 0) {
+                const active = pathname === item.href;
+                return (
+                  <li key={`m-${idx}`}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "block rounded-md px-4 py-3 text-sm hover:bg-accent",
+                        active && "bg-accent text-primary"
+                      )}
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                );
+              }
+
+              // With children -> Accordion
+              return (
+                <li key={`m-${idx}`}>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value={`item-${idx}`} className="border-b-0">
+                      <AccordionTrigger className="px-4 py-3 text-sm hover:no-underline">
+                        {item.title}
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="pb-2">
+                          {item.items.map((child, i) => {
+                            const active = pathname === child.href;
+                            return (
+                              <li key={`m-${idx}-${i}`}>
+                                <Link
+                                  href={child.href}
+                                  onClick={() => setOpen(false)}
+                                  className={cn(
+                                    "block px-8 py-2.5 text-sm hover:bg-accent",
+                                    active && "bg-accent text-primary"
+                                  )}
+                                >
+                                  <div className="font-medium">
+                                    {child.title}
+                                  </div>
+                                  {child.description && (
+                                    <p className="text-xs text-muted-foreground">
+                                      {child.description}
+                                    </p>
+                                  )}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </li>
+              );
+            })}
+
+            {/* Mobile user area */}
+            <li className="mt-2 border-t px-4 pt-3">
+              {session?.user ? (
+                <div className="flex items-center gap-3 pb-3">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src={session.user.image ?? ""} alt="User" />
+                    <AvatarFallback>
+                      {(session.user.name ?? "U").slice(0, 1).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-medium">
+                      {session.user.name}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      {session.user.email}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/login" onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                </Button>
+              )}
+            </li>
+
+            {/* Mobile actions */}
+            {session?.user && (
+              <li className="px-4 pb-4 pt-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button asChild variant="secondary">
+                    <Link
+                      href={dashboardHref}
+                      onClick={() => setOpen(false)}
+                      target="_blank"
+                    >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() =>
+                      signOut({ callbackUrl: pathname ?? "/login" })
+                    }
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Keluar
+                  </Button>
+                </div>
+              </li>
+            )}
+          </ul>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+/* ============ Shared: List item untuk menu dropdown ============ */
 
 function ListItem({
   title,
@@ -311,7 +444,7 @@ function ListItem({
         >
           <div className="text-sm font-medium leading-none">{title}</div>
           {children && (
-            <p className="text-muted-foreground line-clamp-2 text-sm leading-snug mt-1">
+            <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
               {children}
             </p>
           )}

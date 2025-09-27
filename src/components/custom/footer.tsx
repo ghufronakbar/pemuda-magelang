@@ -5,8 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { LOGO } from "@/constants";
 import { Facebook, Instagram, Twitter, Youtube, Mail } from "lucide-react";
 
@@ -19,47 +17,10 @@ export interface FooterProps {
     logo?: string;
     description?: string;
   };
-  columns?: {
-    title: string;
-    links: { label: string; href: string }[];
-  }[];
   socials?: { label: string; href: string; icon: IconType }[];
   bottomLinks?: { label: string; href: string }[];
+  zhubLinks: { label: string; href: string }[];
 }
-
-const DEFAULT_COLUMNS: FooterProps["columns"] = [
-  {
-    title: "Umum",
-    links: [
-      { label: "Beranda", href: "/" },
-      { label: "Galeri", href: "/galeri" },
-      { label: "Talenta", href: "/talenta" },
-    ],
-  },
-  {
-    title: "Townhall",
-    links: [
-      { label: "Forum Diskusi", href: "/forum-diskusi" },
-      { label: "Artikel", href: "/artikel" },
-    ],
-  },
-  {
-    title: "Zhub",
-    links: [
-      { label: "Program A", href: "/program-abc-todo-nanti-ini-dinamis" },
-      { label: "Program B", href: "/program-abc-todo-nanti-ini-dinamis" },
-      { label: "Program C", href: "/program-abc-todo-nanti-ini-dinamis" },
-    ],
-  },
-  {
-    title: "Bantuan",
-    links: [
-      { label: "Tentang", href: "/tentang" },
-      { label: "Kontak", href: "/kontak" },
-      { label: "FAQ", href: "/faq" },
-    ],
-  },
-];
 
 const DEFAULT_SOCIALS: NonNullable<FooterProps["socials"]> = [
   { label: "Email", href: "mailto:hello@example.com", icon: Mail },
@@ -83,10 +44,39 @@ export function Footer({
     description:
       "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
   },
-  columns = DEFAULT_COLUMNS,
   socials = DEFAULT_SOCIALS,
   bottomLinks = DEFAULT_BOTTOM,
+  zhubLinks,
 }: FooterProps) {
+  const columns = [
+    {
+      title: "Umum",
+      links: [
+        { label: "Beranda", href: "/" },
+        { label: "Galeri", href: "/galeri" },
+        { label: "Talenta", href: "/talenta" },
+      ],
+    },
+    {
+      title: "Townhall",
+      links: [
+        { label: "Detak", href: "/detak" },
+        { label: "Gerak", href: "/gerak" },
+      ],
+    },
+    {
+      title: "Zhub",
+      links: zhubLinks,
+    },
+    {
+      title: "Bantuan",
+      links: [
+        { label: "Tentang", href: "/tentang" },
+        { label: "Kontak", href: "/kontak" },
+        { label: "FAQ", href: "/faq" },
+      ],
+    },
+  ];
   const year = new Date().getFullYear();
 
   return (
@@ -142,7 +132,7 @@ export function Footer({
                     {col.title}
                   </h3>
                   <ul className="mt-3 space-y-2">
-                    {col.links.map((l) => (
+                    {col.links?.map((l) => (
                       <li key={`${col.title}-${l.label}`}>
                         <Link
                           href={l.href}

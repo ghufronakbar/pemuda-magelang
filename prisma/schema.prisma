@@ -8,11 +8,292 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  profilePicture String?
+  role           Role    @default(user)
+
+  talent           Talent?
+  articles         Article[]
+  articleUserLikes ArticleUserLike[]
+  comments         Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum Role {
+  superadmin
+  admin
+  user
+}
+
+model Talent {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  name           String
+  profession     String
+  industry       String
+  profilePicture String?
+  bannerPicture  String?
+  description    String? @db.Text()
+
+  status TalentStatusEnum @default(approved)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  products     Product[]
+  socialMedias SocialMedia[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum TalentStatusEnum {
+  pending
+  approved
+  rejected
+  banned
+}
+
+model SocialMedia {
+  id       String                  @id @default(uuid())
+  platform SocialMediaPlatformEnum
+  url      String
+
+  talentId String
+  talent   Talent @relation(fields: [talentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum SocialMediaPlatformEnum {
+  instagram
+  twitter
+  facebook
+  youtube
+  linkedin
+  tiktok
+  website
+  email
+  phone
+  address
+  whatsapp
+  other
+}
+
+model Article {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  title          String
+  thumbnailImage String
+  content        String @db.Text() // HTML string
+
+  category String
+  tags     String[]
+
+  views  Int               @default(0)
+  status ArticleStatusEnum @default(draft)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  articleUserLikes ArticleUserLike[]
+  comments         Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+// to track user who like the article
+model ArticleUserLike {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+// comment
+
+model Comment {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  content String @db.Text()
+}
+
+enum ArticleStatusEnum {
+  draft
+  published
+  banned
+}
+
 model Product {
-  id          String   @id @default(uuid())
+  id   String @id @default(uuid())
+  slug String @unique
+
   title       String
+  images      String[]
   description String   @db.Text()
-  price       Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  price       Float? // jika null maka tidak usah tampilkan di halaman product
+  tags        String[]
+  category    String
+
+  talentId String
+  talent   Talent @relation(fields: [talentId], references: [id])
+
+  status ProductStatusEnum
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum ProductStatusEnum {
+  draft
+  published
+  banned
+}
+
+model HubCategory {
+  id   String @id @default(uuid())
+  name String
+  hubs Hub[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Hub {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  name        String
+  description String
+  image       String?
+  status      HubStatusEnum @default(active)
+
+  hubCategoryId String
+  hubCategory   HubCategory @relation(fields: [hubCategoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum HubStatusEnum {
+  active
+  inactive
+  soon
+}
+
+// expected only one row
+model AppData {
+  id String @id @default(uuid())
+
+  heroTitle       String
+  heroDescription String
+  heroImage       String?
+  heroItems       HeroItem[]
+
+  aboutTitle       String
+  aboutDescription String
+  aboutImage       String?
+  aboutItems       AboutItem[]
+
+  brandingTitle       String
+  brandingDescription String
+  brandingVideo       String?
+
+  partners Partner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model HeroItem {
+  id    String @id @default(uuid())
+  key   String
+  value String
+
+  appDataId String
+  appData   AppData @relation(fields: [appDataId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model AboutItem {
+  id    String   @id @default(uuid())
+  key   String
+  value String
+  icon  IconEnum
+
+  appDataId String
+  appData   AppData @relation(fields: [appDataId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum IconEnum {
+  heart
+  brain
+  globe
+  rocket
+  star
+  hand
+  smile
+  thumbsUp
+  thumbsDown
+  people
+  handshake
+  mapPin
+  sparkles
+  bookOpen
+  users
+  messageSquare
+  layers
+  grid
+}
+
+model Partner {
+  id    String @id @default(uuid())
+  name  String
+  image String
+  href  String
+
+  type PartnerTypeEnum
+
+  appDataId String
+  appData   AppData @relation(fields: [appDataId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum PartnerTypeEnum {
+  supported
+  collaborator
+  media
 }
