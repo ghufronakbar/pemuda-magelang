@@ -51,7 +51,7 @@ const RingkasanPage = async () => {
         <TotalProductCard className="col-span-1" data={totalProduct} />
         <TalentCard className="col-span-1" />
         <TotalTalentCard className="col-span-1" data={totalTalent} />
-        <TopArticleCard className="col-span-2" data={topArticle} />
+        <TopArticleCard className="col-span-1 md:col-span-2 lg:col-span-3" data={topArticle} />
       </div>
     </div>
   );

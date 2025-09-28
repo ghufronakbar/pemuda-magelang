@@ -37,8 +37,9 @@ export const getArticles = makeGetArticles();
 
 // GET DETAIL ARTICLE BY SLUG
 const _getDetailArticle = async (slug: string, session: Session | null) => {
+  const normalizedSlug = decodeURIComponent(slug);
   const article = await db.article.findUnique({
-    where: { slug },
+    where: { slug: normalizedSlug },
     include: {
       _count: true,
       user: {

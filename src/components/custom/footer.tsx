@@ -6,9 +6,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { LOGO } from "@/constants";
-import { Facebook, Instagram, Twitter, Youtube, Mail } from "lucide-react";
-
-type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+import { AppSocialMedia } from "@prisma/client";
+import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 
 export interface FooterProps {
   className?: string;
@@ -17,24 +16,10 @@ export interface FooterProps {
     logo?: string;
     description?: string;
   };
-  socials?: { label: string; href: string; icon: IconType }[];
-  bottomLinks?: { label: string; href: string }[];
+  socials: AppSocialMedia[];
+  bottomLinks: { label: string; href: string }[];
   zhubLinks: { label: string; href: string }[];
 }
-
-const DEFAULT_SOCIALS: NonNullable<FooterProps["socials"]> = [
-  { label: "Email", href: "mailto:hello@example.com", icon: Mail },
-  { label: "Instagram", href: "https://instagram.com/", icon: Instagram },
-  { label: "Twitter/X", href: "https://twitter.com/", icon: Twitter },
-  { label: "YouTube", href: "https://youtube.com/", icon: Youtube },
-  { label: "Facebook", href: "https://facebook.com/", icon: Facebook },
-];
-
-const DEFAULT_BOTTOM: NonNullable<FooterProps["bottomLinks"]> = [
-  { label: "Privasi", href: "/privacy" },
-  { label: "Ketentuan", href: "/terms" },
-  { label: "Peta Situs", href: "/sitemap" },
-];
 
 export function Footer({
   className,
@@ -44,8 +29,8 @@ export function Footer({
     description:
       "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
   },
-  socials = DEFAULT_SOCIALS,
-  bottomLinks = DEFAULT_BOTTOM,
+  socials,
+  bottomLinks,
   zhubLinks,
 }: FooterProps) {
   const columns = [
@@ -71,8 +56,7 @@ export function Footer({
     {
       title: "Bantuan",
       links: [
-        { label: "Tentang", href: "/tentang" },
-        { label: "Kontak", href: "/kontak" },
+        { label: "Tentang", href: "/#about" },
         { label: "FAQ", href: "/faq" },
       ],
     },
@@ -107,12 +91,7 @@ export function Footer({
             {/* Socials */}
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {socials.map((s) => (
-                <SocialLink
-                  key={s.label}
-                  href={s.href}
-                  label={s.label}
-                  icon={s.icon}
-                />
+                <SocialLink key={s.id} item={s} />
               ))}
             </div>
           </div>
@@ -189,22 +168,15 @@ export function Footer({
 
 /* ---------- Helpers ---------- */
 
-function SocialLink({
-  href,
-  label,
-  icon: Icon,
-}: {
-  href: string;
-  label: string;
-  icon: IconType;
-}) {
+function SocialLink({ item }: { item: AppSocialMedia }) {
   return (
     <Link
-      href={href}
-      aria-label={label}
+      href={item.url}
+      aria-label={item.platform}
+      target="_blank"
       className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background text-muted-foreground transition-colors hover:text-foreground"
     >
-      <Icon className="h-4 w-4" />
+      {socialMediaPlatformEnum.getIcon(item.platform)}
     </Link>
   );
 }

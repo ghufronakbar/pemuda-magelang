@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "public"."AppData" ALTER COLUMN "pageFaq" DROP DEFAULT,
+ALTER COLUMN "pagePrivacy" DROP DEFAULT,
+ALTER COLUMN "pageTerms" DROP DEFAULT;

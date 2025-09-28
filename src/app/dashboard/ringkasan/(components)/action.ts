@@ -45,6 +45,7 @@ export const getTotalArticle = (sess: Session | null) =>
     ["total-article"],
     {
       tags: [`total-article-${sess?.user.id}`],
+      revalidate: 60,
     }
   );
 
@@ -89,6 +90,7 @@ export const getTotalProduct = (sess: Session | null) =>
     ["total-product"],
     {
       tags: [`total-product-${sess?.user.id}`],
+      revalidate: 60,
     }
   );
 
@@ -144,6 +146,7 @@ export const getTopArticle = (
     ["top-article"],
     {
       tags: [`top-article-${sess?.user.id}`],
+      revalidate: 60,
     }
   );
 
@@ -173,6 +176,7 @@ export const getTotalTalent = (sess: Session | null) =>
     ["total-talent"],
     {
       tags: [`total-talent-${sess?.user.id}`],
+      revalidate: 60,
     }
   );
 

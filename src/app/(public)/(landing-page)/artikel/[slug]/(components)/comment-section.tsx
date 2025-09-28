@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 import { commentArticle, deleteCommentArticle } from "@/actions/article"; // TODO: sesuaikan path
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,14 +14,15 @@ import { Loader2, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ArticleDetailProps, CommentWithUser } from "./article-detail"; // TODO: atau pakai tipe lokalmu
 import { formatIDDate, getInitials } from "@/lib/helper"; // TODO: sesuaikan path helper
+import { Session } from "next-auth";
 
 export default function CommentSection({
   article,
   className,
+  session,
 }: ArticleDetailProps) {
-  const { data: session } = useSession();
   const pathname = usePathname();
-  const isAuthed = !!session?.user;
+  const isAuthed = !!session;
 
   return (
     <section
@@ -64,7 +64,9 @@ export default function CommentSection({
             Belum ada komentar. Jadilah yang pertama!
           </p>
         ) : (
-          article.comments.map((c) => <CommentItem key={c.id} comment={c} />)
+          article.comments.map((c) => (
+            <CommentItem key={c.id} comment={c} session={session} />
+          ))
         )}
       </div>
     </section>
@@ -140,8 +142,13 @@ function SubmitCommentButton({
    Item komentar + Delete
    ============================= */
 
-function CommentItem({ comment }: { comment: CommentWithUser }) {
-  const { data: session } = useSession();
+function CommentItem({
+  comment,
+  session,
+}: {
+  comment: CommentWithUser;
+  session: Session | null;
+}) {
   const isOwner = comment.userId === session?.user?.id;
   const isAdminOrSuper = session?.user?.role && session.user.role !== "user"; // TODO: sesuaikan logika rolenya
   const isAbleToDelete = isOwner || isAdminOrSuper;

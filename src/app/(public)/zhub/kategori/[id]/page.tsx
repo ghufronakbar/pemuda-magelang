@@ -1,4 +1,4 @@
-import { getCategoryHub } from "@/actions/hub";
+import { getCategoryHub } from "@/actions/zhub";
 import { HubSection } from "@/components/hub/hub-section";
 import { HubCategorySectionProps } from "@/components/hub/hub-cateogry-section";
 import { notFound } from "next/navigation";

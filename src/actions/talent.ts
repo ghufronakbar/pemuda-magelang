@@ -27,8 +27,9 @@ export const getAllTalents = makeGetTalents();
 
 // DETAIL TALENT
 const _getDetailTalent = async (slug: string) => {
+  const normalizedSlug = decodeURIComponent(slug);
   const talent = await db.talent.findUnique({
-    where: { slug },
+    where: { slug: normalizedSlug },
     include: {
       products: true,
       socialMedias: true,

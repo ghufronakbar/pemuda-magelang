@@ -1,4 +1,4 @@
-import { getAllHubs } from "@/actions/hub";
+import { getAllHubs } from "@/actions/zhub";
 import { HubSection } from "@/components/hub/hub-section";
 import { HubCategorySectionProps } from "@/components/hub/hub-cateogry-section";
 

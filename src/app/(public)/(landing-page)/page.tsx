@@ -12,7 +12,7 @@ import {
   HubStatusEnum,
   PartnerTypeEnum,
 } from "@prisma/client";
-import { getAllHubs } from "@/actions/hub";
+import { getAllHubs } from "@/actions/zhub";
 import { getArticles } from "@/actions/article";
 
 const LandingPage = async () => {
@@ -89,7 +89,7 @@ const LandingPage = async () => {
       <MenuSection className="min-h-[calc(100vh-200px)] flex flex-col justify-center" />
       <HubSection viewAllHref="/zhub" className="py-10" hubs={mappedHubs} />
       <ArticleSectionLanding
-        viewAllHref="/artikel"
+        viewAllHref="/detak"
         className="py-10"
         articles={mappedArticles}
       />

@@ -2,7 +2,13 @@
 
 import { db } from "@/lib/db";
 import { UpsertAppDataInput, UpsertAppDataSchema } from "@/validator/app-data";
-import { AboutItem, AppData, HeroItem, Partner } from "@prisma/client";
+import {
+  AboutItem,
+  AppData,
+  AppSocialMedia,
+  HeroItem,
+  Partner,
+} from "@prisma/client";
 import { revalidateTag, unstable_cache } from "next/cache";
 
 // GET APP DATA
@@ -11,6 +17,7 @@ interface AppDataReturnData extends AppData {
   aboutItems: AboutItem[];
   heroItems: HeroItem[];
   partners: Partner[];
+  appSocialMedias: AppSocialMedia[];
 }
 
 const _getAppData = async (): Promise<AppDataReturnData> => {
@@ -24,6 +31,7 @@ const _getAppData = async (): Promise<AppDataReturnData> => {
       aboutItems: true,
       heroItems: true,
       partners: true,
+      appSocialMedias: true,
     },
   })) || {
     id: "",
@@ -44,6 +52,10 @@ const _getAppData = async (): Promise<AppDataReturnData> => {
     // PARTNERS
     partners: [],
     // ADDITIONAL
+    pageTerms: "",
+    pagePrivacy: "",
+    pageFaq: "",
+    appSocialMedias: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -97,6 +109,10 @@ export async function upsertAppDataFromForm(formData: FormData) {
       brandingTitle: parsed.appData.brandingTitle,
       brandingDescription: parsed.appData.brandingDescription,
       brandingVideo: parsed.appData.brandingVideo ?? null,
+
+      pageTerms: parsed.appData.pageTerms,
+      pagePrivacy: parsed.appData.pagePrivacy,
+      pageFaq: parsed.appData.pageFaq,
     };
 
     const appData = existing
@@ -114,6 +130,7 @@ export async function upsertAppDataFromForm(formData: FormData) {
     await tx.heroItem.deleteMany({ where: { appDataId: appData.id } });
     await tx.aboutItem.deleteMany({ where: { appDataId: appData.id } });
     await tx.partner.deleteMany({ where: { appDataId: appData.id } });
+    await tx.appSocialMedia.deleteMany({ where: { appDataId: appData.id } });
 
     if (parsed.heroItems.length) {
       await tx.heroItem.createMany({
@@ -143,6 +160,16 @@ export async function upsertAppDataFromForm(formData: FormData) {
           image: p.image,
           href: p.href,
           type: p.type,
+          appDataId: appData.id,
+        })),
+      });
+    }
+
+    if (parsed.appSocialMedias.length) {
+      await tx.appSocialMedia.createMany({
+        data: parsed.appSocialMedias.map((a) => ({
+          platform: a.platform,
+          url: a.url,
           appDataId: appData.id,
         })),
       });

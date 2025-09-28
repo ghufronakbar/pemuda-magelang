@@ -60,10 +60,8 @@ export function ArticleSectionLanding({
         {/* Carousel horizontal (landing-friendly) */}
         <ScrollArea className="-mx-4">
           <div className="flex gap-4 px-4 py-2">
-            {data.map((a) => (
-              <div key={a.slug} className="w-[300px] sm:w-[360px]">
-                <ArticleCard {...a} />
-              </div>
+            {data.map((a, index) => (
+              <ArticleCard {...a} className="w-[300px] sm:w-[360px] h-full" key={index} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />

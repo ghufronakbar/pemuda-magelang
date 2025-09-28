@@ -69,6 +69,7 @@ import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 
 // --- Styles (punyamu) ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
+import { cn } from "@/lib/utils";
 
 // ==== Props ====
 export interface RichTextEditorProps {
@@ -90,12 +91,12 @@ const MainToolbarContent = ({
 }) => (
   <>
     <Spacer />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <UndoRedoButton action="undo" />
       <UndoRedoButton action="redo" />
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
       <ListDropdownMenu
         types={["bulletList", "orderedList", "taskList"]}
@@ -105,7 +106,7 @@ const MainToolbarContent = ({
       <CodeBlockButton />
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <MarkButton type="bold" className="text-white" />
       <MarkButton type="italic" />
       <MarkButton type="strike" />
@@ -119,19 +120,19 @@ const MainToolbarContent = ({
       {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <MarkButton type="superscript" />
       <MarkButton type="subscript" />
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <TextAlignButton align="left" />
       <TextAlignButton align="center" />
       <TextAlignButton align="right" />
       <TextAlignButton align="justify" />
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup>
+    <ToolbarGroup className="flex flex-row">
       <ImageUploadButton text="Add" />
     </ToolbarGroup>
     <Spacer />
@@ -272,17 +273,22 @@ export function RichTextEditor({
   }, [isMobile, mobileView]);
 
   return (
-    <div className={className}>
+    <div className={cn("!w-full !overflow-hidden", className)}>
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}
+          className="flex flex-row w-full overflow-x-auto bg-gray-50 py-2 border-b border-gray-200 rounded-t-lg gap-2 items-center justify-center px-4"
           style={
-            isMobile
-              ? { bottom: `calc(100% - ${height - rect.y}px)` }
-              : undefined
+            // isMobile
+            false ? { bottom: `calc(100% - ${height - rect.y}px)` } : undefined
           }
         >
-          {mobileView === "main" ? (
+          <MainToolbarContent
+            onHighlighterClick={() => setMobileView("highlighter")}
+            onLinkClick={() => setMobileView("link")}
+            isMobile={isMobile}
+          />
+          {/* {mobileView === "main" ? (
             <MainToolbarContent
               onHighlighterClick={() => setMobileView("highlighter")}
               onLinkClick={() => setMobileView("link")}
@@ -293,7 +299,7 @@ export function RichTextEditor({
               type={mobileView === "highlighter" ? "highlighter" : "link"}
               onBack={() => setMobileView("main")}
             />
-          )}
+          )} */}
         </Toolbar>
 
         <EditorContent

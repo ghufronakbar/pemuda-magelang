@@ -12,6 +12,7 @@ import { likeArticle } from "@/actions/article";
 import { toast } from "sonner";
 import CommentSection from "./comment-section";
 import { formatIDDate, getInitials } from "@/lib/helper";
+import { Session } from "next-auth";
 
 export interface CommentWithUser extends Comment {
   user: User;
@@ -29,11 +30,13 @@ export interface ArticleDetailProps {
     };
   };
   className?: string;
+  session: Session | null;
 }
 
 export async function ArticleDetail({
   article,
   className,
+  session,
 }: ArticleDetailProps) {
   const {
     title,
@@ -73,41 +76,16 @@ export async function ArticleDetail({
     }
   };
 
+  const LinkOrNot = user.talent ? Link : "div";
+
   return (
     <section
       className={cn("mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8", className)}
     >
       {/* Header */}
-      <section className="mb-6 w-full flex flex-row justify-between">
-        <div className="flex items-center gap-3">
-          {user.talent ? (
-            <Link href={`/talenta/${user.talent?.slug}`}>
-              <div className="mb-3 flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="rounded-full">
-                  {category}
-                </Badge>
-              </div>
-              <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-                {title}
-              </h1>
-
-              <div className="mt-4 flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={authorAvatar} alt={authorName} />
-                  <AvatarFallback>{authorInitials}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium">
-                    {authorName}
-                  </div>
-                  <div className="truncate text-xs text-muted-foreground">
-                    {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
-                    {views}x dibaca
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ) : (
+      <section className="mb-6 w-full flex flex-row">
+        <div className="flex items-center gap-3 w-full">
+          <div className="flex flex-row justify-between flex-wrap w-full">
             <div>
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <Badge variant="secondary" className="rounded-full">
@@ -118,7 +96,10 @@ export async function ArticleDetail({
                 {title}
               </h1>
 
-              <div className="mt-4 flex items-center gap-3">
+              <LinkOrNot
+                className="mt-4 flex items-center gap-3"
+                href={`/talenta/${encodeURIComponent(user.talent?.slug ?? "")}`}
+              >
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={authorAvatar} alt={authorName} />
                   <AvatarFallback>{authorInitials}</AvatarFallback>
@@ -132,15 +113,16 @@ export async function ArticleDetail({
                     {views}x dibaca
                   </div>
                 </div>
-              </div>
+              </LinkOrNot>
             </div>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <ActionButtonArticle
-            article={article}
-            onLikeArticle={handleLikeArticle}
-          />
+            <div className="flex items-center gap-3 mt-4">
+              <ActionButtonArticle
+                article={article}
+                onLikeArticle={handleLikeArticle}
+                session={session}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -182,7 +164,7 @@ export async function ArticleDetail({
           </div>
         </>
       ) : null}
-      <CommentSection article={article} className="mt-6" />
+      <CommentSection article={article} className="mt-6" session={session} />
     </section>
   );
 }

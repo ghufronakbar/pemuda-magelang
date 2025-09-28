@@ -7,23 +7,27 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import type { ArticleDetailProps } from "./article-detail";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Session } from "next-auth";
 
 function LikeSubmitButton({
   liked,
   article,
+  session,
 }: {
   liked: "yes" | "yet" | "unauthenticated";
   article: ArticleDetailProps["article"];
+  session: Session | null;
 }) {
   const { pending } = useFormStatus();
+
   const pathname = usePathname();
-  if (liked === "unauthenticated") {
+  if (!session) {
     return (
-      <Link href={`/login?redirect=${pathname}`}>
-        <Button variant="outline" size="icon" type="button" asChild>
+      <Button variant="outline" size="icon" type="button" asChild>
+        <Link href={`/login?redirect=${pathname}`}>
           <FaRegHeart className="h-4 w-4" />
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     );
   }
   return (
@@ -47,6 +51,7 @@ function LikeSubmitButton({
 export function ActionButtonArticle({
   article,
   onLikeArticle,
+  session,
 }: ArticleDetailProps & {
   onLikeArticle: (formData: FormData) => Promise<void>;
 }) {
@@ -62,7 +67,11 @@ export function ActionButtonArticle({
     <div className="flex flex-row items-center gap-2">
       <form action={onLikeArticle}>
         <input type="hidden" name="slug" value={article.slug} />
-        <LikeSubmitButton liked={article.likedStatus} article={article} />
+        <LikeSubmitButton
+          liked={article.likedStatus}
+          article={article}
+          session={session}
+        />
       </form>
       <Button
         variant="outline"

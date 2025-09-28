@@ -15,6 +15,7 @@ interface Params {
 
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
+  const user = await auth();
   const { data: article } = await getDetailArticle(slug, null)();
   return {
     title: article?.title,
@@ -38,6 +39,8 @@ const DetailArtikelPage = async ({ params }: Params) => {
   const { data: article, likedStatus } = await getDetailArticle(slug, user)();
 
   if (!article || article.status !== ArticleStatusEnum.published) {
+    console.log("Article not found");
+    console.log(article);
     return notFound();
   }
 
@@ -51,7 +54,11 @@ const DetailArtikelPage = async ({ params }: Params) => {
     },
   };
 
-  return <ArticleDetail article={mappedArticle} className="py-26" />;
+  // return <div className="py-40">{article.content}</div>;
+
+  return (
+    <ArticleDetail article={mappedArticle} className="py-26" session={user} />
+  );
 };
 
 export default DetailArtikelPage;

@@ -44,6 +44,9 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
             brandingTitle: res.brandingTitle,
             brandingDescription: res.brandingDescription,
             brandingVideo: res.brandingVideo ?? "",
+            pageTerms: res.pageTerms,
+            pagePrivacy: res.pagePrivacy,
+            pageFaq: res.pageFaq,
           },
           heroItems: res.heroItems.map((item) => ({
             id: item.id,
@@ -62,6 +65,11 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
             href: item.href,
             image: item.image,
             type: item.type,
+          })),
+          appSocialMedias: res.appSocialMedias.map((item) => ({
+            id: item.id,
+            platform: item.platform,
+            url: item.url,
           })),
         });
       } catch (error) {

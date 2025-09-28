@@ -1,6 +1,7 @@
-import { getAllHubs } from "@/actions/hub";
+import { getAllHubs } from "@/actions/zhub";
 import { Footer } from "@/components/custom/footer";
 import { Navbar } from "@/components/custom/navbar";
+import { getAppData } from "@/actions/app-data";
 import { HubStatusEnum } from "@prisma/client";
 import { Session } from "next-auth";
 
@@ -13,7 +14,7 @@ export const LandingLayout = async ({
   children,
   session,
 }: LandingLayoutProps) => {
-  const hubs = await getAllHubs();
+  const [hubs, appData] = await Promise.all([getAllHubs(), getAppData()]);
   const mappedHubsLink: { label: string; href: string }[] = hubs
     .flatMap((item) =>
       item.hubs.map((item) => ({
@@ -28,7 +29,15 @@ export const LandingLayout = async ({
     <div className="w-full min-h-screen bg-gray-50 text-foreground">
       <Navbar session={session} />
       <div className="flex-1">{children}</div>
-      <Footer zhubLinks={mappedHubsLink} />
+      <Footer
+        zhubLinks={mappedHubsLink}
+        socials={appData.appSocialMedias}
+        bottomLinks={[
+          { label: "Privasi", href: "/privacy" },
+          { label: "Ketentuan", href: "/terms" },
+          { label: "FAQ", href: "/faq" },
+        ]}
+      />
     </div>
   );
 };

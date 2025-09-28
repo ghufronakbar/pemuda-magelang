@@ -104,7 +104,7 @@ export function ArticleCard({
         </CardContent>
 
         {/* Footer / Byline */}
-        <CardFooter className="flex items-center justify-between">
+        <CardFooter className="flex items-center justify-between mt-auto">
           <div className="flex min-w-0 items-center gap-3">
             <Avatar className="h-9 w-9">
               <AvatarImage

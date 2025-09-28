@@ -1,5 +1,5 @@
 // app/zhub/[slug]/page.tsx
-import { getDetailHub } from "@/actions/hub";
+import { getDetailHub } from "@/actions/zhub";
 import { ZHubDetail } from "./(components)/z-hub-detail";
 import { notFound } from "next/navigation";
 

@@ -32,6 +32,10 @@ import {
   UserCog,
   LogOut,
   ArrowLeft,
+  Lock,
+  HelpCircle,
+  Paperclip,
+  Layers,
 } from "lucide-react";
 import { getInitials } from "@/lib/helper";
 import { roleEnum } from "@/enum/role-enum";
@@ -73,6 +77,24 @@ export function AppSidebar({ session }: { session: Session | null }) {
           icon: PanelsTopLeft,
           roles: [Role.superadmin],
         },
+        {
+          label: "Halaman Privasi",
+          href: "/dashboard/halaman-privasi",
+          icon: Lock,
+          roles: [Role.superadmin],
+        },
+        {
+          label: "Halaman Ketentuan",
+          href: "/dashboard/halaman-ketentuan",
+          icon: Paperclip,
+          roles: [Role.superadmin],
+        },
+        {
+          label: "Halaman FAQ",
+          href: "/dashboard/halaman-faq",
+          icon: HelpCircle,
+          roles: [Role.superadmin],
+        },
       ],
     },
     {
@@ -95,6 +117,23 @@ export function AppSidebar({ session }: { session: Session | null }) {
           href: "/dashboard/admin",
           icon: ShieldCheck,
           roles: [Role.superadmin],
+        },
+      ],
+    },
+    {
+      section: "Manajemen Zhub",
+      items: [
+        {
+          label: "Kategori Zhub",
+          href: "/dashboard/kategori-zhub",
+          icon: Layers,
+          roles: [Role.superadmin, Role.admin],
+        },
+        {
+          label: "Program Zhub",
+          href: "/dashboard/program-zhub",
+          icon: Package,
+          roles: [Role.superadmin, Role.admin],
         },
       ],
     },

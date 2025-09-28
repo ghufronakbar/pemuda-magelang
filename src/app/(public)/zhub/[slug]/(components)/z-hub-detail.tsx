@@ -1,4 +1,3 @@
-// components/zhub/zhub-detail.tsx
 "use client";
 
 import Image from "next/image";
@@ -8,7 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { Hub, HubCategory } from "@prisma/client";
+import { Hub, HubCategory, HubStatusEnum } from "@prisma/client";
+import { PLACEHOLDER_IMAGE } from "@/constants";
+import { formatIDDate } from "@/lib/helper";
 
 interface ZHubDetailProps {
   hub: Hub & {
@@ -27,6 +28,8 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
     image, // url banner/cover
     status, // "active" | "inactive" | "soon"
     hubCategory,
+    createdAt,
+    ctaLink,
   } = hub;
   const { hubs } = hubCategory;
   // Program lain (yang sama kategori) selain yang sedang dibuka
@@ -40,21 +43,15 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
       <div className="relative mb-10 overflow-hidden rounded-2xl border bg-card">
         {/* Banner */}
         <div className="relative h-48 w-full sm:h-56 md:h-64 lg:h-72">
-          {image ? (
-            <Image
-              src={image}
-              alt={name}
-              fill
-              sizes="(max-width:1024px) 100vw, 1024px"
-              className="object-cover"
-              priority
-            />
-          ) : (
-            <div className="grid h-full w-full place-items-center text-sm text-muted-foreground">
-              Gambar program belum diatur
-            </div>
-          )}
-          {/* scrim biar teks kontras */}
+          <Image
+            src={image || PLACEHOLDER_IMAGE}
+            alt={name}
+            fill
+            sizes="(max-width:1024px) 100vw, 1024px"
+            className="object-cover"
+            priority
+          />
+
           <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-background/10 to-transparent" />
         </div>
 
@@ -71,15 +68,25 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
               <h1 className="truncate text-2xl font-bold leading-tight sm:text-3xl">
                 {name}
               </h1>
+              <span className="text-sm text-muted-foreground">
+                Dibuat pada {formatIDDate(createdAt)}
+              </span>
             </div>
 
             {/* CTA opsional — arahkan ke halaman kategori atau daftar Zhub */}
-            <div className="shrink-0">
+            <div className="shrink-0 flex flex-col gap-2">
               <Button asChild size="lg" variant="outline">
                 <Link href={`/zhub/kategori/${hubCategory?.id}`}>
                   Lihat Program Lain
                 </Link>
               </Button>
+              {ctaLink && status === HubStatusEnum.active && (
+                <Button asChild size="lg">
+                  <Link href={ctaLink} target="_blank">
+                    Cek Program Sekarang
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

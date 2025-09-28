@@ -278,6 +278,8 @@ const _updateUserTalent = async (formData: FormData) => {
     });
     revalidateTag(`detail-talent:${createdTalent.id}`);
     revalidateTag(`detail-talent:${createdTalent.slug}`);
+    const encodedSlug = encodeURIComponent(createdTalent.slug);
+    revalidateTag(`detail-talent:${encodedSlug}`);
     revalidateTag(`talents`);
     revalidateTag(`all-users`);
     revalidateTag(`detail-user:${user.user.id}`);
@@ -323,6 +325,8 @@ const _updateUserTalent = async (formData: FormData) => {
 
     revalidateTag(`detail-talent:${checkUser.talent.id}`);
     revalidateTag(`detail-talent:${checkUser.talent.slug}`);
+    const encodedSlug = encodeURIComponent(checkUser.talent.slug);
+    revalidateTag(`detail-talent:${encodedSlug}`);
     revalidateTag(`talents`);
     revalidateTag(`all-users`);
     revalidateTag(`detail-user:${user.user.id}`);

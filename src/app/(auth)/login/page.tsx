@@ -21,12 +21,16 @@ import {
 import Image from "next/image";
 
 interface LoginPageProps {
-  searchParams?: Promise<{ callbackUrl?: string; error?: string }>;
+  searchParams?: Promise<{
+    callbackUrl?: string;
+    error?: string;
+    redirect?: string;
+  }>;
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const sp = await searchParams;
-  const redirectTo = sp?.callbackUrl ?? "/";
+  const redirectTo = sp?.callbackUrl ?? sp?.redirect ?? "/";
 
   return (
     <div className="flex min-h-screen justify-center w-full items-center px-4 py-10">

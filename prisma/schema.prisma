@@ -192,6 +192,7 @@ model Hub {
   name        String
   description String
   image       String?
+  ctaLink     String?
   status      HubStatusEnum @default(active)
 
   hubCategoryId String
@@ -226,6 +227,12 @@ model AppData {
   brandingVideo       String?
 
   partners Partner[]
+
+  pageTerms   String
+  pagePrivacy String
+  pageFaq     String
+
+  appSocialMedias AppSocialMedia[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -296,4 +303,16 @@ enum PartnerTypeEnum {
   supported
   collaborator
   media
+}
+
+model AppSocialMedia {
+  id       String                  @id @default(uuid())
+  platform SocialMediaPlatformEnum
+  url      String
+
+  appDataId String
+  appData   AppData @relation(fields: [appDataId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
