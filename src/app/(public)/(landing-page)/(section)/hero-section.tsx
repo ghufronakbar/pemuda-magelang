@@ -19,7 +19,7 @@ export interface HeroSectionProps {
 export function HeroSection({
   title = "Pemuda Magelang",
   subtitle = "Wadah kolaborasi talenta Kota Magelang — temukan komunitas, bangun portofolio, dan bertumbuh bersama.",
-  ctaPrimary = { label: "Gabung Komunitas", href: "/daftar" },
+  ctaPrimary = { label: "Gabung Komunitas", href: "/register" },
   ctaSecondary = { label: "Lihat Program", href: "/zhub" },
   heroImage = "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
   stats = DEFAULT_STATS,

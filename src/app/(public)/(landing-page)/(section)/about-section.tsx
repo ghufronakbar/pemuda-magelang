@@ -32,8 +32,8 @@ export function AboutSection({
   description = "Pemuda Magelang adalah wadah untuk menghubungkan talenta di Kota Magelang—mulai dari teknologi, seni, desain, musik, film, hingga penulisan. Kami memfasilitasi kolaborasi, membangun portofolio, dan membuka akses ke program, kesempatan, serta komunitas.",
   image = "https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1600&auto=format&fit=crop",
   highlights = DEFAULT_HIGHLIGHTS,
-  ctaPrimary = { label: "Bergabung Sekarang", href: "/daftar" },
-  ctaSecondary = { label: "Pelajari Selengkapnya", href: "/tentang" },
+  ctaPrimary = { label: "Bergabung Sekarang", href: "/register" },
+  ctaSecondary = { label: "Pelajari Selengkapnya", href: "/#about" },
   className,
 }: AboutSectionProps) {
   return (
