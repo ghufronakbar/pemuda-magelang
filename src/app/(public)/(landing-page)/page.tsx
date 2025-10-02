@@ -9,17 +9,23 @@ import { ArticleCardProps } from "@/components/article/article-card";
 import { getAppData } from "@/actions/app-data";
 import {
   ArticleStatusEnum,
+  CommunityStatusEnum,
   HubStatusEnum,
   PartnerTypeEnum,
+  TalentStatusEnum,
 } from "@prisma/client";
 import { getAllHubs } from "@/actions/zhub";
 import { getArticles } from "@/actions/article";
+import { getAllTalents } from "@/actions/talent";
+import { getAllCommunities } from "@/actions/community";
 
 const LandingPage = async () => {
-  const [articles, hubs, appData] = await Promise.all([
+  const [articles, appData, talents, communities, hubs] = await Promise.all([
     getArticles(),
-    getAllHubs(),
     getAppData(),
+    getAllTalents(),
+    getAllCommunities(),
+    getAllHubs(),
   ]);
   const mappedArticles: ArticleCardProps[] = articles
     .filter((article) => article.status === ArticleStatusEnum.published)
@@ -64,14 +70,25 @@ const LandingPage = async () => {
   const medias = appData.partners.filter(
     (partner) => partner.type === PartnerTypeEnum.media
   );
+  const countTalent = talents.filter(
+    (talent) => talent.status === TalentStatusEnum.approved
+  ).length;
+  const countCommunity = communities.filter(
+    (community) => community.status === CommunityStatusEnum.approved
+  ).length;
+  const countZhub = hubs
+    .flatMap((h) => h.hubs)
+    .filter((hub) => hub.status === HubStatusEnum.active).length;
   return (
     <main>
       <HeroSection
         className="min-h-screen flex flex-col justify-center"
-        stats={appData.heroItems}
         title={appData.heroTitle}
         subtitle={appData.heroDescription}
         heroImage={appData.heroImage}
+        countTalent={countTalent}
+        countCommunity={countCommunity}
+        countZhub={countZhub}
       />
       <AboutSection
         className="py-26 min-h-screen"

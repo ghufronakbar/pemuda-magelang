@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import {
   ArticleStatusEnum,
+  ArticleTypeEnum,
   HubStatusEnum,
   IconEnum,
   PartnerTypeEnum,
@@ -332,7 +333,12 @@ export async function GET() {
     for (const a of articlesSeed) {
       const exist = await db.article.findUnique({ where: { id: a.id } });
       if (!exist) {
-        await db.article.create({ data: a });
+        await db.article.create({
+          data: {
+            ...a,
+            type: ArticleTypeEnum.detak, // TOOD: fix seeder
+          },
+        });
         summary.created.articles++;
       } else summary.skipped.articles++;
     }

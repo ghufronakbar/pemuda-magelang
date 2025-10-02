@@ -15,12 +15,20 @@ model User {
   password String
 
   profilePicture String?
-  role           Role    @default(user)
+
+  //address info
+  subdistrict String?
+  village     String?
+  street      String? @db.Text()
+
+  role Role @default(user)
 
   talent           Talent?
   articles         Article[]
   articleUserLikes ArticleUserLike[]
   comments         Comment[]
+
+  community Community?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -36,12 +44,20 @@ model Talent {
   id   String @id @default(uuid())
   slug String @unique
 
-  name           String
-  profession     String
-  industry       String
+  name String
+
   profilePicture String?
   bannerPicture  String?
-  description    String? @db.Text()
+
+  profession String
+  industry   String
+
+  workExperiences WorkExperience[]
+  educations      Education[]
+  awards          Award[]
+  skills          String[]
+
+  description String? @db.Text()
 
   status TalentStatusEnum @default(approved)
 
@@ -50,6 +66,55 @@ model Talent {
 
   products     Product[]
   socialMedias SocialMedia[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model WorkExperience {
+  id String @id @default(uuid())
+
+  talentId String
+  talent   Talent @relation(fields: [talentId], references: [id])
+
+  companyName String
+  position    String
+  description String? @db.Text()
+
+  startDate DateTime
+  endDate   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Education {
+  id String @id @default(uuid())
+
+  talentId String
+  talent   Talent @relation(fields: [talentId], references: [id])
+
+  degree      String
+  schoolName  String
+  description String? @db.Text()
+
+  startDate DateTime
+  endDate   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Award {
+  id String @id @default(uuid())
+
+  talentId String
+  talent   Talent @relation(fields: [talentId], references: [id])
+
+  image       String?
+  name        String
+  description String?  @db.Text()
+  date        DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -106,11 +171,22 @@ model Article {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
+  type ArticleTypeEnum
+
   articleUserLikes ArticleUserLike[]
   comments         Comment[]
 
+  communityId String?
+  community   Community? @relation(fields: [communityId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum ArticleTypeEnum {
+  detak // user
+  gerak // admin
+  dampak // komunitas
 }
 
 // to track user who like the article
@@ -215,7 +291,6 @@ model AppData {
   heroTitle       String
   heroDescription String
   heroImage       String?
-  heroItems       HeroItem[]
 
   aboutTitle       String
   aboutDescription String
@@ -233,18 +308,6 @@ model AppData {
   pageFaq     String
 
   appSocialMedias AppSocialMedia[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-}
-
-model HeroItem {
-  id    String @id @default(uuid())
-  key   String
-  value String
-
-  appDataId String
-  appData   AppData @relation(fields: [appDataId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -315,4 +378,34 @@ model AppSocialMedia {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Community {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  name           String
+  description    String? @db.Text()
+  profilePicture String?
+  bannerPicture  String?
+
+  ctaText  String
+  ctaLink  String
+  category String
+  status   CommunityStatusEnum @default(pending)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  articles Article[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum CommunityStatusEnum {
+  pending
+  approved
+  rejected
+  banned
 }

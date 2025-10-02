@@ -12,10 +12,25 @@ import {
   initialUserTalentInput,
 } from "@/validator/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Talent, TalentStatusEnum, User } from "@prisma/client";
+import {
+  Award,
+  Education,
+  WorkExperience,
+  Talent,
+  TalentStatusEnum,
+  User,
+  SocialMedia,
+} from "@prisma/client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+
+interface DetailTalent extends Talent {
+  socialMedias: SocialMedia[];
+  workExperiences: WorkExperience[];
+  educations: Education[];
+  awards: Award[];
+}
 
 interface FormUserContext {
   formProfile: UseFormReturn<UserProfileInput>;
@@ -40,7 +55,8 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
     defaultValues: initialUserProfileInput,
   });
   const formTalent = useForm<UserTalentInput>({
-    resolver: zodResolver(UserTalentSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(UserTalentSchema as any),
     defaultValues: initialUserTalentInput,
   });
   const formPassword = useForm<UserPasswordInput>({
@@ -57,11 +73,50 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
           throw new Error("Failed to fetch user");
         }
         const user = (await res.json()).data as User & {
-          talent: Talent | null;
+          talent: DetailTalent | null;
         };
-        formProfile.reset(user);
+        formProfile.reset({
+          name: user.name,
+          email: user.email,
+          profilePicture: user.profilePicture,
+          subdistrict: user.subdistrict ?? "",
+          village: user.village ?? "",
+          street: user.street ?? "",
+        });
         if (user.talent && user.role === "user") {
-          formTalent.reset(user.talent);
+          formTalent.reset({
+            profession: user.talent.profession,
+            industry: user.talent.industry,
+            bannerPicture: user.talent.bannerPicture,
+            description: user.talent.description,
+            socialMedias: user.talent.socialMedias.map((socialMedia) => ({
+              platform: socialMedia.platform,
+              url: socialMedia.url,
+            })),
+            skills: user.talent.skills,
+            awards: user.talent.awards.map((award) => ({
+              image: award.image,
+              name: award.name,
+              description: award.description,
+              date: award.date,
+            })),
+            educations: user.talent.educations.map((education) => ({
+              degree: education.degree,
+              schoolName: education.schoolName,
+              description: education.description,
+              startDate: education.startDate,
+              endDate: education.endDate,
+            })),
+            workExperiences: user.talent.workExperiences.map(
+              (workExperience) => ({
+                companyName: workExperience.companyName,
+                position: workExperience.position,
+                description: workExperience.description,
+                startDate: workExperience.startDate,
+                endDate: workExperience.endDate,
+              })
+            ),
+          });
           setTalentStatus(user.talent.status);
         }
       } catch (error) {

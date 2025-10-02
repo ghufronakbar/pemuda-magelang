@@ -1,6 +1,6 @@
 "use client";
 
-import { createCategoryHub } from "@/actions/zhub";
+import { createUpdateCategoryHub } from "@/actions/zhub";
 import {
   HubCategoryInput,
   HubCategorySchema,
@@ -59,7 +59,7 @@ const FormCategoryHubProvider = ({
       if (loading) return;
       const fd = new FormData();
       fd.append("payload", JSON.stringify(data));
-      const res = await createCategoryHub(fd);
+      const res = await createUpdateCategoryHub(fd);
       if (res.error) {
         toast.error(res.error);
       } else {

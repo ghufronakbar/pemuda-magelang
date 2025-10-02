@@ -3,16 +3,15 @@ import { Role } from "@prisma/client";
 import {
   DataTableUserTalent,
   TableUserTalent,
-} from "../(components)/table-user-talent";
+} from "../../(components)/table-user-talent";
 import { checkPermission, deleteUser, getAllUsers } from "@/actions/user";
 import { setStatusTalent } from "@/actions/talent";
-import { FormAdmin } from "../(components)/form-admin";
 
-const AdminPage = async () => {
-  await checkPermission([Role.superadmin]);
+const PenggunaPage = async () => {
+  await checkPermission([Role.superadmin, Role.admin]);
   const users = await getAllUsers();
 
-  const filteredUsers = users.filter((item) => item.role !== Role.user);
+  const filteredUsers = users.filter((item) => item.role === Role.user);
 
   const mappedUsers: DataTableUserTalent[] = filteredUsers.map((item) => {
     return {
@@ -26,9 +25,13 @@ const AdminPage = async () => {
       name: item.name,
       status: item.talent?.status || null,
       createdAt: item.createdAt,
-      type: "admin",
+      type: "pengguna",
       role: item.role,
-      isTalent: false,
+      isTalent: !!item.talent,
+      subdistrict: item.subdistrict ?? "",
+      village: item.village ?? "",
+      street: item.street ?? "",
+      slug: null,
     };
   });
 
@@ -36,12 +39,11 @@ const AdminPage = async () => {
     <div className="space-y-4">
       <div className="flex items-center gap-2 justify-between">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-bold">Admin</h1>
+          <h1 className="text-2xl font-bold">Pengguna</h1>
           <p className="text-muted-foreground text-sm">
-            Admin yang terdaftar di platform ini
+            Pengguna yang terdaftar di platform ini
           </p>
         </div>
-        <FormAdmin />
       </div>
       <TableUserTalent
         users={mappedUsers}
@@ -53,10 +55,10 @@ const AdminPage = async () => {
           "use server";
           await deleteUser(id);
         }}
-        type="admin"
+        type="pengguna"
       />
     </div>
   );
 };
 
-export default AdminPage;
+export default PenggunaPage;

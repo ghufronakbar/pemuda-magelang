@@ -5,9 +5,9 @@ import { CheckCircle2, Clock, PowerOff } from "lucide-react";
 const getLabel = (status: HubStatusEnum) => {
   switch (status) {
     case HubStatusEnum.active:
-      return "Aktif";
+      return "Sedang Berlangsung";
     case HubStatusEnum.inactive:
-      return "Tidak Aktif";
+      return "Telah Berakhir";
     case HubStatusEnum.soon:
       return "Segera Hadir";
     default:

@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useFormUser } from "@/context/form-user-context";
 import { updateUser } from "@/actions/user";
-import { ImageUploader } from "@/components/custom/image-uploader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,6 +30,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper";
 import { uploadImage } from "@/actions/image";
 import { useSession } from "next-auth/react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ProfileSectionProps {
   className?: string;
@@ -48,6 +56,9 @@ export function ProfileSection({ className }: ProfileSectionProps) {
       const fd = new FormData();
       fd.append("name", data.name);
       fd.append("email", data.email);
+      fd.append("subdistrict", data.subdistrict);
+      fd.append("village", data.village);
+      fd.append("street", data.street);
       if (data.profilePicture) fd.append("profilePicture", data.profilePicture);
       const res = await updateUser(fd);
       if (!res?.ok) {
@@ -99,6 +110,14 @@ export function ProfileSection({ className }: ProfileSectionProps) {
       setUploading(false);
     }
   };
+
+  const villages = useMemo(() => {
+    return (
+      KOTA_MAGELANG_ADDRESS_DATA.find(
+        (item) => item.subdistrict === formProfile.watch("subdistrict")
+      )?.villages ?? []
+    );
+  }, [formProfile.watch("subdistrict")]);
 
   return (
     <Card className={className}>
@@ -154,36 +173,105 @@ export function ProfileSection({ className }: ProfileSectionProps) {
               )}
             </div>
 
-            <div className="space-y-4">
+            <FormField
+              control={formProfile.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nama lengkap" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={formProfile.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" {...field} disabled />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col md:flex-row gap-4">
               <FormField
                 control={formProfile.control}
-                name="name"
+                name="subdistrict"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nama</FormLabel>
+                  <FormItem className="flex-1 w-full">
+                    <FormLabel>Kecamatan</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nama lengkap" {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Kecamatan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
+                            <SelectItem
+                              key={item.subdistrict}
+                              value={item.subdistrict}
+                            >
+                              {item.subdistrict}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formProfile.control}
+                name="village"
+                render={({ field }) => (
+                  <FormItem className="flex-1 w-full">
+                    <FormLabel>Kelurahan</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Kelurahan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {villages.map((item) => (
+                            <SelectItem key={item} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="space-y-4">
-              <FormField
-                control={formProfile.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Email" {...field} disabled />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={formProfile.control}
+              name="street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Alamat</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Alamat" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button
               type="submit"

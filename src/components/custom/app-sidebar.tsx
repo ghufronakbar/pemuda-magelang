@@ -36,6 +36,7 @@ import {
   HelpCircle,
   Paperclip,
   Layers,
+  RocketIcon,
 } from "lucide-react";
 import { getInitials } from "@/lib/helper";
 import { roleEnum } from "@/enum/role-enum";
@@ -117,6 +118,23 @@ export function AppSidebar({ session }: { session: Session | null }) {
           href: "/dashboard/admin",
           icon: ShieldCheck,
           roles: [Role.superadmin],
+        },
+      ],
+    },
+    {
+      section: "Komunitas",
+      items: [
+        {
+          label: "Komunitas",
+          href: "/dashboard/komunitas",
+          icon: RocketIcon,
+          roles: [Role.user],
+        },
+        {
+          label: "Kelola Komunitas",
+          href: "/dashboard/kelola-komunitas",
+          icon: RocketIcon,
+          roles: [Role.superadmin, Role.admin],
         },
       ],
     },

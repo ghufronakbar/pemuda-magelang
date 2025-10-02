@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { generateSlug } from "@/lib/helper";
 import { ArticleInputSchema } from "@/validator/article";
-import { ArticleStatusEnum } from "@prisma/client";
+import { ArticleStatusEnum, ArticleTypeEnum, Role } from "@prisma/client";
 import { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 
@@ -191,6 +191,10 @@ const _createUpdateArticle = async (formData: FormData) => {
         views: 0,
         userId: user.user.id,
         slug: generateSlug(parseData.data.title),
+        type:
+          user.user.role === Role.user
+            ? ArticleTypeEnum.detak
+            : ArticleTypeEnum.gerak,
       },
     });
     revalidateTag("published-articles");

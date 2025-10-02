@@ -9,22 +9,29 @@ import { Input } from "@/components/ui/input";
 
 interface PasswordFieldProps {
   identifier?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  label?: string;
 }
 export const PasswordField = ({
   identifier = "password",
+  value,
+  onChange,
+  label = "Password",
 }: PasswordFieldProps) => {
   const [show, setShow] = React.useState(false);
   return (
     <div className="space-y-2">
-      <Label htmlFor="password">Password</Label>
+      <Label htmlFor="password">{label}</Label>
       <div className="relative">
         <Input
           id={identifier}
           name={identifier}
           type={show ? "text" : "password"}
           placeholder="••••••••"
-          required
           className="pr-10"
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
         />
         <button
           type="button"
@@ -39,11 +46,17 @@ export const PasswordField = ({
   );
 };
 
-export const SubmitButton = ({ children }: { children: React.ReactNode }) => {
+export const SubmitButton = ({
+  children,
+  loading,
+}: {
+  children: React.ReactNode;
+  loading: boolean;
+}) => {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? (
+    <Button type="submit" className="w-full" disabled={pending || loading}>
+      {pending || loading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Memproses…

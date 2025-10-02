@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { commentArticle, deleteCommentArticle } from "@/actions/article"; // TODO: sesuaikan path
+import { commentArticle, deleteCommentArticle } from "@/actions/article";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,8 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import { useFormStatus } from "react-dom";
 import { Loader2, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ArticleDetailProps, CommentWithUser } from "./article-detail"; // TODO: atau pakai tipe lokalmu
-import { formatIDDate, getInitials } from "@/lib/helper"; // TODO: sesuaikan path helper
+import { ArticleDetailProps, CommentWithUser } from "./article-detail";
+import { formatIDDate, getInitials } from "@/lib/helper";
 import { Session } from "next-auth";
 
 export default function CommentSection({
@@ -150,7 +150,7 @@ function CommentItem({
   session: Session | null;
 }) {
   const isOwner = comment.userId === session?.user?.id;
-  const isAdminOrSuper = session?.user?.role && session.user.role !== "user"; // TODO: sesuaikan logika rolenya
+  const isAdminOrSuper = session?.user?.role && session.user.role !== "user";
   const isAbleToDelete = isOwner || isAdminOrSuper;
 
   const name = comment.user.name ?? "Pengguna";

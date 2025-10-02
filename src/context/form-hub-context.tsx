@@ -1,6 +1,6 @@
 "use client";
 
-import { createHub } from "@/actions/zhub";
+import { createUpdateHub } from "@/actions/zhub";
 import { HubInput, HubInputSchema, initialHubInput } from "@/validator/zhub";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Hub, HubStatusEnum } from "@prisma/client";
@@ -58,13 +58,18 @@ const FormHubProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
       if (loading) return;
+      console.log(data);
       const fd = new FormData();
       fd.append("payload", JSON.stringify(data));
-      const res = await createHub(fd);
+      const res = await createUpdateHub(fd);
       if (res.error) {
         toast.error(res.error);
       } else {
-        toast.success("Program zhub berhasil ditambahkan");
+        if (data.id) {
+          toast.success("Program zhub berhasil diubah");
+        } else {
+          toast.success("Program zhub berhasil ditambahkan");
+        }
         setOpen(false);
       }
     } catch (error) {

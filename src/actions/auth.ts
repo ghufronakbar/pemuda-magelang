@@ -14,31 +14,21 @@ const RegisterSchema = z.object({
   email: EmailSchema,
   password: PasswordSchema,
   confirmPassword: PasswordSchema,
+  subdistrict: z.string().min(1),
+  village: z.string().min(1),
+  street: z.string().min(1),
 });
 
 export async function register(formData: FormData) {
   const data = Object.fromEntries(formData);
   const parsed = RegisterSchema.safeParse(data);
-  const safeParseEmail = EmailSchema.safeParse(data.email);
-  if (!safeParseEmail.success) {
-    return { ok: false, error: "EMAIL_INVALID" };
-  }
-  const safeParseName = NameSchema.safeParse(data.name);
-  if (!safeParseName.success) {
-    return { ok: false, error: "NAME_INVALID" };
-  }
-  const safeParsePassword = PasswordSchema.safeParse(data.password);
-  if (!safeParsePassword.success) {
-    return { ok: false, error: "PASSWORD_INVALID" };
-  }
-  if (data.password !== data.confirmPassword) {
-    return { ok: false, error: "PASSWORD_MISMATCH" };
-  }
+  
+  
   if (!parsed.success) {
     return { ok: false, error: "DATA_INVALID" };
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, subdistrict, village, street } = parsed.data;
 
   const exists = await db.user.findUnique({ where: { email } });
   if (exists) {
@@ -52,6 +42,9 @@ export async function register(formData: FormData) {
       email,
       password: hash,
       role: Role.user,
+      subdistrict,
+      village,
+      street,
     },
   });
   await signIn("credentials", { email, password, redirectTo: "/" });

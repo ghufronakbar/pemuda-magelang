@@ -88,6 +88,21 @@ const _getDetailUser = async (id: string) => {
       talent: {
         include: {
           socialMedias: true,
+          workExperiences: {
+            orderBy: {
+              startDate: "desc",
+            },
+          },
+          educations: {
+            orderBy: {
+              startDate: "desc",
+            },
+          },
+          awards: {
+            orderBy: {
+              date: "desc",
+            },
+          },
         },
       },
     },
@@ -129,6 +144,9 @@ const _updateUser = async (formData: FormData) => {
     name: formData.get("name"),
     profilePicture: formData.get("profilePicture"),
     email: formData.get("email"),
+    subdistrict: formData.get("subdistrict"),
+    village: formData.get("village"),
+    street: formData.get("street"),
   });
 
   if (!parsedData.success) {
@@ -140,6 +158,9 @@ const _updateUser = async (formData: FormData) => {
     data: {
       name: parsedData.data.name,
       profilePicture: parsedData.data.profilePicture,
+      subdistrict: parsedData.data.subdistrict,
+      village: parsedData.data.village,
+      street: parsedData.data.street,
       talent: checkUser.talent
         ? {
             update: {
@@ -230,20 +251,14 @@ const _updateUserTalent = async (formData: FormData) => {
   if (!checkUser) {
     return { ok: false, error: "Pengguna tidak ditemukan" };
   }
-  let socialMedias: unknown = {};
+  let parsedPayload: unknown = {};
   try {
-    socialMedias = JSON.parse(String(formData.get("socialMedias")) || "{}");
+    parsedPayload = JSON.parse(String(formData.get("payload")) || "{}");
   } catch (error) {
     console.error(error);
     return { ok: false, error: "Social media tidak valid" };
   }
-  const parsedData = UserTalentSchema.safeParse({
-    profession: formData.get("profession"),
-    industry: formData.get("industry"),
-    bannerPicture: formData.get("bannerPicture"),
-    description: formData.get("description"),
-    socialMedias: socialMedias,
-  });
+  const parsedData = UserTalentSchema.safeParse(parsedPayload);
   if (!parsedData.success) {
     return { ok: false, error: parsedData.error.message };
   }
@@ -258,6 +273,7 @@ const _updateUserTalent = async (formData: FormData) => {
         bannerPicture: parsedData.data.bannerPicture,
         description: parsedData.data.description,
         status: TalentStatusEnum.pending,
+        skills: parsedData.data.skills,
         socialMedias:
           parsedData.data.socialMedias.length > 0
             ? {
@@ -274,6 +290,48 @@ const _updateUserTalent = async (formData: FormData) => {
             id: user.user.id,
           },
         },
+        workExperiences:
+          parsedData.data.workExperiences.length > 0
+            ? {
+                createMany: {
+                  data: parsedData.data.workExperiences.map(
+                    (workExperience) => ({
+                      companyName: workExperience.companyName,
+                      position: workExperience.position,
+                      startDate: workExperience.startDate,
+                      endDate: workExperience.endDate,
+                      description: workExperience.description,
+                    })
+                  ),
+                },
+              }
+            : undefined,
+        educations:
+          parsedData.data.educations.length > 0
+            ? {
+                createMany: {
+                  data: parsedData.data.educations.map((education) => ({
+                    degree: education.degree,
+                    schoolName: education.schoolName,
+                    startDate: education.startDate,
+                    endDate: education.endDate,
+                    description: education.description,
+                  })),
+                },
+              }
+            : undefined,
+        awards:
+          parsedData.data.awards.length > 0
+            ? {
+                createMany: {
+                  data: parsedData.data.awards.map((award) => ({
+                    name: award.name,
+                    description: award.description,
+                    date: award.date,
+                  })),
+                },
+              }
+            : undefined,
       },
     });
     revalidateTag(`detail-talent:${createdTalent.id}`);
@@ -299,6 +357,15 @@ const _updateUserTalent = async (formData: FormData) => {
         await tx.socialMedia.deleteMany({
           where: { talentId: checkUser?.talent?.id },
         });
+        await tx.workExperience.deleteMany({
+          where: { talentId: checkUser?.talent?.id },
+        });
+        await tx.education.deleteMany({
+          where: { talentId: checkUser?.talent?.id },
+        });
+        await tx.award.deleteMany({
+          where: { talentId: checkUser?.talent?.id },
+        });
         const updatedTalent = await db.talent.update({
           where: { id: checkUser.talent.id },
           data: {
@@ -306,6 +373,7 @@ const _updateUserTalent = async (formData: FormData) => {
             profession: parsedData.data.profession,
             bannerPicture: parsedData.data.bannerPicture,
             description: parsedData.data.description,
+            skills: parsedData.data.skills,
             socialMedias:
               parsedData.data.socialMedias.length > 0
                 ? {
@@ -313,6 +381,48 @@ const _updateUserTalent = async (formData: FormData) => {
                       data: parsedData.data.socialMedias.map((socialMedia) => ({
                         platform: socialMedia.platform,
                         url: socialMedia.url,
+                      })),
+                    },
+                  }
+                : undefined,
+            workExperiences:
+              parsedData.data.workExperiences.length > 0
+                ? {
+                    createMany: {
+                      data: parsedData.data.workExperiences.map(
+                        (workExperience) => ({
+                          companyName: workExperience.companyName,
+                          position: workExperience.position,
+                          startDate: workExperience.startDate,
+                          endDate: workExperience.endDate,
+                          description: workExperience.description,
+                        })
+                      ),
+                    },
+                  }
+                : undefined,
+            educations:
+              parsedData.data.educations.length > 0
+                ? {
+                    createMany: {
+                      data: parsedData.data.educations.map((education) => ({
+                        degree: education.degree,
+                        schoolName: education.schoolName,
+                        startDate: education.startDate,
+                        endDate: education.endDate,
+                        description: education.description,
+                      })),
+                    },
+                  }
+                : undefined,
+            awards:
+              parsedData.data.awards.length > 0
+                ? {
+                    createMany: {
+                      data: parsedData.data.awards.map((award) => ({
+                        name: award.name,
+                        description: award.description,
+                        date: award.date,
                       })),
                     },
                   }

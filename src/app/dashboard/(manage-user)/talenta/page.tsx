@@ -3,7 +3,7 @@ import { Role } from "@prisma/client";
 import {
   DataTableUserTalent,
   TableUserTalent,
-} from "../(components)/table-user-talent";
+} from "../../(components)/table-user-talent";
 import { checkPermission, deleteUser, getAllUsers } from "@/actions/user";
 import { setStatusTalent } from "@/actions/talent";
 
@@ -30,6 +30,10 @@ const TalentaPage = async () => {
       type: "talenta",
       role: item.role,
       isTalent: !!item.talent,
+      subdistrict: item.subdistrict ?? "",
+      village: item.village ?? "",
+      street: item.street ?? "",
+      slug: item.talent?.slug ?? null,
     };
   });
 

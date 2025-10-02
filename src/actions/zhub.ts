@@ -82,7 +82,7 @@ export const getCategoryHub = makeGetCategoryHub;
 
 // CREATE CATEGORY HUB
 
-const _createCategoryHub = async (formData: FormData) => {
+const _createUpdateCategoryHub = async (formData: FormData) => {
   const input = HubCategorySchema.safeParse(
     JSON.parse(String(formData.get("payload")))
   );
@@ -111,11 +111,11 @@ const _createCategoryHub = async (formData: FormData) => {
   }
 };
 
-export const createCategoryHub = _createCategoryHub;
+export const createUpdateCategoryHub = _createUpdateCategoryHub;
 
 // CREATE HUB
 
-const _createHub = async (formData: FormData) => {
+const _createUpdateHub = async (formData: FormData) => {
   const input = HubInputSchema.safeParse(
     JSON.parse(String(formData.get("payload")))
   );
@@ -131,6 +131,7 @@ const _createHub = async (formData: FormData) => {
         image: input.data.image,
         ctaLink: input.data.ctaLink,
         hubCategoryId: input.data.hubCategoryId,
+        status: input.data.status,
       },
       select: {
         id: true,
@@ -162,7 +163,7 @@ const _createHub = async (formData: FormData) => {
   }
 };
 
-export const createHub = _createHub;
+export const createUpdateHub = _createUpdateHub;
 
 // GET HUB BY ID
 

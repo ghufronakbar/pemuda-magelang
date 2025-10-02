@@ -9,21 +9,21 @@ import { cn } from "@/lib/utils";
 export interface HeroSectionProps {
   title?: string;
   subtitle?: string;
-  ctaPrimary?: { label: string; href: string };
-  ctaSecondary?: { label: string; href: string };
-  heroImage?: string | null; // gambar ilustrasi/kolase kanan (opsional)
-  stats?: { key: string; value: string }[];
+  heroImage: string | null; // gambar ilustrasi/kolase kanan (opsional)
   className?: string;
+  countTalent: number;
+  countCommunity: number;
+  countZhub: number;
 }
 
 export function HeroSection({
   title = "Pemuda Magelang",
   subtitle = "Wadah kolaborasi talenta Kota Magelang — temukan komunitas, bangun portofolio, dan bertumbuh bersama.",
-  ctaPrimary = { label: "Gabung Komunitas", href: "/register" },
-  ctaSecondary = { label: "Lihat Program", href: "/zhub" },
-  heroImage = "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
-  stats = DEFAULT_STATS,
+  heroImage,
   className,
+  countTalent,
+  countCommunity,
+  countZhub,
 }: HeroSectionProps) {
   return (
     <section
@@ -57,7 +57,7 @@ export function HeroSection({
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href={ctaPrimary.href}>{ctaPrimary.label}</Link>
+              <Link href={"/register"}>Gabung Komunitas</Link>
             </Button>
             <Button
               asChild
@@ -65,26 +65,36 @@ export function HeroSection({
               variant="outline"
               className="w-full sm:w-auto"
             >
-              <Link href={ctaSecondary.href}>{ctaSecondary.label}</Link>
+              <Link href={"/zhub"}>Lihat Program</Link>
             </Button>
           </div>
 
           {/* Stats */}
-          {stats?.length ? (
-            <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {stats.map((s) => (
-                <div
-                  key={s.key}
-                  className="rounded-lg border bg-background/60 p-4"
-                >
-                  <dt className="text-xs text-muted-foreground">{s.key}</dt>
-                  <dd className="mt-1 text-lg font-semibold sm:text-xl">
-                    {s.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          ) : null}
+
+          <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <div className="rounded-lg border bg-background/60 p-4">
+              <dt className="text-xs text-muted-foreground">
+                Talenta terdaftar
+              </dt>
+              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+                {countTalent}
+              </dd>
+            </div>
+            <div className="rounded-lg border bg-background/60 p-4">
+              <dt className="text-xs text-muted-foreground">
+                Komunitas tergabung
+              </dt>
+              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+                {countCommunity}
+              </dd>
+            </div>
+            <div className="rounded-lg border bg-background/60 p-4">
+              <dt className="text-xs text-muted-foreground">Program aktif</dt>
+              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+                {countZhub}
+              </dd>
+            </div>
+          </dl>
         </div>
 
         {/* Right: hero image / collage */}
@@ -113,9 +123,3 @@ export function HeroSection({
     </section>
   );
 }
-
-const DEFAULT_STATS: NonNullable<HeroSectionProps["stats"]> = [
-  { key: "Talenta tergabung", value: "1.2K+" },
-  { key: "Program aktif", value: "12" },
-  { key: "Kolaborasi/bulan", value: "80+" },
-];

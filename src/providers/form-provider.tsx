@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import { FormAppDataProvider } from "@/context/form-app-data-context";
 import { FormCategoryHubProvider } from "@/context/form-category-hub-context";
 import { FormHubProvider } from "@/context/form-hub-context";
+import { FormCommunityProvider } from "@/context/form-community-context";
 
 interface FormProviderProps {
   children: ReactNode;
@@ -18,7 +19,9 @@ export function FormProvider({ children }: FormProviderProps) {
           <FormAdminProvider>
             <FormAppDataProvider>
               <FormCategoryHubProvider>
-                <FormHubProvider>{children}</FormHubProvider>
+                <FormHubProvider>
+                  <FormCommunityProvider>{children}</FormCommunityProvider>
+                </FormHubProvider>
               </FormCategoryHubProvider>
             </FormAppDataProvider>
           </FormAdminProvider>

@@ -1,7 +1,7 @@
 import { getArticles } from "@/actions/article";
 import { ArticleCardProps } from "@/components/article/article-card";
 import { ArticleSection } from "@/components/article/article-section";
-import { ArticleStatusEnum, Role } from "@prisma/client";
+import { ArticleStatusEnum, ArticleTypeEnum, Role } from "@prisma/client";
 
 const ArtikelDetakPage = async () => {
   const articles = await getArticles();
@@ -9,7 +9,8 @@ const ArtikelDetakPage = async () => {
     .filter(
       (article) =>
         article.status === ArticleStatusEnum.published &&
-        article.user.role === Role.user
+        article.user.role === Role.user &&
+        article.type === ArticleTypeEnum.detak
     )
     .map((article) => {
       return {

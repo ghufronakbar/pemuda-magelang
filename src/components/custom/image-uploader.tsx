@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Loader2, ImageOffIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { toast } from "sonner";
 
 interface ImageUploaderProps {
   image: string | null;
@@ -33,9 +34,12 @@ export const ImageUploader = ({
         const res = await uploadImage(formData);
         if (res.success && res.result) {
           setImage(res.result);
+        } else {
+          throw new Error(res.error);
         }
       }
     } catch (error) {
+      toast.error("Gagal mengunggah gambar");
       console.error(error);
     } finally {
       setLoading(false);

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useFormUser } from "@/context/form-user-context";
 import { updateUserTalent } from "@/actions/user";
-import { TalentForm } from "./talent-form";
+import { FormTalent } from "./form-talent";
 import { TalentStatusEnum } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -61,15 +61,32 @@ export function TalentSection({
   const onSubmit = formTalent.handleSubmit(async (data: UserTalentInput) => {
     try {
       setPending(true);
+      const mappedData = {
+        ...data,
+        awards: data.awards.map((award) => ({
+          ...award,
+          date: new Date(award.date),
+        })),
+        educations: data.educations.map((education) => ({
+          ...education,
+          startDate: new Date(education.startDate),
+          endDate: education.endDate ? new Date(education.endDate) : null,
+        })),
+        workExperiences: data.workExperiences.map((workExperience) => ({
+          ...workExperience,
+          startDate: new Date(workExperience.startDate),
+          endDate: workExperience.endDate
+            ? new Date(workExperience.endDate)
+            : null,
+        })),
+      };
+      console.log("data", mappedData);
       const fd = new FormData();
-      fd.append("profession", data.profession);
-      fd.append("industry", data.industry);
-      if (data.bannerPicture) fd.append("bannerPicture", data.bannerPicture);
-      if (data.description) fd.append("description", data.description);
-      fd.append("socialMedias", JSON.stringify(data.socialMedias)); // <<< IMPORTANT
+      fd.append("payload", JSON.stringify(mappedData));
 
       const res = await updateUserTalent(fd);
       if (!res?.ok) {
+        console.log("res error", res?.error);
         toast.error(res?.error ?? "Gagal menyimpan data talenta");
       } else {
         toast.success(
@@ -155,7 +172,7 @@ export function TalentSection({
                 </DialogDescription>
               </DialogHeader>
 
-              <TalentForm pending={pending} onSubmit={onSubmit} />
+              <FormTalent pending={pending} onSubmit={onSubmit} />
 
               <DialogFooter>
                 <DialogClose asChild>
@@ -171,7 +188,7 @@ export function TalentSection({
         {/* Form edit (sudah terdaftar) */}
         {isRegistered && showForm && (
           <form onSubmit={onSubmit} className="space-y-6">
-            <TalentForm pending={pending} disabled={!isEditable} />
+            <FormTalent pending={pending} disabled={!isEditable} />
             <div>
               <Button
                 type="submit"

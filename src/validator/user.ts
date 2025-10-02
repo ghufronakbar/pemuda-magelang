@@ -6,6 +6,9 @@ export const UserProfileSchema = z.object({
   name: z.string().min(1, "Nama tidak boleh kosong"),
   email: z.string().email(),
   profilePicture: z.string().optional().nullable(),
+  subdistrict: z.string().min(1, "Kecamatan tidak boleh kosong"),
+  village: z.string().min(1, "Kelurahan tidak boleh kosong"),
+  street: z.string().min(1, "Alamat tidak boleh kosong"),
 });
 
 export type UserProfileInput = z.infer<typeof UserProfileSchema>;
@@ -14,6 +17,9 @@ export const initialUserProfileInput: UserProfileInput = {
   name: "",
   email: "",
   profilePicture: null,
+  subdistrict: "",
+  village: "",
+  street: "",
 };
 
 // USER TALENT
@@ -28,6 +34,45 @@ export const UserTalentSchema = z.object({
       url: z.string().url("URL tidak valid").min(1, "URL tidak boleh kosong"),
     })
   ),
+  skills: z.array(z.string()).min(1, "Setidaknya isi satu skill"),
+  awards: z.array(
+    z.object({
+      image: z
+        .string()
+        .url("Harap unggah gambar yang valid")
+        .optional()
+        .nullable(),
+      name: z.string().min(1, "Nama tidak boleh kosong"),
+      description: z.string().optional().nullable(),
+      date: z.coerce.date("Tanggal tidak boleh kosong"),
+    })
+  ),
+  educations: z.array(
+    z
+      .object({
+        degree: z.string().min(1, "Jenjang pendidikan tidak boleh kosong"),
+        schoolName: z.string().min(1, "Nama sekolah tidak boleh kosong"),
+        description: z.string().optional().nullable(),
+        startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
+        endDate: z.coerce.date().optional().nullable(),
+      })
+      .refine((data) => data.endDate && data.startDate < data.endDate, {
+        path: ["endDate"],
+        message: "Tanggal selesai harus lebih dari tanggal mulai",
+      })
+  ),
+  workExperiences: z.array(
+    z.object({
+      companyName: z.string().min(1, "Nama perusahaan tidak boleh kosong"),
+      position: z.string().min(1, "Jabatan tidak boleh kosong"),
+      description: z.string().optional().nullable(),
+      startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
+      endDate: z.coerce.date().optional().nullable(),
+    }).refine((data) => data.endDate && data.startDate < data.endDate, {
+      path: ["endDate"],
+      message: "Tanggal selesai harus lebih dari tanggal mulai",
+    }),
+  ),
 });
 
 export type UserTalentInput = z.infer<typeof UserTalentSchema>;
@@ -38,6 +83,10 @@ export const initialUserTalentInput: UserTalentInput = {
   bannerPicture: null,
   description: null,
   socialMedias: [],
+  skills: [],
+  awards: [],
+  educations: [],
+  workExperiences: [],
 };
 
 // USER PASSWORD

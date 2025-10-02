@@ -29,6 +29,7 @@ import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
+import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
 
 /* ================== Types ================== */
 
@@ -48,6 +49,10 @@ export interface DataTableUserTalent {
   createdAt: Date;
   type: DataType;
   isTalent: boolean;
+  subdistrict: string;
+  village: string;
+  street: string;
+  slug: string | null;
 }
 
 interface TableUserTalentProps {
@@ -72,6 +77,9 @@ export function TableUserTalent({
   const [query, setQuery] = React.useState("");
   const [pageSize, setPageSize] = React.useState(defaultPageSize);
   const [page, setPage] = React.useState(1);
+
+  const [subdistrict, setSubdistrict] = React.useState<"all" | string>("all");
+  const [village, setVillage] = React.useState<"all" | string>("all");
 
   // filter khusus talenta
   const [talentStatus, setTalentStatus] = React.useState<
@@ -101,6 +109,9 @@ export function TableUserTalent({
         if (industry !== "all" && u.industry !== industry) return false;
       }
 
+      if (subdistrict !== "all" && u.subdistrict !== subdistrict) return false;
+      if (village !== "all" && u.village !== village) return false;
+
       if (!q) return true;
       const hay = [
         u.name,
@@ -115,7 +126,7 @@ export function TableUserTalent({
 
       return hay.includes(q);
     });
-  }, [users, query, type, talentStatus, industry]);
+  }, [users, query, type, talentStatus, industry, subdistrict, village]);
 
   // pagination
   const total = filtered.length;
@@ -128,6 +139,16 @@ export function TableUserTalent({
   React.useEffect(() => {
     setPage(1);
   }, [query, pageSize, talentStatus, industry]);
+
+  const villageOptions = React.useMemo(() => {
+    if (subdistrict === "all")
+      return KOTA_MAGELANG_ADDRESS_DATA.flatMap((item) => item.villages);
+    return (
+      KOTA_MAGELANG_ADDRESS_DATA.find(
+        (item) => item.subdistrict === subdistrict
+      )?.villages ?? KOTA_MAGELANG_ADDRESS_DATA.flatMap((item) => item.villages)
+    );
+  }, [subdistrict]);
 
   return (
     <section className={cn("space-y-4", className)}>
@@ -194,6 +215,60 @@ export function TableUserTalent({
               </div>
             </>
           )}
+          {type === "pengguna" && (
+            <>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Kecamatan
+                </label>
+                <Select
+                  value={subdistrict}
+                  onValueChange={(v) => {
+                    setSubdistrict(v);
+                    setVillage("all");
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua kecamatan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
+                      <SelectItem
+                        key={item.subdistrict}
+                        value={item.subdistrict}
+                      >
+                        {item.subdistrict}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Kelurahan/Desa
+                </label>
+                <Select
+                  value={village}
+                  onValueChange={(v) => {
+                    setVillage(v);
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua kelurahan/desa" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {villageOptions.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -222,6 +297,8 @@ export function TableUserTalent({
                 setTalentStatus("all");
                 setIndustry("all");
               }
+              setSubdistrict("all");
+              setVillage("all");
             }}
           >
             Reset
@@ -241,6 +318,7 @@ export function TableUserTalent({
           <TableHeader>
             <TableRow>
               <TableHead>Pengguna</TableHead>
+              {type === "pengguna" && <TableHead>Alamat</TableHead>}
               <TableHead className="w-[140px] text-right">
                 Artikel Publish
               </TableHead>
@@ -268,7 +346,7 @@ export function TableUserTalent({
             {pageItems.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={type === "talenta" ? 8 : 4}
+                  colSpan={type === "talenta" ? 9 : type === "pengguna" ? 6 : 6}
                   className="py-10 text-center text-sm text-muted-foreground"
                 >
                   Tidak ada data yang cocok.
@@ -294,6 +372,19 @@ export function TableUserTalent({
                     </div>
                   </div>
                 </TableCell>
+                {type === "pengguna" && (
+                  <TableCell>
+                    <div className="flex flex-col gap-2">
+                      <div className="text-sm font-medium">
+                        {u.subdistrict}
+                        {u.village ? "," : ""} {u.village}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {u.street}
+                      </div>
+                    </div>
+                  </TableCell>
+                )}
 
                 <TableCell className="text-right">
                   {u.publishedArticle}
@@ -487,9 +578,13 @@ function ActionButtons({
   return (
     <div className="flex items-center gap-2">
       {/* View */}
-      {/* <Button asChild variant="outline">
-        <Link href={`/dashboard/${item.type}/${item.id}`}>Lihat</Link>
-      </Button> */}
+      {item.type === "talenta" && item.status === "approved" && (
+        <Button asChild variant="outline">
+          <Link href={`/talenta/${item.slug}`} target="_blank">
+            Lihat
+          </Link>
+        </Button>
+      )}
 
       {/* Delete */}
       {item.role !== Role.superadmin && type !== "talenta" && (
