@@ -28,7 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   pages: { signIn: "/login" },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: false,
+  debug: true,
 
   providers: [
     Credentials({
@@ -73,14 +73,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       // Di setiap request, jika sudah lewat hardExp → kosongkan token (session jadi null)
       if (token.hardExp && Date.now() / 1000 > (token.hardExp as number)) {
-        return {} 
+        return {};
       }
 
       // support update() dari client untuk refresh name/image
       if (trigger === "update" && session) {
         if (session?.name) token.name = session.name;
         if (typeof session?.image !== "undefined")
-          token.picture = session.image 
+          token.picture = session.image;
       }
       return token;
     },

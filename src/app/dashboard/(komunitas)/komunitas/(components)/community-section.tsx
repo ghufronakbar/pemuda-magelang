@@ -159,19 +159,11 @@ export function CommunitySection({
         {/* Form edit (sudah terdaftar) */}
         {isRegistered && showForm && (
           <div className="space-y-6">
-            <FormCommunity pending={loading} disabled={!isEditable} />
-            <div>
-              <Button
-                type="submit"
-                disabled={!isEditable || loading}
-                className="min-w-28"
-              >
-                {loading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : null}
-                Simpan
-              </Button>
-            </div>
+            <FormCommunity
+              pending={loading}
+              disabled={!isEditable}
+              onSubmit={onSubmit}
+            />
           </div>
         )}
       </CardContent>

@@ -5,15 +5,27 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { generateSlug } from "@/lib/helper";
 import { ArticleInputSchema } from "@/validator/article";
-import { ArticleStatusEnum, ArticleTypeEnum, Role } from "@prisma/client";
+import {
+  ArticleStatusEnum,
+  ArticleTypeEnum,
+  CommunityStatusEnum,
+} from "@prisma/client";
 import { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { getIp } from "./helper";
 
 // GET ALL PUBLISHED ARTICLES
 
 const _getArticles = async () => {
   const articles = await db.article.findMany({
     include: {
+      _count: {
+        select: {
+          comments: true,
+          articleUserLikes: true,
+          trackViews: true,
+        },
+      },
       user: {
         include: {
           talent: true,
@@ -36,12 +48,17 @@ const makeGetArticles = () =>
 export const getArticles = makeGetArticles();
 
 // GET DETAIL ARTICLE BY SLUG
-const _getDetailArticle = async (slug: string, session: Session | null) => {
+const _getDetailArticle = async (
+  slug: string,
+  session: Session | null,
+  ip: string
+) => {
   const normalizedSlug = decodeURIComponent(slug);
   const article = await db.article.findUnique({
     where: { slug: normalizedSlug },
     include: {
       _count: true,
+      community: true,
       user: {
         include: {
           talent: true,
@@ -61,11 +78,21 @@ const _getDetailArticle = async (slug: string, session: Session | null) => {
     ? "yet"
     : "unauthenticated";
   if (article) {
-    await db.article.update({
-      where: { id: article?.id },
-      data: { views: article?.views + 1 },
+    const checkView = await db.trackView.findFirst({
+      where: {
+        articleId: article?.id,
+        ip,
+      },
     });
-    article.views = article.views + 1;
+    if (!checkView) {
+      await db.trackView.create({
+        data: {
+          articleId: article?.id,
+          ip,
+        },
+      });
+      article._count.trackViews = article._count.trackViews + 1;
+    }
     const like = await db.articleUserLike.findFirst({
       where: {
         articleId: article?.id,
@@ -83,9 +110,13 @@ const _getDetailArticle = async (slug: string, session: Session | null) => {
   };
 };
 
-const makeGetDetailArticle = (slug: string, session: Session | null) =>
+const makeGetDetailArticle = (
+  slug: string,
+  session: Session | null,
+  ip: string
+) =>
   unstable_cache(
-    async () => _getDetailArticle(slug, session),
+    async () => _getDetailArticle(slug, session, ip),
     [`detail-article:${slug}`, "v1"],
     { tags: [`detail-article:${slug}`], revalidate: 300 }
   );
@@ -154,10 +185,32 @@ const _createUpdateArticle = async (formData: FormData) => {
     content: formData.get("content") as string,
     userId: user.user.id,
     status: formData.get("status"),
+    type: formData.get("type"),
+    communityId: formData.get("communityId"),
   });
 
   if (!parseData.success) {
     return { ok: false, error: parseData.error.message };
+  }
+
+  let communityId = parseData.data.communityId;
+  if (parseData.data.type === ArticleTypeEnum.dampak) {
+    const checkUserCommunity = await db.community.findFirst({
+      where: {
+        userId: user.user.id,
+      },
+      select: {
+        id: true,
+        status: true,
+      },
+    });
+    if (!checkUserCommunity) {
+      return { ok: false, error: "USER_NOT_IN_COMMUNITY" };
+    }
+    if (checkUserCommunity.status !== CommunityStatusEnum.approved) {
+      return { ok: false, error: "COMMUNITY_NOT_APPROVED" };
+    }
+    communityId = checkUserCommunity.id;
   }
 
   if (parseData.data.id) {
@@ -173,6 +226,7 @@ const _createUpdateArticle = async (formData: FormData) => {
         status: parseData.data.status,
         title: parseData.data.title,
         slug: generateSlug(parseData.data.title),
+        communityId: communityId || null,
       },
     });
     revalidateTag(`detail-article:${article.id}`);
@@ -188,13 +242,10 @@ const _createUpdateArticle = async (formData: FormData) => {
         content: parseData.data.content,
         status: parseData.data.status,
         title: parseData.data.title,
-        views: 0,
         userId: user.user.id,
         slug: generateSlug(parseData.data.title),
-        type:
-          user.user.role === Role.user
-            ? ArticleTypeEnum.detak
-            : ArticleTypeEnum.gerak,
+        type: parseData.data.type,
+        communityId: communityId || null,
       },
     });
     revalidateTag("published-articles");

@@ -48,11 +48,6 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
             pagePrivacy: res.pagePrivacy,
             pageFaq: res.pageFaq,
           },
-          heroItems: res.heroItems.map((item) => ({
-            id: item.id,
-            label: item.key,
-            value: item.value,
-          })),
           aboutItems: res.aboutItems.map((item) => ({
             id: item.id,
             title: item.key,

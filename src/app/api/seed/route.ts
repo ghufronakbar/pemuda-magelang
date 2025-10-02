@@ -439,8 +439,8 @@ export async function GET() {
       },
       include: {
         aboutItems: true,
-        heroItems: true,
         partners: true,
+        appSocialMedias: true,
       },
     });
 
@@ -456,24 +456,6 @@ export async function GET() {
             "Wadah kolaborasi talenta Kota Magelang — temukan komunitas, bangun portofolio, dan bertumbuh bersama.",
           heroImage:
             "https://cjip.jatengprov.go.id/storage/profil/foto/qQ90oLmKqOXj0tTGLIzjlkouGkWSeh-metaMjAyMDEwMjlEUkEyMV9tZW5hcmEtYWlyLWtvdGEtbWFnZWxhbmcuanBn-.jpg",
-          heroItems: {
-            createMany: {
-              data: [
-                {
-                  key: "Talenta tergabung",
-                  value: "1.2K+",
-                },
-                {
-                  key: "Program aktif",
-                  value: "12",
-                },
-                {
-                  key: "Kolaborasi/bulan",
-                  value: "80+",
-                },
-              ],
-            },
-          },
           // ABOUT SECTION
           aboutTitle: "Tentang Pemuda Magelang",
           aboutDescription:
@@ -576,8 +558,8 @@ export async function GET() {
         },
         include: {
           aboutItems: true,
-          heroItems: true,
           partners: true,
+          appSocialMedias: true,
         },
       });
       isAppDataCreated = true;

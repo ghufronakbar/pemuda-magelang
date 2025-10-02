@@ -30,7 +30,8 @@ interface LoginPageProps {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const sp = await searchParams;
-  const redirectTo = sp?.callbackUrl ?? sp?.redirect ?? "/";
+  // const redirectTo = decodeURIComponent(sp?.callbackUrl ?? sp?.redirect ?? "/");
+  const redirectTo = sp?.redirect ?? "/";
 
   return (
     <div className="flex min-h-screen justify-center w-full items-center px-4 py-10">

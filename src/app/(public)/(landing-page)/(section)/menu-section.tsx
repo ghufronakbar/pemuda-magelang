@@ -16,6 +16,8 @@ import {
   FiMessageSquare,
   FiGrid,
 } from "react-icons/fi";
+import { FaPeopleArrows, FaPeopleCarry } from "react-icons/fa";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export interface MenuItem {
   title: string;
@@ -25,6 +27,7 @@ export interface MenuItem {
   description?: string;
   /** (Baru) Ikon react-icons */
   icon?: IconType;
+  className?: string;
 }
 
 export interface MenuSectionProps {
@@ -56,23 +59,43 @@ export function MenuSection({
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {data.map((m) => (
-          <MenuCard key={m.href} {...m} />
-        ))}
-      </div>
+      {/* <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"> */}
+
+      <ScrollArea className="flex flex-row">
+        <div className="flex w-max space-x-4 p-4">
+          {data.map((m) => (
+            <MenuCard
+              key={m.href}
+              {...m}
+              className={cn("w-[200px]", m.className)}
+            />
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </section>
   );
 }
 
 /* ---------- Card ---------- */
 
-function MenuCard({ title, href, description, icon: Icon }: MenuItem) {
+function MenuCard({
+  title,
+  href,
+  description,
+  icon: Icon,
+  className,
+}: MenuItem) {
   const FallbackIcon = getDefaultIcon(title);
 
   return (
     <Link href={href} aria-label={`Buka menu ${title}`} className="group block">
-      <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg">
+      <Card
+        className={cn(
+          "h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg",
+          className
+        )}
+      >
         <CardHeader className="items-center space-y-3 text-center">
           <div className="rounded-full flex aspect-square w-fit h-fit bg-background p-4 shadow-sm transition-colors group-hover:bg-accent items-center justify-center mx-auto">
             {Icon ? (
@@ -116,16 +139,22 @@ function getDefaultIcon(title: string): IconType {
 
 const DUMMY_MENUS: MenuItem[] = [
   {
-    title: "Artikel",
-    href: "/artikel",
-    icon: FiBookOpen,
-    description: "Wawasan dan cerita terbaru dari komunitas.",
+    title: "Galeri",
+    href: "/galeri",
+    icon: FiGrid,
+    description: "Produk & karya para talenta muda.",
   },
   {
     title: "Talenta",
     href: "/talenta",
     icon: FiUsers,
     description: "Kenali kreator & profesional di Kota Magelang.",
+  },
+  {
+    title: "Komunitas",
+    href: "/komunitas",
+    icon: FaPeopleCarry,
+    description: "Temukan komunitas & kolaborasi di Kota Magelang.",
   },
   {
     title: "Zhub",
@@ -138,5 +167,17 @@ const DUMMY_MENUS: MenuItem[] = [
     href: "/detak",
     icon: FiMessageSquare,
     description: "Kolom opini berbagai topik.",
+  },
+  {
+    title: "Gerak",
+    href: "/gerak",
+    icon: FiBookOpen,
+    description: "Artikel & berita terbaru dari admin.",
+  },
+  {
+    title: "Dampak",
+    href: "/dampak",
+    icon: FaPeopleArrows,
+    description: "Artikel & berita terbaru dari komunitas.",
   },
 ];

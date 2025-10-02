@@ -234,11 +234,10 @@ export function FormCommunity({
           )}
         />
 
-        {/* ===== Submit (opsional, kalau parent kirim onSubmit) ===== */}
         {onSubmit && (
           <div>
             <Button type="submit" disabled={pending} className="min-w-28">
-              {pending ? "Memproses…" : "Kirim"}
+              {pending ? "Memproses…" : "Simpan"}
             </Button>
           </div>
         )}

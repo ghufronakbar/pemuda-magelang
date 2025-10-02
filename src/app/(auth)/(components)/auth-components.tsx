@@ -51,7 +51,7 @@ export const SubmitButton = ({
   loading,
 }: {
   children: React.ReactNode;
-  loading: boolean;
+  loading?: boolean;
 }) => {
   const { pending } = useFormStatus();
   return (

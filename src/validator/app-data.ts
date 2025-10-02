@@ -5,12 +5,6 @@ import {
   SocialMediaPlatformEnum,
 } from "@prisma/client";
 
-const HeroItemSchema = z.object({
-  id: z.string().optional(),
-  label: z.string().min(1, "Wajib diisi"),
-  value: z.string().min(1, "Wajib diisi"),
-});
-
 const AboutItemSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, "Wajib diisi"),
@@ -52,7 +46,6 @@ const AppSocialMediaSchema = z.object({
 
 export const UpsertAppDataSchema = z.object({
   appData: AppDataOnlySchema,
-  heroItems: z.array(HeroItemSchema),
   aboutItems: z.array(AboutItemSchema),
   partners: z.array(PartnerSchema),
   appSocialMedias: z.array(AppSocialMediaSchema),
@@ -75,7 +68,6 @@ export const initialUpsertAppDataInput: UpsertAppDataInput = {
     pagePrivacy: "",
     pageFaq: "",
   },
-  heroItems: [],
   aboutItems: [],
   partners: [],
   appSocialMedias: [],

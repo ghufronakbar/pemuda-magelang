@@ -4,10 +4,8 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  ArticleCard,
-  type ArticleCardProps,
-} from "@/components/article/article-card";
+import { ArticleGridCard } from "@/components/article/grid/article-grid-card";
+import { ArticleCardProps } from "@/components/article/type";
 
 export interface ArticleLandingSectionProps {
   title?: string;
@@ -61,7 +59,11 @@ export function ArticleSectionLanding({
         <ScrollArea className="-mx-4">
           <div className="flex gap-4 px-4 py-2">
             {data.map((a, index) => (
-              <ArticleCard {...a} className="w-[300px] sm:w-[360px] h-full" key={index} />
+              <ArticleGridCard
+                {...a}
+                className="w-[300px] sm:w-[360px] h-full"
+                key={index}
+              />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />

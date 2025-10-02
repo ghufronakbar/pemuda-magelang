@@ -32,7 +32,10 @@ import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
 
-type ArticleWithUser = Article & { user: User };
+interface ArticleWithUser extends Article {
+  user: User;
+  _count: { trackViews: number };
+}
 
 interface TableArticleProps {
   articles: ArticleWithUser[];
@@ -40,7 +43,7 @@ interface TableArticleProps {
   defaultPageSize?: number;
   onSetStatus: (slug: string, formData: FormData) => Promise<void>;
   onDelete: (slug: string) => Promise<void>;
-  type: "gerak" | "detak";
+  type: "gerak" | "detak" | "dampak";
 }
 
 export function TableArticle({
@@ -221,7 +224,7 @@ export function TableArticle({
             {pageItems.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={8}
                   className="py-10 text-center text-sm text-muted-foreground"
                 >
                   Tidak ada data yang cocok.
@@ -283,7 +286,9 @@ export function TableArticle({
                   </TableCell>
                 )}
 
-                <TableCell className="text-right">{a.views}</TableCell>
+                <TableCell className="text-right">
+                  {a._count.trackViews}
+                </TableCell>
 
                 <TableCell>
                   <div className="text-xs">{formatIDDate(a.createdAt)}</div>
@@ -338,7 +343,7 @@ interface ActionButtonsProps {
   article: ArticleWithUser;
   onSetStatus: (slug: string, formData: FormData) => Promise<void>;
   onDelete: (slug: string) => Promise<void>;
-  type: "gerak" | "detak";
+  type: "gerak" | "detak" | "dampak";
 }
 
 function SubmitBtn({

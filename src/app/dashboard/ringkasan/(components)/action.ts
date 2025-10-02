@@ -118,6 +118,7 @@ export const getTopArticle = (
             select: {
               articleUserLikes: true,
               comments: true,
+              trackViews: true,
             },
           },
         },
@@ -137,7 +138,7 @@ export const getTopArticle = (
             type: (article.user.role === Role.user ? "detak" : "gerak") as
               | "detak"
               | "gerak",
-            views: article.views,
+            views: article._count.trackViews,
           };
         })
         .sort((a, b) => b.views - a.views);

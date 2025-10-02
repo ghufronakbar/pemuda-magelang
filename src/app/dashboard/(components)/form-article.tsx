@@ -29,9 +29,10 @@ import { ArticleStatusEnum } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { ARTICLE_CATEGORIES } from "@/data/article";
 
 interface FormArticleProps {
-  type: "gerak" | "detak";
+  type: "gerak" | "detak" | "dampak";
 }
 
 export function FormArticle({ type }: FormArticleProps) {
@@ -55,6 +56,10 @@ export function FormArticle({ type }: FormArticleProps) {
       formData.append("thumbnailImage", data.thumbnailImage);
       formData.append("content", data.content);
       formData.append("status", data.status);
+      formData.append("type", type);
+      if (data.communityId) {
+        formData.append("communityId", data.communityId);
+      }
       const res = await createUpdateArticle(formData);
       if (res.error) {
         toast.error(res.error);
@@ -118,7 +123,7 @@ export function FormArticle({ type }: FormArticleProps) {
                         <SelectValue placeholder="Pilih Kategori" />
                       </SelectTrigger>
                       <SelectContent>
-                        {CATEGORIES.map((category) => (
+                        {ARTICLE_CATEGORIES.map((category) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
@@ -224,14 +229,3 @@ export function FormArticle({ type }: FormArticleProps) {
     </Form>
   );
 }
-
-const CATEGORIES = [
-  "Kesehatan",
-  "Teknologi",
-  "Ekonomi",
-  "Politik",
-  "Sosial",
-  "Budaya",
-  "Olahraga",
-  "Edukasi",
-];

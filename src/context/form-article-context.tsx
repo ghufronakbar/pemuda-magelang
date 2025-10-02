@@ -41,6 +41,7 @@ const FormArticleProvider = ({ children }: { children: React.ReactNode }) => {
         form.setValue("category", article.category);
         form.setValue("tags", article.tags);
         form.setValue("status", article.status);
+        form.setValue("communityId", article.communityId ?? null);
       } catch (error) {
         console.error(error);
         toast.error("Gagal mengambil data artikel");

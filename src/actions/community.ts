@@ -3,18 +3,12 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { generateSlug } from "@/lib/helper";
-import { ArticleInputSchema } from "@/validator/article";
+
 import { CommunityInputSchema } from "@/validator/community";
-import {
-  ArticleStatusEnum,
-  ArticleTypeEnum,
-  CommunityStatusEnum,
-  Role,
-} from "@prisma/client";
-import { Session } from "next-auth";
+import { CommunityStatusEnum } from "@prisma/client";
 import { revalidateTag, unstable_cache } from "next/cache";
 
-// GET ALL PUBLISHED ARTICLES
+// GET ALL COMMUNITIES
 
 const _getCommunities = async () => {
   const communities = await db.community.findMany({
@@ -41,62 +35,35 @@ const makeGetCommunities = () =>
 
 export const getAllCommunities = makeGetCommunities();
 
-// // GET DETAIL ARTICLE BY SLUG
-// const _getDetailArticle = async (slug: string, session: Session | null) => {
-//   const normalizedSlug = decodeURIComponent(slug);
-//   const article = await db.article.findUnique({
-//     where: { slug: normalizedSlug },
-//     include: {
-//       _count: true,
-//       user: {
-//         include: {
-//           talent: true,
-//         },
-//       },
-//       comments: {
-//         include: {
-//           user: true,
-//         },
-//         orderBy: {
-//           createdAt: "desc",
-//         },
-//       },
-//     },
-//   });
-//   let likedStatus: "yes" | "yet" | "unauthenticated" = session?.user.id
-//     ? "yet"
-//     : "unauthenticated";
-//   if (article) {
-//     await db.article.update({
-//       where: { id: article?.id },
-//       data: { views: article?.views + 1 },
-//     });
-//     article.views = article.views + 1;
-//     const like = await db.articleUserLike.findFirst({
-//       where: {
-//         articleId: article?.id,
-//         userId: session?.user.id,
-//       },
-//       select: {
-//         id: true,
-//       },
-//     });
-//     likedStatus = like ? "yes" : "yet";
-//   }
-//   return {
-//     data: article,
-//     likedStatus: likedStatus,
-//   };
-// };
+// // GET DETAIL COMMUNITY BY SLUG
+const _getDetailCommBySlug = async (slug: string) => {
+  const normalizedSlug = decodeURIComponent(slug);
+  const community = await db.community.findUnique({
+    where: { slug: normalizedSlug },
+    include: {
+      user: true,
+      articles: {
+        include: {
+          user: true,
+          _count: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+  return community;
+};
 
-// const makeGetDetailArticle = (slug: string, session: Session | null) =>
-//   unstable_cache(
-//     async () => _getDetailArticle(slug, session),
-//     [`detail-article:${slug}`, "v1"],
-//     { tags: [`detail-article:${slug}`], revalidate: 300 }
-//   );
+const makeGetDetailCommunityBySlug = (slug: string) =>
+  unstable_cache(
+    async () => _getDetailCommBySlug(slug),
+    [`detail-community:${slug}`, "v1"],
+    { tags: [`detail-community:${slug}`], revalidate: 300 }
+  );
 
-// export const getDetailArticle = makeGetDetailArticle;
+export const getDetailCommunityBySlug = makeGetDetailCommunityBySlug;
 
 // // GET DETAIL ARTICLE BY ID
 const _getDetailCommunityByUserId = async (userId: string) => {
@@ -188,6 +155,7 @@ const _createUpdateCommunity = async (formData: FormData) => {
         ctaText: parseData.data.ctaText,
         ctaLink: parseData.data.ctaLink,
         category: parseData.data.category,
+        slug: generateSlug(parseData.data.name),
       },
     });
     revalidateTag(`detail-community:${community.id}`);

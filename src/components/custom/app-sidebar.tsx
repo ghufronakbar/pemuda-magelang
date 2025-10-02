@@ -37,6 +37,7 @@ import {
   Paperclip,
   Layers,
   RocketIcon,
+  FolderArchive,
 } from "lucide-react";
 import { getInitials } from "@/lib/helper";
 import { roleEnum } from "@/enum/role-enum";
@@ -169,6 +170,12 @@ export function AppSidebar({ session }: { session: Session | null }) {
           href: "/dashboard/gerak",
           icon: Newspaper,
           roles: [Role.admin, Role.superadmin],
+        },
+        {
+          label: "Dampak",
+          href: "/dashboard/dampak",
+          icon: FolderArchive,
+          roles: [Role.superadmin, Role.admin, Role.user],
         },
       ],
     },

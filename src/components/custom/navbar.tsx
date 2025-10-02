@@ -57,7 +57,22 @@ interface LinkItem {
 export const LINK_ITEMS: LinkItem[] = [
   { title: "Beranda", href: "/", items: [] },
   { title: "Galeri", href: "/galeri", items: [] },
-  { title: "Talenta", href: "/talenta", items: [] },
+  {
+    title: "Jejaring",
+    href: null,
+    items: [
+      {
+        title: "Talenta",
+        href: "/talenta",
+        description: "Talenta muda",
+      },
+      {
+        title: "Komunitas",
+        href: "/komunitas",
+        description: "Komunitas kepemudaan",
+      },
+    ],
+  },
   {
     title: "Townhall",
     href: null,
@@ -65,12 +80,17 @@ export const LINK_ITEMS: LinkItem[] = [
       {
         title: "Detak",
         href: "/detak",
-        description: "Kolom opini berbagai topik.",
+        description: "Kolom opini berbagai topik",
       },
       {
         title: "Gerak",
         href: "/gerak",
-        description: "Jurnal giat kepemudaan.",
+        description: "Jurnal giat kepemudaan",
+      },
+      {
+        title: "Dampak",
+        href: "/dampak",
+        description: "Dampak kepemudaan",
       },
     ],
   },
@@ -161,7 +181,11 @@ export function Navbar({ session }: NavbarProps) {
             />
           ) : (
             <Button asChild variant="outline">
-              <Link href="/login">Login</Link>
+              <Link
+                href={`/login?redirect=${encodeURIComponent(pathname ?? "")}`}
+              >
+                Login
+              </Link>
             </Button>
           )}
         </div>
@@ -387,7 +411,12 @@ function MobileMenu({
                 </div>
               ) : (
                 <Button asChild variant="outline" className="w-full">
-                  <Link href="/login" onClick={() => setOpen(false)}>
+                  <Link
+                    href={`/login?redirect=${encodeURIComponent(
+                      pathname ?? ""
+                    )}`}
+                    onClick={() => setOpen(false)}
+                  >
                     Login
                   </Link>
                 </Button>
@@ -411,7 +440,10 @@ function MobileMenu({
                   <Button
                     variant="destructive"
                     onClick={() =>
-                      signOut({ callbackUrl: pathname ?? "/login" })
+                      signOut({
+                        callbackUrl:
+                          encodeURIComponent(pathname ?? "") ?? "/login",
+                      })
                     }
                   >
                     <LogOut className="mr-2 h-4 w-4" />

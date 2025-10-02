@@ -31,13 +31,22 @@ const _getDetailTalent = async (slug: string) => {
   const talent = await db.talent.findUnique({
     where: { slug: normalizedSlug },
     include: {
-      products: true,
+      products: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
       socialMedias: true,
       user: {
         include: {
           articles: {
             orderBy: {
-              views: "desc",
+              articleUserLikes: {
+                _count: "desc",
+              },
+            },
+            include: {
+              _count: true,
             },
           },
         },

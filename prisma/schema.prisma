@@ -165,8 +165,8 @@ model Article {
   category String
   tags     String[]
 
-  views  Int               @default(0)
-  status ArticleStatusEnum @default(draft)
+  trackViews TrackView[]
+  status     ArticleStatusEnum @default(draft)
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -181,6 +181,14 @@ model Article {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model TrackView {
+  id Int @id @default(autoincrement())
+
+  ip        String
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id])
 }
 
 enum ArticleTypeEnum {

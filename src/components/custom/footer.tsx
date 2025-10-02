@@ -40,6 +40,7 @@ export function Footer({
         { label: "Beranda", href: "/" },
         { label: "Galeri", href: "/galeri" },
         { label: "Talenta", href: "/talenta" },
+        { label: "Komunitas", href: "/komunitas" },
       ],
     },
     {
@@ -47,6 +48,7 @@ export function Footer({
       links: [
         { label: "Detak", href: "/detak" },
         { label: "Gerak", href: "/gerak" },
+        { label: "Dampak", href: "/dampak" },
       ],
     },
     {

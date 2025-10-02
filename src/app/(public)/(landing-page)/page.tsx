@@ -5,10 +5,10 @@ import { ArticleSectionLanding } from "./(section)/article-section-landing";
 import { PartnerSection } from "./(section)/partner-section";
 import { MenuSection } from "./(section)/menu-section";
 import { BrandingSection } from "./(section)/branding-section";
-import { ArticleCardProps } from "@/components/article/article-card";
 import { getAppData } from "@/actions/app-data";
 import {
   ArticleStatusEnum,
+  ArticleTypeEnum,
   CommunityStatusEnum,
   HubStatusEnum,
   PartnerTypeEnum,
@@ -18,6 +18,7 @@ import { getAllHubs } from "@/actions/zhub";
 import { getArticles } from "@/actions/article";
 import { getAllTalents } from "@/actions/talent";
 import { getAllCommunities } from "@/actions/community";
+import { ArticleCardProps } from "@/components/article/type";
 
 const LandingPage = async () => {
   const [articles, appData, talents, communities, hubs] = await Promise.all([
@@ -46,6 +47,10 @@ const LandingPage = async () => {
         title: article.title,
         thumbnail: article.thumbnailImage,
         tags: article.tags,
+        commentsCount: article._count.comments,
+        likesCount: article._count.articleUserLikes,
+        isCommunity: article.type === ArticleTypeEnum.dampak,
+        isTalent: article.type === ArticleTypeEnum.detak,
       };
     });
   const mappedHubs: HubCardProps[] = hubs
@@ -79,6 +84,7 @@ const LandingPage = async () => {
   const countZhub = hubs
     .flatMap((h) => h.hubs)
     .filter((hub) => hub.status === HubStatusEnum.active).length;
+
   return (
     <main>
       <HeroSection

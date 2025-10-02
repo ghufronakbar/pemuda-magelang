@@ -1,4 +1,4 @@
-import { ArticleStatusEnum } from "@prisma/client";
+import { ArticleStatusEnum, ArticleTypeEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const ArticleInputSchema = z.object({
@@ -10,6 +10,7 @@ export const ArticleInputSchema = z.object({
     .url("Harap unggah gambar"),
   content: z.string().min(1, "Konten harus diisi"),
   category: z.string().min(1, "Kategori harus diisi"),
+  communityId: z.string().optional().nullable(),
   tags: z
     .array(
       z
@@ -33,6 +34,7 @@ export const ArticleInputSchema = z.object({
         });
     }),
   status: z.enum(ArticleStatusEnum, "Status harus diisi"),
+  type: z.enum(ArticleTypeEnum, "Tipe harus diisi"),
 });
 
 export type ArticleInput = z.infer<typeof ArticleInputSchema>;
@@ -44,4 +46,5 @@ export const initialArticleInput: ArticleInput = {
   category: "",
   tags: [],
   status: ArticleStatusEnum.draft,
+  type: ArticleTypeEnum.gerak,
 };

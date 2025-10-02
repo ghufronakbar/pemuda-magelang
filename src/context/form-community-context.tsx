@@ -88,6 +88,7 @@ const FormCommunityProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         if (res.result) {
           setCommunityStatus(res.result.status);
+          setOpenCommunityDialog(false);
           form.reset({
             bannerPicture: res.result.bannerPicture ?? "",
             profilePicture: res.result.profilePicture ?? "",
@@ -96,15 +97,14 @@ const FormCommunityProvider = ({ children }: { children: React.ReactNode }) => {
             ctaText: res.result.ctaText,
             ctaLink: res.result.ctaLink,
             category: res.result.category,
+            id: res.result.id,
           });
-          setOpenCommunityDialog(false);
         }
         if (data.id) {
           toast.success("Berhasil mengedit data komunitas");
         } else {
           toast.success("Berhasil mendaftarkan komunitas");
         }
-        form.reset(initialCommunityInput);
       }
     } catch (error) {
       console.error(error);

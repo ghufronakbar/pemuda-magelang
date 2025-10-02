@@ -132,6 +132,7 @@ const _createUpdateHub = async (formData: FormData) => {
         ctaLink: input.data.ctaLink,
         hubCategoryId: input.data.hubCategoryId,
         status: input.data.status,
+        slug: generateSlug(input.data.name),
       },
       select: {
         id: true,
