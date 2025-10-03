@@ -24,7 +24,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { Loader2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { FiExternalLink } from "react-icons/fi";
 import { useFormCommunity } from "@/context/form-community-context";
 

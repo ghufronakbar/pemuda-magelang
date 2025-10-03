@@ -75,6 +75,7 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchAppData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = form.handleSubmit(async (data) => {

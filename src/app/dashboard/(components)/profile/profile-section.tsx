@@ -25,7 +25,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2, Trash } from "lucide-react";
 import type { UserProfileInput } from "@/validator/user";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper";
 import { uploadImage } from "@/actions/image";
@@ -117,6 +116,7 @@ export function ProfileSection({ className }: ProfileSectionProps) {
         (item) => item.subdistrict === formProfile.watch("subdistrict")
       )?.villages ?? []
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formProfile.watch("subdistrict")]);
 
   return (

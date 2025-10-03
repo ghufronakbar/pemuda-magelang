@@ -24,7 +24,6 @@ import {
 import { useFormCommunity } from "@/context/form-community-context";
 import { COMMUNITY_CATEGORIES } from "@/data/community";
 import { UrlInput } from "@/components/custom/url-input";
-import Image from "next/image";
 import { UploadIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { uploadImage } from "@/actions/image";

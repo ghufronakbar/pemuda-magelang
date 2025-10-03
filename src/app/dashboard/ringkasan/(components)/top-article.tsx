@@ -15,7 +15,6 @@ import { ArticleStatusEnum, Role } from "@prisma/client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { FaExternalLinkAlt, FaExternalLinkSquareAlt } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";

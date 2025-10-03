@@ -52,6 +52,7 @@ const FormProductProvider = ({ children }: { children: React.ReactNode }) => {
     if (id) {
       fetchArticle(id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (

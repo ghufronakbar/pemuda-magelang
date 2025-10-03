@@ -127,6 +127,7 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

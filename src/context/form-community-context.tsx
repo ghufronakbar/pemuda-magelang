@@ -45,6 +45,7 @@ const FormCommunityProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetchCommunity();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCommunity = async () => {

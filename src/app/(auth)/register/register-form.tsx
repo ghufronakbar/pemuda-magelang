@@ -87,6 +87,7 @@ export const RegisterForm = ({
         (item) => item.subdistrict === form.getValues("subdistrict")
       )?.villages ?? []
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("subdistrict")]);
 
   const onSubmit = async (data: RegisterFormSchema) => {

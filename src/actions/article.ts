@@ -12,7 +12,6 @@ import {
 } from "@prisma/client";
 import { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
-import { getIp } from "./helper";
 
 // GET ALL PUBLISHED ARTICLES
 

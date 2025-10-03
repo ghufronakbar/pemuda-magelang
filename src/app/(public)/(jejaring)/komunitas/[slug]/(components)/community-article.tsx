@@ -1,9 +1,8 @@
-import { ArticleGridCard } from "@/components/article/grid/article-grid-card";
 import { ArticleListMap } from "@/components/article/list/article-list-map";
 import { ArticleCardProps } from "@/components/article/type";
-import { Button } from "@/components/ui/button";
-import { Article, Talent, User } from "@prisma/client";
-import Link from "next/link";
+// import { Button } from "@/components/ui/button";
+import { Talent, User } from "@prisma/client";
+// import Link from "next/link";
 
 interface CommunityArticleProps {
   articles: ArticleCardProps[];
@@ -15,22 +14,20 @@ interface CommunityArticleProps {
 
 export const CommunityArticle = ({
   articles,
-  user,
-  showShowAllButton,
+  // user,
+  // showShowAllButton,
 }: CommunityArticleProps) => {
-  const profession =
-    user.role === "user" ? user.talent?.profession || "Penulis" : "Admin";
   return (
     <section className="mb-6">
       <div className="mb-3 flex items-end justify-between gap-4">
         <h2 className="text-lg font-semibold sm:text-xl">Artikel Populers</h2>
-        {showShowAllButton && (
+        {/* {showShowAllButton && (
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link href={`/talenta/${user.talent?.slug}/artikel`}>
               Lihat semua →
             </Link>
           </Button>
-        )}
+        )} */}
       </div>
 
       {articles.length ? (
@@ -39,7 +36,7 @@ export const CommunityArticle = ({
         <p className="text-sm text-muted-foreground">Belum ada artikel.</p>
       )}
 
-      {showShowAllButton && (
+      {/* {showShowAllButton && (
         <div className="mt-6 sm:hidden">
           <Button asChild variant="outline" className="w-full">
             <Link href={`/talenta/${user.talent?.slug}/artikel`}>
@@ -47,7 +44,7 @@ export const CommunityArticle = ({
             </Link>
           </Button>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

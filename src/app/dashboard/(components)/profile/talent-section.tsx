@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/card";
 import {
   Dialog,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
   DialogDescription,

@@ -238,6 +238,7 @@ export function RichTextEditor({
         },
         onSuccess: (url: string) => {
           // opsional: analytics / toast
+          console.log("Upload success:", url);
         },
         onError: (error: unknown) => {
           console.error("Upload failed:", error);

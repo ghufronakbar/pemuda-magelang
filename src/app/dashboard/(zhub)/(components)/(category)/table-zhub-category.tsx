@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { HubCategory, Role, TalentStatusEnum } from "@prisma/client";
+import { HubCategory } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,7 +13,6 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableHeader,
@@ -23,12 +22,10 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Pagination } from "@/components/custom/pagination";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { roleEnum } from "@/enum/role-enum";
 import { formatIDDate } from "@/lib/helper";
 import { useFormCategoryHub } from "@/context/form-category-hub-context";
 

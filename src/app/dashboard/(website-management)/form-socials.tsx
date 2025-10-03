@@ -7,9 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import {
@@ -19,7 +16,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { ImageUploader } from "@/components/custom/image-uploader";
 import {
   Select,
   SelectContent,

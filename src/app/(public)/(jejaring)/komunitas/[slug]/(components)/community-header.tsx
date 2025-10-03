@@ -19,7 +19,6 @@ export const CommunityHeader = ({ community }: CommunityHeaderProps) => {
     bannerPicture,
     name,
     profilePicture,
-    user,
     ctaText,
     ctaLink,
     category,

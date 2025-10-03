@@ -1,9 +1,8 @@
-// components/article-detail.tsx
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import type { Article, User, Talent, Comment, Role } from "@prisma/client";
+import type { Article, User, Comment } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import RichTextStyles from "@/components/editor/rich-text-styles";
@@ -179,10 +178,6 @@ export async function ArticleDetail({
       <CommentSection article={article} className="mt-6" session={session} />
     </section>
   );
-}
-
-function capitalize(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 // Estimasi waktu baca (200 wpm)

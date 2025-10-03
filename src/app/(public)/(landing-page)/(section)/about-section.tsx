@@ -1,4 +1,3 @@
-// components/landing/about-section.tsx
 "use client";
 
 import Image from "next/image";
@@ -7,12 +6,9 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type * as React from "react";
-import { Users, Handshake, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { AboutItem } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
-
-type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
 export interface AboutSectionProps {
   title?: string;
