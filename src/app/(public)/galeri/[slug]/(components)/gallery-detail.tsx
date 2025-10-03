@@ -76,7 +76,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
           </div>
 
           {safeImages.length > 1 && (
-            <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
+            <div className="p-2 flex gap-3 overflow-x-auto pb-1">
               {safeImages.map((src, idx) => (
                 <button
                   key={src + idx}

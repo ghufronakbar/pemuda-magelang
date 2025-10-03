@@ -31,6 +31,7 @@ import {
 
 import { Save, EarthIcon, Loader2, Plus, Trash2 } from "lucide-react";
 import { useFieldArray } from "react-hook-form";
+import { PRODUCT_CATEGORIES } from "@/data/product";
 
 export function FormProduct() {
   const { form, loading } = useFormProduct();
@@ -323,15 +324,3 @@ export function FormProduct() {
     </Form>
   );
 }
-
-/* ================== Konstanta ================== */
-const PRODUCT_CATEGORIES = [
-  "Merchandise",
-  "Kerajinan",
-  "Desain",
-  "Fotografi",
-  "Musik",
-  "Kuliner",
-  "Event",
-  "Layanan",
-];

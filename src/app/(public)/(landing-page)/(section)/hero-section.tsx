@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { HERO_IMAGE } from "@/constants";
 
 export interface HeroSectionProps {
   title?: string;
@@ -33,13 +34,26 @@ export function HeroSection({
         className
       )}
     >
+      <div className="absolute inset-0 z-10 w-full h-full">
+        <Image
+          src={HERO_IMAGE}
+          alt="Ilustrasi Pemuda Magelang"
+          width={1920}
+          height={1080}
+          className="object-cover w-full h-full"
+          priority
+        />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent z-10" /> */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20 z-10" />
+      </div>
+
       {/* Decorative background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-[-10%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute right-[-10%] bottom-[-10%] h-[28rem] w-[28rem] rounded-full bg-blue-500/10 blur-3xl" />
       </div>
 
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:py-24 lg:px-8">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:py-24 lg:px-8 z-10">
         {/* Left: copy & CTAs */}
         <div className="order-2 lg:order-1 lg:col-span-6">
           <div className="mb-4">
@@ -48,10 +62,10 @@ export function HeroSection({
             </Badge>
           </div>
 
-          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl text-white">
             {title}
           </h1>
-          <p className="mt-3 max-w-prose text-sm text-muted-foreground sm:text-base">
+          <p className="mt-3 max-w-prose text-sm text-gray-200 sm:text-base">
             {subtitle}
           </p>
 

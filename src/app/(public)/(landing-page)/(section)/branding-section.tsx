@@ -30,7 +30,7 @@ export function BrandingSection({
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
     >
       {/* White container with split layout */}
-      <div className="relative overflow-visible rounded-2xl border bg-white shadow-sm">
+      <div className="relative overflow-visible rounded-2xl border bg-primary shadow-sm">
         <div className="grid grid-cols-1 items-center gap-6 p-4 sm:p-6 lg:grid-cols-12 lg:gap-8 lg:p-8">
           {/* Left: Video (sticks out to the left on larger screens) */}
           <div className="lg:col-span-7">
@@ -41,7 +41,7 @@ export function BrandingSection({
                 // "-ml-2 sm:-ml-4 lg:-ml-16"
               )}
             >
-              {src ? (
+              {src && (
                 <iframe
                   title={title}
                   src={src}
@@ -50,11 +50,6 @@ export function BrandingSection({
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
-              ) : (
-                <div className="grid h-full place-items-center p-6 text-center text-sm text-muted-foreground">
-                  URL YouTube tidak valid. Contoh:
-                  https://www.youtube.com/watch?v=XXXXXXXXXXX
-                </div>
               )}
             </div>
           </div>
@@ -62,8 +57,8 @@ export function BrandingSection({
           {/* Right: Text */}
           <div className="lg:col-span-5">
             <div className="space-y-3">
-              <h3 className="text-2xl font-semibold sm:text-3xl">{title}</h3>
-              <p className="text-sm text-muted-foreground">{description}</p>
+              <h3 className="text-2xl font-semibold sm:text-3xl text-white">{title}</h3>
+              <p className="text-sm text-white">{description}</p>
               {ctaHref && (
                 <div className="pt-2">
                   <Button asChild size="lg">
