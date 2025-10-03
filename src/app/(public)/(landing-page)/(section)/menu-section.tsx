@@ -97,7 +97,7 @@ function MenuCard({
         )}
       >
         <CardHeader className="items-center space-y-3 text-center">
-          <div className="rounded-full flex aspect-square w-fit h-fit bg-background p-4 shadow-sm transition-colors group-hover:bg-accent items-center justify-center mx-auto">
+          <div className="rounded-full flex aspect-square w-fit h-fit bg-background p-4 shadow-sm transition-colors group-hover:bg-primary group-hover:text-white items-center justify-center mx-auto">
             {Icon ? (
               <Icon aria-hidden className="h-7 w-7" />
             ) : (
@@ -112,11 +112,11 @@ function MenuCard({
 
         <CardContent />
 
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center mt-auto">
           <Button
             size="sm"
             variant="outline"
-            className="transition-transform group-hover:translate-x-0.5"
+            className="transition-transform group-hover:translate-x-0.5 hover:bg-primary"
           >
             Buka →
           </Button>

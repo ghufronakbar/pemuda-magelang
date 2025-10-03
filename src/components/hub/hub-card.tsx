@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Clock, PowerOff } from "lucide-react";
+import { PLACEHOLDER_IMAGE } from "@/constants";
 
 export interface HubCardProps {
   title: string;
@@ -42,23 +43,18 @@ export function HubCard({
     >
       {/* Media */}
       <div className="relative aspect-[16/9] w-full bg-muted">
-        {image ? (
-          <Image
-            src={image}
-            alt={`Program ${title}`}
-            fill
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
-            className={cn(
-              "object-cover",
-              "transition-transform duration-300 group-hover:scale-[1.02]"
-            )}
-            priority={false}
-          />
-        ) : (
-          <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-muted to-muted-foreground/10">
-            <span className="text-xs text-muted-foreground">No Image</span>
-          </div>
-        )}
+        <Image
+          src={image || PLACEHOLDER_IMAGE}
+          alt={`Program ${title}`}
+          fill
+          sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
+          className={cn(
+            "object-cover",
+            "transition-transform duration-300 group-hover:scale-[1.02]"
+          )}
+          priority={false}
+        />
+
         {/* Status badge */}
         <div className="absolute left-3 top-3">
           <Badge

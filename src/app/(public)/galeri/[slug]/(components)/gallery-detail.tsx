@@ -108,7 +108,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
           {/* Tags */}
           <div className="flex flex-wrap items-center gap-2">
             {tags?.map((t) => (
-              <Badge key={t} variant="secondary" className="rounded-full">
+              <Badge key={t} variant="outline" className="rounded-full">
                 #{t}
               </Badge>
             ))}
@@ -119,7 +119,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
           </h1>
 
           {/* Price (opsional) */}
-          {typeof price === "number" && (
+          {typeof price === "number" && price !== 0 && (
             <div className="mt-2 text-xl font-semibold">{formatIDR(price)}</div>
           )}
 
@@ -142,7 +142,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
                 {talent.profession} • {talent.industry}
               </div>
             </div>
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex flex-col gap-2">
               <Button asChild size="sm" variant="outline">
                 <Link href={`/talenta/${talent.slug}`}>Lihat Profil</Link>
               </Button>
@@ -153,7 +153,10 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {socialMediaPlatformEnum.getIcon(ctaSM!.platform, "mr-2 text-white")}
+                    {socialMediaPlatformEnum.getIcon(
+                      ctaSM.platform,
+                      "mr-2 text-white"
+                    )}
                     {ctaLabel}
                   </Link>
                 </Button>
@@ -176,7 +179,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
                       asChild
                       size="sm"
                       variant="secondary"
-                      className="justify-start gap-2"
+                      className="justify-start gap-2 bg-primary/10 text-primary hover:bg-primary/20"
                     >
                       <Link
                         href={href}

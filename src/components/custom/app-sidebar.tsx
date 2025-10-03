@@ -315,7 +315,7 @@ function Item({
     <SidebarMenuItem data-active={active}>
       <SidebarMenuButton
         asChild
-        className={cn(active && "bg-accent text-primary")}
+        className={cn(active && "bg-primary text-primary-foreground")}
       >
         <Link href={href}>
           <Icon className="mr-2 h-4 w-4" />

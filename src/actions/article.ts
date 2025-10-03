@@ -30,6 +30,7 @@ const _getArticles = async () => {
           talent: true,
         },
       },
+      community: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -77,20 +78,25 @@ const _getDetailArticle = async (
     ? "yet"
     : "unauthenticated";
   if (article) {
-    const checkView = await db.trackView.findFirst({
-      where: {
-        articleId: article?.id,
-        ip,
-      },
-    });
-    if (!checkView) {
-      await db.trackView.create({
-        data: {
+    if (ip) {
+      const checkView = await db.trackView.findFirst({
+        where: {
           articleId: article?.id,
           ip,
         },
+        select: {
+          id: true,
+        },
       });
-      article._count.trackViews = article._count.trackViews + 1;
+      if (!checkView) {
+        await db.trackView.create({
+          data: {
+            articleId: article?.id,
+            ip,
+          },
+        });
+        article._count.trackViews = article._count.trackViews + 1;
+      }
     }
     const like = await db.articleUserLike.findFirst({
       where: {

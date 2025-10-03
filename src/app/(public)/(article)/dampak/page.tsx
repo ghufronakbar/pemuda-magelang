@@ -1,7 +1,11 @@
 import { getArticles } from "@/actions/article";
 import { ArticleCardProps } from "@/components/article/type";
 import { ArticleListSection } from "@/components/article/list/article-list-section";
-import { ArticleStatusEnum, ArticleTypeEnum } from "@prisma/client";
+import {
+  ArticleStatusEnum,
+  ArticleTypeEnum,
+  CommunityStatusEnum,
+} from "@prisma/client";
 
 const DampakPage = async () => {
   const articles = await getArticles();
@@ -9,7 +13,8 @@ const DampakPage = async () => {
     .filter(
       (article) =>
         article.status === ArticleStatusEnum.published &&
-        article.type === ArticleTypeEnum.dampak
+        article.type === ArticleTypeEnum.dampak &&
+        article.community?.status === CommunityStatusEnum.approved
     )
     .map((article) => {
       return {

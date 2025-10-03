@@ -84,8 +84,8 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
                   {name}
                 </h1>
                 {status === TalentStatusEnum.approved && (
-                  <Badge className="shrink-0 gap-1" variant="secondary">
-                    <CheckCheck className="h-3.5 w-3.5" />
+                  <Badge className="shrink-0 gap-1 bg-primary/10 text-primary" variant="outline">
+                    <CheckCheck className="h-3.5 w-3.5 text-primary" />
                     Terverifikasi
                   </Badge>
                 )}
@@ -121,11 +121,11 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
                   asChild
                   size="sm"
                   variant="outline"
-                  className="gap-2"
+                  className="gap-2 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary-foreground"
                 >
                   <Link href={href} target="_blank" rel="noopener noreferrer">
                     {socialMediaPlatformEnum.getIcon(sm.platform)}
-                    <span className="text-xs">
+                    <span className="text-xs text-primary">
                       {socialMediaPlatformEnum.getLabel(sm.platform)}
                     </span>
                   </Link>

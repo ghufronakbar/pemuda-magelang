@@ -134,8 +134,9 @@ export function Navbar({ session }: NavbarProps) {
                       asChild
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "bg-transparent hover:bg-accent/50",
-                        pathname === item.href && "text-primary"
+                        "bg-transparent hover:bg-primary/90 hover:text-white",
+                        pathname === item.href &&
+                          "bg-primary text-primary-foreground"
                       )}
                     >
                       <Link href={item.href}>{item.title}</Link>
@@ -145,7 +146,7 @@ export function Navbar({ session }: NavbarProps) {
                   {/* With children */}
                   {!item.href && item.items.length > 0 && (
                     <>
-                      <NavigationMenuTrigger className="bg-transparent hover:bg-accent/50">
+                      <NavigationMenuTrigger className="bg-transparent hover:bg-primary/50">
                         {item.title}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -180,7 +181,7 @@ export function Navbar({ session }: NavbarProps) {
               pathname={pathname}
             />
           ) : (
-            <Button asChild variant="outline">
+            <Button variant="outline">
               <Link
                 href={`/login?redirect=${encodeURIComponent(pathname ?? "")}`}
               >
@@ -268,7 +269,7 @@ function UserMenuDesktop({
           >
             <LayoutDashboard className="h-4 w-4" />
 
-            <span>Dashboard</span>
+            <span className="!text-black">Dashboard</span>
           </Link>
         </DropdownMenuItem>
 
@@ -306,7 +307,7 @@ function MobileMenu({
       <SheetTrigger asChild>
         <button
           aria-label="Buka menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-primary hover:text-white transition-all duration-300"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -338,8 +339,8 @@ function MobileMenu({
                       href={item.href}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "block rounded-md px-4 py-3 text-sm hover:bg-accent",
-                        active && "bg-accent text-primary"
+                        "block rounded-md px-4 py-3 text-sm hover:bg-primary/90 hover:text-white",
+                        active && "bg-primary text-primary-foreground"
                       )}
                     >
                       {item.title}
@@ -357,7 +358,7 @@ function MobileMenu({
                         {item.title}
                       </AccordionTrigger>
                       <AccordionContent>
-                        <ul className="pb-2">
+                        <ul className="pb-2 space-y-1">
                           {item.items.map((child, i) => {
                             const active = pathname === child.href;
                             return (
@@ -366,15 +367,21 @@ function MobileMenu({
                                   href={child.href}
                                   onClick={() => setOpen(false)}
                                   className={cn(
-                                    "block px-8 py-2.5 text-sm hover:bg-accent",
-                                    active && "bg-accent text-primary"
+                                    "block px-8 py-2.5 text-sm hover:bg-primary/90 hover:text-white group rounded-md",
+                                    active &&
+                                      "bg-primary text-primary-foreground"
                                   )}
                                 >
                                   <div className="font-medium">
                                     {child.title}
                                   </div>
                                   {child.description && (
-                                    <p className="text-xs text-muted-foreground">
+                                    <p
+                                      className={cn(
+                                        "text-xs text-muted-foreground group-hover:text-white",
+                                        active && "text-white"
+                                      )}
+                                    >
                                       {child.description}
                                     </p>
                                   )}
@@ -472,7 +479,11 @@ function ListItem({
       <NavigationMenuLink asChild>
         <Link
           href={href}
-          className="block rounded-md p-3 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
+          className="block rounded-md p-3 text-foreground transition-colors
+                     hover:bg-primary/90
+                     hover:[&>div]:text-white
+                     hover:[&>p]:text-white
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <div className="text-sm font-medium leading-none">{title}</div>
           {children && (
