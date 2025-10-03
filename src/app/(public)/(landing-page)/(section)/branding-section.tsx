@@ -17,7 +17,7 @@ export interface BrandingSectionProps {
 
 export function BrandingSection({
   title,
-  url = "https://www.youtube.com/watch?v=z-JqZQy0Qyo",
+  url,
   description = "Pemuda Magelang adalah wadah kolaborasi talenta—temukan komunitas, bangun portofolio, dan bertumbuh bersama lewat program dan kegiatan yang relevan.",
   ctaHref,
   ctaLabel = "Pelajari Selengkapnya",

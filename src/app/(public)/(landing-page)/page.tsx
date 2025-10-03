@@ -29,7 +29,11 @@ const LandingPage = async () => {
     getAllHubs(),
   ]);
   const mappedArticles: ArticleCardProps[] = articles
-    .filter((article) => article.status === ArticleStatusEnum.published)
+    .filter(
+      (article) =>
+        article.status === ArticleStatusEnum.published &&
+        article.type === ArticleTypeEnum.detak
+    )
     .map((article) => {
       return {
         category: article.category,
