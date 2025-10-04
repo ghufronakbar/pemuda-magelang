@@ -328,6 +328,7 @@ const _updateUserTalent = async (formData: FormData) => {
                     name: award.name,
                     description: award.description,
                     date: award.date,
+                    image: award.image || null,
                   })),
                 },
               }
@@ -423,6 +424,7 @@ const _updateUserTalent = async (formData: FormData) => {
                         name: award.name,
                         description: award.description,
                         date: award.date,
+                        image: award.image || null,
                       })),
                     },
                   }

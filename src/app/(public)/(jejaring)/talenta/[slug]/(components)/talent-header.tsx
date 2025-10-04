@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCheck } from "lucide-react";
+import { CheckCheck, Download } from "lucide-react";
 import {
   SocialMedia,
   SocialMediaPlatformEnum,
@@ -28,6 +28,7 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
     industry,
     status,
     socialMedias,
+    id,
   } = talent;
 
   // CTA prioritas WhatsApp -> Email -> Website -> lainnya
@@ -84,7 +85,10 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
                   {name}
                 </h1>
                 {status === TalentStatusEnum.approved && (
-                  <Badge className="shrink-0 gap-1 bg-primary/10 text-primary" variant="outline">
+                  <Badge
+                    className="shrink-0 gap-1 bg-primary/10 text-primary"
+                    variant="outline"
+                  >
                     <CheckCheck className="h-3.5 w-3.5 text-primary" />
                     Terverifikasi
                   </Badge>
@@ -97,17 +101,28 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
           </div>
 
           {/* kanan: CTA, beri ruang & tidak mepet */}
-          {ctaHref && (
-            <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1">
-              <Link href={ctaHref} target="_blank" rel="noopener noreferrer">
-                {socialMediaPlatformEnum.getIcon(
-                  cta.platform,
-                  "mr-2 text-white"
-                )}
-                {ctaLabel}
+          <div className="flex flex-col gap-2">
+            {ctaHref && (
+              <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1">
+                <Link href={ctaHref} target="_blank" rel="noopener noreferrer">
+                  {socialMediaPlatformEnum.getIcon(
+                    cta.platform,
+                    "mr-2 text-white"
+                  )}
+                  {ctaLabel}
+                </Link>
+              </Button>
+            )}
+            <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1" variant="outline">
+              <Link
+                href={`/api/cv/${id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Download className="mr-2 h-4 w-4" /> Download CV
               </Link>
             </Button>
-          )}
+          </div>
         </div>
 
         {/* Sosial media list */}

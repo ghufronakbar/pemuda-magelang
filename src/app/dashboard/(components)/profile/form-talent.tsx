@@ -215,10 +215,7 @@ export function FormTalent({
 
         <div className="space-y-3">
           {smArray.fields.map((f, i) => (
-            <div
-              key={f.id}
-              className="grid gap-3 md:grid-cols-[220px_1fr_auto] items-start"
-            >
+            <div key={f.id} className="flex flex-row gap-3 items-start">
               <FormField
                 control={formTalent.control}
                 name={`socialMedias.${i}.platform`}
@@ -255,13 +252,14 @@ export function FormTalent({
                 control={formTalent.control}
                 name={`socialMedias.${i}.url`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel className="sr-only">URL</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="https://…"
                         {...field}
                         disabled={disabled}
+                        className="w-full"
                       />
                     </FormControl>
                     <FormMessage />
@@ -656,28 +654,27 @@ export function FormTalent({
                     )}
                   />
 
-                  <div className="grid gap-3 md:grid-cols-2 items-start">
-                    <FormField
-                      control={formTalent.control}
-                      name={`awards.${i}.date`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tanggal</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="date"
-                              value={formatDateInput(field.value as Date)}
-                              onChange={(e) =>
-                                field.onChange(toDateOrNull(e.target.value))
-                              }
-                              disabled={disabled}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={formTalent.control}
+                    name={`awards.${i}.date`}
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>Tanggal</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="w-full"
+                            type="date"
+                            value={formatDateInput(field.value as Date)}
+                            onChange={(e) =>
+                              field.onChange(toDateOrNull(e.target.value))
+                            }
+                            disabled={disabled}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={formTalent.control}

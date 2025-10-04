@@ -56,22 +56,24 @@ export const UserTalentSchema = z.object({
         startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
         endDate: z.coerce.date().optional().nullable(),
       })
-      .refine((data) => data.endDate && data.startDate < data.endDate, {
-        path: ["endDate"],
-        message: "Tanggal selesai harus lebih dari tanggal mulai",
-      })
+      // .refine((data) => data.endDate && data.startDate < data.endDate, {
+      //   path: ["endDate"],
+      //   message: "Tanggal selesai harus lebih dari tanggal mulai",
+      // })
   ),
   workExperiences: z.array(
-    z.object({
-      companyName: z.string().min(1, "Nama perusahaan tidak boleh kosong"),
-      position: z.string().min(1, "Jabatan tidak boleh kosong"),
-      description: z.string().optional().nullable(),
-      startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
-      endDate: z.coerce.date().optional().nullable(),
-    }).refine((data) => data.endDate && data.startDate < data.endDate, {
-      path: ["endDate"],
-      message: "Tanggal selesai harus lebih dari tanggal mulai",
-    }),
+    z
+      .object({
+        companyName: z.string().min(1, "Nama perusahaan tidak boleh kosong"),
+        position: z.string().min(1, "Jabatan tidak boleh kosong"),
+        description: z.string().optional().nullable(),
+        startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
+        endDate: z.coerce.date().optional().nullable(),
+      })
+      // .refine((data) => data.endDate && data.startDate < data.endDate, {
+      //   path: ["endDate"],
+      //   message: "Tanggal selesai harus lebih dari tanggal mulai",
+      // })
   ),
 });
 
