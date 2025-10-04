@@ -3,46 +3,41 @@
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
-interface ArticleFilterContext {
+interface FilterContext {
   search: string;
   setSearch: (search: string) => void;
   category: string;
   setCategory: (category: string) => void;
 }
 
-const ArticleFilterContext = createContext<ArticleFilterContext>({
+const FilterContext = createContext<FilterContext>({
   search: "",
   setSearch: () => {},
   category: "",
   setCategory: () => {},
 });
 
-export const ArticleFilterProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const pathname = usePathname();
   useEffect(() => {
     setCategory("");
+    setSearch("");
   }, [pathname]);
   return (
-    <ArticleFilterContext.Provider
+    <FilterContext.Provider
       value={{ search, setSearch, category, setCategory }}
     >
       {children}
-    </ArticleFilterContext.Provider>
+    </FilterContext.Provider>
   );
 };
 
-export const useArticleFilter = () => {
-  const context = useContext(ArticleFilterContext);
+export const useFilter = () => {
+  const context = useContext(FilterContext);
   if (!context) {
-    throw new Error(
-      "useArticleFilter must be used within a ArticleFilterProvider"
-    );
+    throw new Error("useFilter must be used within a FilterProvider");
   }
   return context;
 };

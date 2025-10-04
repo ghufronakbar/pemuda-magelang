@@ -29,6 +29,7 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
     status,
     socialMedias,
     id,
+    description,
   } = talent;
 
   // CTA prioritas WhatsApp -> Email -> Website -> lainnya
@@ -44,7 +45,7 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
     ? `Hubungi di ${socialMediaPlatformEnum.getLabel(cta.platform)}`
     : "Hubungi";
   return (
-    <div className="relative mb-16 overflow-hidden rounded-2xl border bg-card">
+    <div className="relative mb-8 overflow-hidden rounded-2xl border bg-card">
       {/* Banner */}
       <div className="relative h-48 w-full sm:h-56 md:h-64 lg:h-72">
         {bannerPicture ? (
@@ -69,35 +70,57 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
       <div className="px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           {/* kiri: avatar + teks */}
-          <div className="flex min-w-0 items-end gap-4">
-            {/* Avatar overlap sedikit ke banner */}
-            <div className="-mt-10 sm:-mt-12">
-              <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
-                <AvatarImage src={profilePicture ?? ""} alt={name} />
-                <AvatarFallback>{getInitials(name)}</AvatarFallback>
-              </Avatar>
-            </div>
+          <div className="flex flex-col min-w-0 items-start gap-4">
+            <div>
+              <div className="-mt-10 sm:-mt-12">
+                <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
+                  <AvatarImage src={profilePicture ?? ""} alt={name} />
+                  <AvatarFallback>{getInitials(name)}</AvatarFallback>
+                </Avatar>
+              </div>
 
-            <div className="min-w-0 pb-1">
-              <div className="flex flex-wrap items-center gap-2">
-                {/* truncate untuk nama panjang */}
-                <h1 className="truncate text-xl font-semibold sm:text-2xl">
-                  {name}
-                </h1>
-                {status === TalentStatusEnum.approved && (
-                  <Badge
-                    className="shrink-0 gap-1 bg-primary/10 text-primary"
-                    variant="outline"
-                  >
-                    <CheckCheck className="h-3.5 w-3.5 text-primary" />
-                    Terverifikasi
-                  </Badge>
-                )}
-              </div>
-              <div className="mt-1 truncate text-sm text-muted-foreground">
-                {profession} • {industry}
+              <div className="min-w-0 pb-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* truncate untuk nama panjang */}
+                  <h1 className="truncate text-xl font-semibold sm:text-2xl">
+                    {name}
+                  </h1>
+                </div>
+                <div className="mt-1 truncate text-sm text-muted-foreground">
+                  {profession} • {industry}
+                </div>
               </div>
             </div>
+            {socialMedias.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {socialMedias.map((sm) => {
+                  const href = normalizeSocialUrl(sm.platform, sm.url);
+                  return (
+                    <Button
+                      key={sm.id}
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="gap-2 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary-foreground"
+                    >
+                      <Link
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {socialMediaPlatformEnum.getIcon(sm.platform)}
+                        <span className="text-xs text-primary">
+                          {socialMediaPlatformEnum.getLabel(sm.platform)}
+                        </span>
+                      </Link>
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+            {description && (
+              <p className="text-sm text-muted-foreground">{description}</p>
+            )}
           </div>
 
           {/* kanan: CTA, beri ruang & tidak mepet */}
@@ -113,7 +136,12 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
                 </Link>
               </Button>
             )}
-            <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1" variant="outline">
+            <Button
+              asChild
+              size="lg"
+              className="shrink-0 sm:mt-0 md:mb-1"
+              variant="outline"
+            >
               <Link
                 href={`/api/cv/${id}`}
                 target="_blank"
@@ -124,31 +152,6 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
             </Button>
           </div>
         </div>
-
-        {/* Sosial media list */}
-        {socialMedias.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {socialMedias.map((sm) => {
-              const href = normalizeSocialUrl(sm.platform, sm.url);
-              return (
-                <Button
-                  key={sm.id}
-                  asChild
-                  size="sm"
-                  variant="outline"
-                  className="gap-2 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary-foreground"
-                >
-                  <Link href={href} target="_blank" rel="noopener noreferrer">
-                    {socialMediaPlatformEnum.getIcon(sm.platform)}
-                    <span className="text-xs text-primary">
-                      {socialMediaPlatformEnum.getLabel(sm.platform)}
-                    </span>
-                  </Link>
-                </Button>
-              );
-            })}
-          </div>
-        )}
       </div>
     </div>
   );

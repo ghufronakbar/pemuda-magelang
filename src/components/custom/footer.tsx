@@ -51,10 +51,10 @@ export function Footer({
         { label: "Dampak", href: "/dampak" },
       ],
     },
-    {
-      title: "Zhub",
-      links: zhubLinks,
-    },
+    // {
+    //   title: "Zhub",
+    //   links: zhubLinks,
+    // },
     {
       title: "Bantuan",
       links: [
@@ -69,7 +69,7 @@ export function Footer({
     <footer className={cn("border-t bg-background", className)}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top: Brand + Newsletter */}
-        <div className="grid gap-8 py-10 md:grid-cols-3">
+        <div className="flex flex-row flex-wrap gap-8 py-10">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-3">
               {/* Logo */}
@@ -99,8 +99,8 @@ export function Footer({
           </div>
 
           {/* Navigation columns */}
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="md:col-span-2 items-end justify-end">
+            <div className="flex flex-row flex-wrap gap-36 w-full">
               {columns?.map((col) => (
                 <nav
                   key={col.title}
@@ -129,22 +129,6 @@ export function Footer({
             </div>
           </div>
         </div>
-
-        <Separator />
-
-        {/* Newsletter row */}
-        {/* <div className="flex flex-col items-start justify-between gap-3 py-6 sm:flex-row sm:items-center">
-          <p className="text-sm text-muted-foreground">
-            Dapatkan kabar terbaru dan kurasi pilihan setiap minggunya.
-          </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex w-full max-w-sm items-center gap-2"
-          >
-            <Input type="email" placeholder="Email kamu" aria-label="Email" />
-            <Button type="submit">Langganan</Button>
-          </form>
-        </div> */}
 
         <Separator />
 

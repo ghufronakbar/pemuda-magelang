@@ -54,58 +54,67 @@ interface LinkItem {
   items: { title: string; href: string; description: string | null }[];
 }
 
-export const LINK_ITEMS: LinkItem[] = [
-  { title: "Beranda", href: "/", items: [] },
-  { title: "Galeri", href: "/galeri", items: [] },
-  {
-    title: "Jejaring",
-    href: null,
-    items: [
-      {
-        title: "Talenta",
-        href: "/talenta",
-        description: "Talenta muda",
-      },
-      {
-        title: "Komunitas",
-        href: "/komunitas",
-        description: "Komunitas kepemudaan",
-      },
-    ],
-  },
-  {
-    title: "Townhall",
-    href: null,
-    items: [
-      {
-        title: "Detak",
-        href: "/detak",
-        description: "Kolom opini berbagai topik",
-      },
-      {
-        title: "Gerak",
-        href: "/gerak",
-        description: "Jurnal giat kepemudaan",
-      },
-      {
-        title: "Dampak",
-        href: "/dampak",
-        description: "Dampak kepemudaan",
-      },
-    ],
-  },
-  { title: "Zhub", href: "/zhub", items: [] },
-];
-
 interface NavbarProps {
   session: Session | null;
+  categoriesHubs: { label: string; href: string }[];
 }
 
-export function Navbar({ session }: NavbarProps) {
+export function Navbar({ session, categoriesHubs }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
 
   const dashboardHref = "/dashboard";
+
+  const LINK_ITEMS: LinkItem[] = [
+    { title: "Beranda", href: "/", items: [] },
+    { title: "Galeri", href: "/galeri", items: [] },
+    {
+      title: "Jejaring",
+      href: null,
+      items: [
+        {
+          title: "Talenta",
+          href: "/talenta",
+          description: "Talenta muda",
+        },
+        {
+          title: "Komunitas",
+          href: "/komunitas",
+          description: "Komunitas kepemudaan",
+        },
+      ],
+    },
+    {
+      title: "Townhall",
+      href: null,
+      items: [
+        {
+          title: "Detak",
+          href: "/detak",
+          description: "Kolom opini berbagai topik",
+        },
+        {
+          title: "Gerak",
+          href: "/gerak",
+          description: "Jurnal giat kepemudaan",
+        },
+        {
+          title: "Dampak",
+          href: "/dampak",
+          description: "Dampak kepemudaan",
+        },
+      ],
+    },
+    {
+      title: "Zhub",
+      href: null,
+      items: categoriesHubs.map((item) => ({
+        title: item.label,
+        href: item.href,
+        description: null,
+      })),
+    },
+  ];
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -199,6 +208,7 @@ export function Navbar({ session }: NavbarProps) {
             pathname={pathname}
             dashboardHref={dashboardHref}
             session={session}
+            itemLinks={LINK_ITEMS}
           />
         </div>
       </div>
@@ -295,12 +305,14 @@ function MobileMenu({
   pathname,
   dashboardHref,
   session,
+  itemLinks,
 }: {
   open: boolean;
   setOpen: (v: boolean) => void;
   pathname: string | null;
   dashboardHref: string;
   session: Session | null;
+  itemLinks: LinkItem[];
 }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -329,7 +341,7 @@ function MobileMenu({
 
         <div className="overflow-y-auto p-2">
           <ul className="space-y-1">
-            {LINK_ITEMS.map((item, idx) => {
+            {itemLinks.map((item, idx) => {
               // Simple link
               if (item.href && item.items.length === 0) {
                 const active = pathname === item.href;

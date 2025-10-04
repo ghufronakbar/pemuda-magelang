@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { ArticleFilterProvider } from "@/components/article/filter/article-filter-context";
+import { FilterProvider } from "@/components/filter/filter-context";
 import { LandingLayout } from "@/components/ui/layouts/landing-layout";
 
 export default async function RootLayout({
@@ -9,8 +9,8 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   return (
-    <ArticleFilterProvider>
+    <FilterProvider>
       <LandingLayout session={session}>{children}</LandingLayout>
-    </ArticleFilterProvider>
+    </FilterProvider>
   );
 }

@@ -1,8 +1,12 @@
-// components/talent-section.tsx
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CommunityCard, CommunityCardProps } from "./community-card";
+import { useMemo } from "react";
+import { useFilter } from "../filter/filter-context";
+import { Filter } from "../filter/filter";
 
 export interface CommunitySectionProps {
   title?: string;
@@ -21,10 +25,17 @@ export function CommunitySection({
   viewAllHref,
   className,
 }: CommunitySectionProps) {
-  const data = communities.slice(
-    0,
-    typeof limit === "number" ? limit : undefined
-  );
+  const { search, category } = useFilter();
+  const categories = useMemo(() => {
+    return Array.from(new Set(communities.map((c) => c.category)));
+  }, [communities]);
+  const data = useMemo(() => {
+    return communities.filter(
+      (c) =>
+        c.name.toLowerCase().includes(search.toLowerCase()) &&
+        c.category.toLowerCase().includes(category.toLowerCase())
+    );
+  }, [communities, search, category]);
 
   return (
     <section
@@ -45,11 +56,25 @@ export function CommunitySection({
         )}
       </div>
 
+      <Filter
+        categories={categories}
+        className="mb-4"
+        placeholder="Cari komunitas..."
+      />
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((t) => (
           <CommunityCard key={t.slug} {...t} />
         ))}
       </div>
+
+      {data.length === 0 && (
+        <div className="flex flex-col gap-5 max-w-4xl mx-auto h-40 items-center justify-center">
+          <p className="text-center text-sm text-muted-foreground">
+            Tidak ada komunitas yang cocok dengan pencarian
+          </p>
+        </div>
+      )}
 
       {viewAllHref && (
         <div className="mt-6 flex justify-center sm:hidden">

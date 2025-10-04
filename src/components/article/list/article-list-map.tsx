@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import { ArticleListCard } from "./article-list-card";
 import { ArticleCardProps } from "../type";
-import { useArticleFilter } from "../filter/article-filter-context";
+import { useFilter } from "../../filter/filter-context";
 
 export const ArticleListMap = ({ data }: { data: ArticleCardProps[] }) => {
-  const { search, category } = useArticleFilter();
+  const { search, category } = useFilter();
   const filteredData = useMemo(() => {
     return data.filter(
       (a) =>

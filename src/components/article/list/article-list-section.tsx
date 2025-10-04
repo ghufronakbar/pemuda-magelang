@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArticleSectionProps } from "../type";
-import { ArticleFilter } from "../filter/article-filter";
+import { Filter } from "../../filter/filter";
 import { ArticleListMap } from "./article-list-map";
 
 export function ArticleListSection({
@@ -32,7 +32,7 @@ export function ArticleListSection({
       </div>
 
       {!viewAllHref && (
-        <ArticleFilter
+        <Filter
           categories={Array.from(new Set(articles.map((a) => a.category)))}
         />
       )}

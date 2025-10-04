@@ -62,7 +62,7 @@ export const FormSocials = () => {
             <Button
               type="button"
               size="sm"
-              variant="secondary"
+              variant="default"
               onClick={() =>
                 socialArray.append({ platform: "instagram", url: "" })
               }
@@ -130,10 +130,11 @@ export const FormSocials = () => {
 
               <Button
                 type="button"
-                variant="outline"
+                variant="destructive"
                 className="sm:justify-self-end"
                 onClick={() => socialArray.remove(i)}
               >
+                Hapus
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

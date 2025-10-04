@@ -29,7 +29,7 @@ export function CommunityDetail({ data, className }: CommunityDetailProps) {
 
       {/* ===== Bio / Deskripsi ===== */}
 
-      <CommunityBio bio={description} />
+      {/* <CommunityBio bio={description} /> */}
 
       <CommunityArticle
         articles={articles}

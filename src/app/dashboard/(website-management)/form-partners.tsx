@@ -101,7 +101,7 @@ export const FormPartners = () => {
           <Button
             type="button"
             size="sm"
-            variant="secondary"
+            variant="default"
             onClick={() => appendFor(type)}
           >
             <Plus className="h-4 w-4" />
@@ -208,9 +208,10 @@ export const FormPartners = () => {
               <div className="flex items-center justify-end">
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="destructive"
                   onClick={() => partnerArray.remove(i)}
                 >
+                  Hapus
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>

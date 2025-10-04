@@ -51,7 +51,7 @@ export function ArticleListCard({
 
               {isTalent && (
                 <Badge
-                  variant="secondary"
+                  variant="outline"
                   className="ml-0.5 flex items-center gap-1 rounded-full px-1.5 py-0 text-[10px]"
                 >
                   <BadgeCheck className="h-3 w-3 text-sky-500" />

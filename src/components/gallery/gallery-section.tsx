@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -5,6 +7,9 @@ import {
   GalleryCardProps,
 } from "@/components/gallery/gallery-card";
 import { Button } from "@/components/ui/button";
+import { useFilter } from "../filter/filter-context";
+import { useMemo } from "react";
+import { Filter } from "../filter/filter";
 
 export interface GallerySectionProps {
   title?: string;
@@ -17,13 +22,22 @@ export interface GallerySectionProps {
 
 export function GallerySection({
   title = "Galeri",
-  description = "Koleksi pilihan yang dikurasi untuk kamu.",
+  description = "Produk dari para talenta Pemuda Magelang.",
   products,
-  limit,
   viewAllHref,
   className,
 }: GallerySectionProps) {
-  const data = products.slice(0, typeof limit === "number" ? limit : undefined);
+  const { search, category } = useFilter();
+  const categories = useMemo(() => {
+    return Array.from(new Set(products.map((p) => p.category)));
+  }, [products]);
+  const data = useMemo(() => {
+    return products.filter(
+      (p) =>
+        p.title.toLowerCase().includes(search.toLowerCase()) &&
+        p.category.toLowerCase().includes(category.toLowerCase())
+    );
+  }, [products, search, category]);
 
   return (
     <section
@@ -44,11 +58,24 @@ export function GallerySection({
         )}
       </div>
 
+      <Filter
+        categories={categories}
+        className="mb-4"
+        placeholder="Cari produk..."
+      />
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((p) => (
           <GalleryCard key={p.slug} {...p} />
         ))}
       </div>
+      {data.length === 0 && (
+        <div className="flex flex-col gap-5 max-w-4xl mx-auto h-40 items-center justify-center">
+          <p className="text-center text-sm text-muted-foreground">
+            Tidak ada produk yang cocok dengan pencarian
+          </p>
+        </div>
+      )}
 
       {viewAllHref && (
         <div className="mt-6 flex justify-center sm:hidden">

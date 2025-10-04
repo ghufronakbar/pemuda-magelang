@@ -205,7 +205,6 @@ export function FormTalent({
             <Button
               type="button"
               size="sm"
-              variant="secondary"
               onClick={() => smArray.append({ platform: "instagram", url: "" })}
             >
               <Plus className="mr-2 h-4 w-4" /> Tambah
@@ -270,7 +269,7 @@ export function FormTalent({
               {!disabled ? (
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="destructive"
                   onClick={() => smArray.remove(i)}
                   className="justify-self-end"
                 >
@@ -296,7 +295,6 @@ export function FormTalent({
             <Button
               type="button"
               size="sm"
-              variant="secondary"
               onClick={() =>
                 workExperiencesArray.append({
                   companyName: "",
@@ -419,7 +417,7 @@ export function FormTalent({
                 <div className="flex justify-end">
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="destructive"
                     onClick={() => workExperiencesArray.remove(i)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
@@ -444,7 +442,6 @@ export function FormTalent({
             <Button
               type="button"
               size="sm"
-              variant="secondary"
               onClick={() =>
                 educationsArray.append({
                   degree: "",
@@ -567,7 +564,7 @@ export function FormTalent({
                 <div className="flex justify-end">
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="destructive"
                     onClick={() => educationsArray.remove(i)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
@@ -592,7 +589,6 @@ export function FormTalent({
             <Button
               type="button"
               size="sm"
-              variant="secondary"
               onClick={() =>
                 awardsArray.append({
                   image: null,
@@ -701,7 +697,7 @@ export function FormTalent({
                 <div className="flex justify-end">
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="destructive"
                     onClick={() => awardsArray.remove(i)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />

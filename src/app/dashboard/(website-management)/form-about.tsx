@@ -187,10 +187,11 @@ export const FormAbout = () => {
                   </div>
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="destructive"
                     className="sm:justify-self-end ml-auto flex-shrink-0"
                     onClick={() => aboutArray.remove(i)}
                   >
+                    Hapus
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

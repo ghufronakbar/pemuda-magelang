@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import { ArticleCardProps } from "../type";
 import { ArticleGridCard } from "./article-grid-card";
-import { useArticleFilter } from "../filter/article-filter-context";
+import { useFilter } from "../../filter/filter-context";
 
 export const ArticleGridMap = ({ data }: { data: ArticleCardProps[] }) => {
-  const { search, category } = useArticleFilter();
+  const { search, category } = useFilter();
   const filteredData = useMemo(() => {
     return data.filter(
       (a) =>

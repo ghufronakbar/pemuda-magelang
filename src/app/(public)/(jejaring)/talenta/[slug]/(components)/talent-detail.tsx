@@ -7,6 +7,7 @@ import { TalentHeader } from "./talent-header";
 import { TalentBio } from "./talent-bio";
 import { TalentProduct } from "./talent-product";
 import { TalentArticle } from "./talent-article";
+import { TalentProductArticle } from "./talent-product-article";
 
 interface DetailArticle extends Article {
   _count: {
@@ -27,7 +28,7 @@ export interface TalentDetailProps {
 }
 
 export function TalentDetail({ talent, className }: TalentDetailProps) {
-  const { description, products, user } = talent;
+  const { products, user } = talent;
 
   return (
     <section
@@ -38,23 +39,33 @@ export function TalentDetail({ talent, className }: TalentDetailProps) {
 
       {/* ===== Bio / Deskripsi ===== */}
 
-      <TalentBio bio={description} />
+      {/* <TalentBio bio={description} /> */}
 
-      <TalentProduct
+      <TalentProductArticle
+        products={products}
+        talent={talent}
+        articles={user.articles}
+        user={{
+          ...user,
+          talent: talent,
+        }}
+      />
+
+      {/* <TalentProduct
         products={products?.slice(0, 3) ?? []}
         talent={talent}
         showShowAllButton={products.length > 3}
       />
 
       {/* ===== Artikel Populer ===== */}
-      <TalentArticle
+      {/* <TalentArticle
         articles={user.articles?.slice(0, 3) ?? []}
         user={{
           ...user,
           talent: talent,
         }}
         showShowAllButton={user.articles.length > 3}
-      />
+      /> */}
     </section>
   );
 }

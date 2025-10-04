@@ -25,9 +25,14 @@ export const LandingLayout = async ({
     )
     .filter((item) => item.status === HubStatusEnum.active)
     .slice(0, 3);
+
+  const categoriesHubs = hubs.map((item) => ({
+    label: item.name,
+    href: "/zhub/kategori/" + item.id,
+  }));
   return (
     <div className="w-full min-h-screen bg-gray-50 text-foreground">
-      <Navbar session={session} />
+      <Navbar session={session} categoriesHubs={categoriesHubs} />
       <div className="flex-1">{children}</div>
       <Footer
         zhubLinks={mappedHubsLink}

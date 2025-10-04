@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArticleSectionProps } from "../type";
-import { ArticleFilter } from "../filter/article-filter";
+import { Filter } from "../../filter/filter";
 import { ArticleGridMap } from "./article-grid-map";
 
 export function ArticleGridSection({
@@ -32,8 +32,10 @@ export function ArticleGridSection({
       </div>
 
       {!viewAllHref && (
-        <ArticleFilter
+        <Filter
           categories={Array.from(new Set(articles.map((a) => a.category)))}
+          className="mb-4"
+          placeholder="Cari artikel..."
         />
       )}
       <ArticleGridMap data={articles} />

@@ -9,16 +9,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useArticleFilter } from "./article-filter-context";
-import { Button } from "../../ui/button";
+import { useFilter } from "./filter-context";
+import { Button } from "../ui/button";
 
 interface Props {
   categories: string[];
   className?: string;
+  placeholder?: string;
 }
 
-export const ArticleFilter = ({ categories, className }: Props) => {
-  const { search, setSearch, category, setCategory } = useArticleFilter();
+export const Filter = ({
+  categories,
+  className,
+  placeholder = "Cari artikel...",
+}: Props) => {
+  const { search, setSearch, category, setCategory } = useFilter();
   const handleReset = () => {
     setSearch("");
     setCategory("");
@@ -26,7 +31,7 @@ export const ArticleFilter = ({ categories, className }: Props) => {
   return (
     <div className={cn("w-full flex flex-row gap-4", className)}>
       <Input
-        placeholder="Cari artikel"
+        placeholder={placeholder}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />

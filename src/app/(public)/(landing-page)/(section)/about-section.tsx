@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { AboutItem } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
+import { useSession } from "next-auth/react";
 
 export interface AboutSectionProps {
   title?: string;
@@ -29,9 +30,10 @@ export function AboutSection({
   image = "https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1600&auto=format&fit=crop",
   highlights = DEFAULT_HIGHLIGHTS,
   ctaPrimary = { label: "Bergabung Sekarang", href: "/register" },
-  ctaSecondary = { label: "Pelajari Selengkapnya", href: "/#about" },
   className,
 }: AboutSectionProps) {
+  const { data: session } = useSession();
+  const isAuthed = !!session;
   return (
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
@@ -93,23 +95,11 @@ export function AboutSection({
           </div>
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href={ctaPrimary.href}>{ctaPrimary.label}</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto"
-            >
-              <Link
-                href={ctaSecondary.href}
-                className="inline-flex items-center gap-1"
-              >
-                {ctaSecondary.label}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
+            {isAuthed ? null : (
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link href={ctaPrimary.href}>{ctaPrimary.label}</Link>
+              </Button>
+            )}
           </div>
         </div>
 
