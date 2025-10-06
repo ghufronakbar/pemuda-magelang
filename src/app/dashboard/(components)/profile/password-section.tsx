@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import type { UserPasswordInput } from "@/validator/user";
 
 interface PasswordSectionProps {
@@ -123,7 +123,9 @@ export function PasswordSection({ className }: PasswordSectionProps) {
               <Button type="submit" disabled={pending} className="min-w-28">
                 {pending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : null}
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
                 Simpan
               </Button>
             </div>

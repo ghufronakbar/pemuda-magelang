@@ -15,7 +15,7 @@ import {
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { uploadImage } from "@/actions/image";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 
 export const FormPrivacy = () => {
   const { form, loading } = useFormAppData();
@@ -65,7 +65,9 @@ export const FormPrivacy = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>

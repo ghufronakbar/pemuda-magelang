@@ -29,7 +29,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Save, Plus } from "lucide-react";
 import type { UserTalentInput } from "@/validator/user";
 import { FiExternalLink } from "react-icons/fi";
 
@@ -196,7 +196,9 @@ export function TalentSection({
               >
                 {pending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : null}
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
                 Simpan
               </Button>
             </div>

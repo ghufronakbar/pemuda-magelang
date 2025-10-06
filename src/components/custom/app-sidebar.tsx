@@ -20,24 +20,15 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Home,
   LayoutDashboard,
   PanelsTopLeft,
   Users,
-  UserRound,
-  ShieldCheck,
   FileText,
-  Newspaper,
   Package,
   UserCog,
   LogOut,
   ArrowLeft,
-  Lock,
-  HelpCircle,
-  Paperclip,
-  Layers,
   RocketIcon,
-  FolderArchive,
 } from "lucide-react";
 import { getInitials } from "@/lib/helper";
 import { roleEnum } from "@/enum/role-enum";
@@ -91,34 +82,16 @@ export function AppSidebar({ session }: { session: Session | null }) {
       section: "Manajemen Pengguna",
       items: [
         {
-          label: "Pengguna",
-          href: "/dashboard/pengguna",
+          label: "Manajemen Pengguna",
+          href: "/dashboard/manajemen-pengguna",
           icon: Users,
-          roles: [Role.superadmin, Role.admin],
-        },
-        {
-          label: "Talent",
-          href: "/dashboard/talenta",
-          icon: UserRound,
-          roles: [Role.superadmin, Role.admin],
-        },
-        {
-          label: "Admin",
-          href: "/dashboard/admin",
-          icon: ShieldCheck,
-          roles: [Role.superadmin],
-        },
-        {
-          label: "Komunitas",
-          href: "/dashboard/kelola-komunitas",
-          icon: RocketIcon,
           roles: [Role.superadmin, Role.admin],
         },
         {
           label: "Produk",
           href: "/dashboard/produk",
           icon: Package,
-          roles: [Role.superadmin, Role.admin, Role.user],
+          roles: [Role.user],
         },
       ],
     },
@@ -137,28 +110,10 @@ export function AppSidebar({ session }: { session: Session | null }) {
       section: "Artikel",
       items: [
         {
-          label: "Detak",
-          href: "/dashboard/detak",
+          label: "Artikel",
+          href: "/dashboard/manajemen-artikel",
           icon: FileText,
           roles: [Role.superadmin, Role.admin, Role.user],
-        },
-        {
-          label: "Gerak",
-          href: "/dashboard/gerak",
-          icon: Newspaper,
-          roles: [Role.admin, Role.superadmin],
-        },
-        {
-          label: "Dampak",
-          href: "/dashboard/dampak",
-          icon: FolderArchive,
-          roles: [Role.superadmin, Role.admin, Role.user],
-        },
-        {
-          label: "Program Zhub",
-          href: "/dashboard/program-zhub",
-          icon: Package,
-          roles: [Role.superadmin, Role.admin],
         },
       ],
     },
@@ -184,8 +139,6 @@ export function AppSidebar({ session }: { session: Session | null }) {
       ),
     };
   }).filter((tree) => tree.items.length > 0);
-
-  const utilities: NavTree[] = [];
 
   return (
     <Sidebar className="z-50">
@@ -238,32 +191,22 @@ export function AppSidebar({ session }: { session: Session | null }) {
                     active={isActive(item.href)}
                   />
                 ))}
+                {/* Add Logout to Lainnya section */}
+                {section.section === "Lainnya" && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => signOutClient({ callbackUrl: "/" })}
+                      className="text-destructive hover:text-destructive data-[active=true]:text-destructive"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Logout</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-
-        {/* ===== Utilitas ===== */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Utilitas</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {utilities.map((item) => (
-                <Item key={item.href} {...item} active={isActive(item.href)} />
-              ))}
-              {/* Logout */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => signOutClient({ callbackUrl: "/" })}
-                  className="text-destructive hover:text-destructive data-[active=true]:text-destructive"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );

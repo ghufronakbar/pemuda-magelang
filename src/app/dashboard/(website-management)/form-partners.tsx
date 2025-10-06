@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Loader2, Save } from "lucide-react";
 import { ImageUploader } from "@/components/custom/image-uploader";
 import {
   Select,
@@ -31,7 +31,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UrlInput } from "@/components/custom/url-input";
-import { Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -240,7 +239,9 @@ export const FormPartners = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>

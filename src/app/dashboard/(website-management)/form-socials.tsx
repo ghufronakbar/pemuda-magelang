@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Loader2, Save } from "lucide-react";
 import {
   FormField,
   FormItem,
@@ -26,7 +26,6 @@ import {
 import { SocialMediaPlatformEnum } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import { UrlInput } from "@/components/custom/url-input";
-import { Loader2 } from "lucide-react";
 
 export const FormSocials = () => {
   const { form, loading } = useFormAppData();
@@ -152,7 +151,9 @@ export const FormSocials = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>

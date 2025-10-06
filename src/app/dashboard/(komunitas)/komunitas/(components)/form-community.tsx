@@ -24,7 +24,7 @@ import {
 import { useFormCommunity } from "@/context/form-community-context";
 import { COMMUNITY_CATEGORIES } from "@/data/community";
 import { UrlInput } from "@/components/custom/url-input";
-import { UploadIcon } from "lucide-react";
+import { UploadIcon, Loader2, Save } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { uploadImage } from "@/actions/image";
 import { toast } from "sonner";
@@ -236,6 +236,11 @@ export function FormCommunity({
         {onSubmit && (
           <div>
             <Button type="submit" disabled={pending} className="min-w-28">
+              {pending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
               {pending ? "Memproses…" : "Simpan"}
             </Button>
           </div>

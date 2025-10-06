@@ -57,6 +57,7 @@ export const FormHub = ({ categories }: FormHubProps) => {
           });
         }}
       >
+        <Plus className="mr-2 h-4 w-4" />
         Tambah Program Zhub
       </Button>
       <DialogContent className="max-h-[90vh] overflow-y-auto">

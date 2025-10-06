@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { ImageUploader } from "@/components/custom/image-uploader";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 
 export const FormHero = () => {
   const { form, loading } = useFormAppData();
@@ -107,7 +107,9 @@ export const FormHero = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>

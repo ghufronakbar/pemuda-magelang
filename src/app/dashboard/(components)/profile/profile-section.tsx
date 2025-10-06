@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, Save } from "lucide-react";
 import type { UserProfileInput } from "@/validator/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper";
@@ -275,7 +275,9 @@ export function ProfileSection({ className }: ProfileSectionProps) {
             >
               {pending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
               Simpan
             </Button>
           </form>

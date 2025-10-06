@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Loader2, Save } from "lucide-react";
 import {
   FormField,
   FormItem,
@@ -30,7 +30,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { IconEnum } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
-import { Loader2 } from "lucide-react";
 
 export const FormAbout = () => {
   const { form } = useFormAppData();
@@ -105,7 +104,9 @@ export const FormAbout = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>
@@ -241,7 +242,9 @@ export const FormAboutHighlights = () => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null}
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Simpan
           </Button>
         </div>

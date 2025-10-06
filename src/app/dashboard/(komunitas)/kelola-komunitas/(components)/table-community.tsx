@@ -5,6 +5,7 @@ import { Community, User, CommunityStatusEnum } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableHeader,
@@ -20,10 +21,9 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Pagination } from "@/components/custom/pagination";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -58,12 +58,28 @@ export function TableCommunity({
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(defaultPageSize);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = React.useState<string>("all");
 
-  const filteredCommunities = communities.filter((community) =>
-    community.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    community.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    community.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Get unique categories
+  const categories = React.useMemo(() => {
+    const uniqueCategories = Array.from(
+      new Set(communities.map((c) => c.category))
+    );
+    return uniqueCategories.sort();
+  }, [communities]);
+
+  const filteredCommunities = communities.filter((community) => {
+    const matchesSearch =
+      community.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      community.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      community.category.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = statusFilter === "all" || community.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || community.category === categoryFilter;
+
+    return matchesSearch && matchesStatus && matchesCategory;
+  });
 
   const totalPages = Math.ceil(filteredCommunities.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
@@ -82,22 +98,64 @@ export function TableCommunity({
     toast.success("Komunitas berhasil dihapus");
   };
 
+  // Reset page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, categoryFilter]);
+
   return (
     <div className={cn("space-y-4", className)}>
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Menampilkan {startIndex + 1}-{Math.min(endIndex, filteredCommunities.length)} dari {filteredCommunities.length} komunitas
+      {/* Controls */}
+      <div className="flex gap-3">
+        <div>
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Cari
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Cari nama komunitas, pemilik, kategori…"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Select value={String(pageSize)} onValueChange={(value) => setPageSize(Number(value))}>
-            <SelectTrigger className="w-20">
-              <SelectValue />
+
+        <div>
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Status
+          </label>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Semua Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
+              <SelectItem value="all">Semua Status</SelectItem>
+              {Object.entries(communityStatusMap).map(([status, config]) => (
+                <SelectItem key={status} value={status}>
+                  {config.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Kategori
+          </label>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Semua Kategori" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Kategori</SelectItem>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -180,11 +238,56 @@ export function TableCommunity({
       </div>
 
       {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Menampilkan {startIndex + 1}-{Math.min(endIndex, filteredCommunities.length)} dari {filteredCommunities.length} komunitas
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Sebelumnya
+            </Button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    className="w-8 h-8 p-0"
+                    onClick={() => setCurrentPage(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Selanjutnya
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

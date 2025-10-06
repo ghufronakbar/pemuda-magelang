@@ -22,10 +22,9 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Pagination } from "@/components/custom/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye } from "lucide-react";
+import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
@@ -151,10 +150,9 @@ export function TableUserTalent({
   }, [subdistrict]);
 
   return (
-    <section className={cn("space-y-4", className)}>
-      {/* Controls */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="w-full flex flex-row gap-4 flex-wrap">
+      <section className={cn("space-y-4", className)}>
+        {/* Controls */}
+        <div className="flex gap-3">
           <div>
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
@@ -273,41 +271,6 @@ export function TableUserTalent({
             </>
           )}
         </div>
-
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground">Tampil</label>
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="w-[84px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[5, 10, 20, 50].map((n) => (
-                <SelectItem key={n} value={String(n)}>
-                  {n}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setQuery("");
-              if (type === "talenta") {
-                setTalentStatus("all");
-                setIndustry("all");
-              }
-              setSubdistrict("all");
-              setVillage("all");
-            }}
-          >
-            Reset
-          </Button>
-        </div>
-      </div>
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">
@@ -437,11 +400,58 @@ export function TableUserTalent({
       </div>
 
       {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setPage={setPage}
-      />
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari {total} data
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Sebelumnya
+            </Button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    className="w-8 h-8 p-0"
+                    onClick={() => setPage(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Selanjutnya
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -598,8 +608,9 @@ function ActionButtons({
       {/* Delete */}
       {item.role !== Role.superadmin && type !== "talenta" && (
         <AlertConfirmation
+          title="Hapus Pengguna"
+          description={`Apakah Anda yakin ingin menghapus pengguna "${item.name}"? Data yang dihapus tidak dapat dikembalikan. Semua data terkait pengguna ini (artikel, produk, dll) juga akan dihapus.`}
           onConfirm={handleDelete}
-          description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data pengguna dan semua data yang terkait dengan pengguna tersebut."
         >
           <Button variant="destructive" size="sm">
             <Trash2 className="mr-2 h-4 w-4" />
