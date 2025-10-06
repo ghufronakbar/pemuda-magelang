@@ -25,16 +25,24 @@ const ZhubKategoriPage = async ({ params }: Params) => {
   const mappedHubs: HubCategorySectionProps[] = [
     {
       title: cat.name,
-      items: cat?.hubs.map((h) => ({
-        title: h.name,
-        description: h.description,
-        image: h.image,
-        slug: h.slug,
-        status: h.status,
-      })),
+      items: cat?.hubs
+        .map((h) => ({
+          title: h.name,
+          description: h.description,
+          image: h.image,
+          slug: h.slug,
+          status: h.status,
+        }))
+        .sort((a, b) => SORTS[a.status] - SORTS[b.status]),
     },
   ];
   return <HubSection className="py-26" categories={mappedHubs} />;
 };
 
 export default ZhubKategoriPage;
+
+const SORTS = {
+  active: 0,
+  soon: 1,
+  inactive: 2,
+} as const;

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -32,11 +33,15 @@ export const Filter = ({
   };
   return (
     <div className={cn("w-full flex flex-row gap-4", className)}>
-      <Input
-        placeholder={placeholder}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="relative w-full">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder={placeholder}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9"
+        />
+      </div>
       <Select
         value={category === "" ? "all" : category}
         onValueChange={(value) => setCategory(value === "all" ? "" : value)}

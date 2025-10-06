@@ -1,12 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -31,12 +26,12 @@ export function GalleryCard({
   category,
   description,
   author,
-  tags,
+  // tags removed from visual card
   slug,
   className,
 }: GalleryCardProps) {
   const initials = getInitials(author.name);
-  const { visible, restCount } = splitTags(tags, 3);
+  // tags hidden on card per request
 
   return (
     <Link
@@ -73,7 +68,7 @@ export function GalleryCard({
         </div>
 
         {/* Content */}
-        <CardHeader className="space-y-2 flex-1">
+        <CardHeader className="space-y-2 flex-1 min-h-[96px] sm:min-h-[110px]">
           <h3 className="line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight">
             {title}
           </h3>
@@ -82,26 +77,6 @@ export function GalleryCard({
           </p>
         </CardHeader>
 
-        <CardContent className="flex flex-wrap gap-1.5 h-7 overflow-hidden">
-          {visible.map((t) => (
-            <Badge
-              key={t}
-              variant="outline"
-              className="rounded-full border-dashed px-2 py-0.5 text-[11px] text-muted-foreground"
-            >
-              #{t}
-            </Badge>
-          ))}
-          {restCount > 0 && (
-            <Badge
-              variant="outline"
-              className="rounded-full px-2 py-0.5 text-[11px] text-muted-foreground"
-              aria-label={`Dan ${restCount} tag lainnya`}
-            >
-              +{restCount}
-            </Badge>
-          )}
-        </CardContent>
 
         {/* Footer: Author */}
         <CardFooter className="flex items-center justify-between pt-0 mt-auto">
@@ -138,12 +113,6 @@ function getInitials(name: string) {
   const first = parts[0]?.[0] ?? "";
   const last = parts.length > 1 ? parts[parts.length - 1][0] ?? "" : "";
   return (first + last).toUpperCase();
-}
-
-function splitTags(all: string[], take: number) {
-  const visible = all.slice(0, take);
-  const restCount = Math.max(0, all.length - visible.length);
-  return { visible, restCount };
 }
 
 // Deterministic color per category using a small predefined palette

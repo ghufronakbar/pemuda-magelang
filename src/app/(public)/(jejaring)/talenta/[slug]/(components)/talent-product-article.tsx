@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArticleGridCard } from "@/components/article/grid/article-grid-card";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
@@ -97,12 +98,14 @@ export const TalentProductArticle = ({
             </TabsList>
             <TabsContent value="products">
               <Reveal>
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={productQuery}
                   onChange={(e) => setProductQuery(e.target.value)}
                   placeholder="Cari produk berdasarkan judul, kategori, atau tag..."
                   aria-label="Cari produk"
+                  className="pl-9"
                 />
               </div>
               </Reveal>
@@ -142,12 +145,14 @@ export const TalentProductArticle = ({
             </TabsContent>
             <TabsContent value="articles">
               <Reveal>
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={articleQuery}
                   onChange={(e) => setArticleQuery(e.target.value)}
                   placeholder="Cari artikel berdasarkan judul, kategori, atau tag..."
                   aria-label="Cari artikel"
+                  className="pl-9"
                 />
               </div>
               </Reveal>

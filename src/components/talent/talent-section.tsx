@@ -8,10 +8,11 @@ import {
   type TalentCardProps,
 } from "@/components/talent/talent-card";
 import { useFilter } from "../filter/filter-context";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Filter } from "../filter/filter";
 import { INDUSTRY_LIST } from "@/data/industry";
 import { Reveal } from "@/components/ui/reveal";
+import { computeSearchScore } from "@/lib/search";
 import {
 	Card,
 	CardHeader,
@@ -21,6 +22,7 @@ import {
 	CardTitle,
 	CardDescription,
 } from "@/components/ui/card";
+import { Pagination, usePagination } from "@/components/ui/pagination";
 
 export interface TalentSectionProps {
   title?: string;
@@ -43,12 +45,25 @@ export function TalentSection({
     return INDUSTRY_LIST;
   }, []);
   const data = useMemo(() => {
-    const bySearch = (t: TalentCardProps) =>
-      t.name.toLowerCase().includes(search.toLowerCase());
-    const byCategory = (t: TalentCardProps) =>
-      category === "" ? true : t.industry === category;
-    return talents.filter((t) => bySearch(t) && byCategory(t));
+    const filtered = talents
+      .map((t) => ({
+        item: t,
+        score: computeSearchScore(t, search, {
+          name: { weight: 3, accessor: (x) => x.name },
+          profession: { weight: 2, accessor: (x) => x.profession },
+          industry: { weight: 1.5, accessor: (x) => x.industry },
+        }),
+      }))
+      .filter(({ score }) => (search ? score > 0 : true))
+      .filter(({ item }) => (category === "" ? true : item.industry === category))
+      .sort((a, b) => b.score - a.score)
+      .map(({ item }) => item);
+    return filtered;
   }, [talents, search, category]);
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
+  const pager = usePagination(page, pageSize, data.length);
+  const visible = useMemo(() => data.slice(pager.start, pager.end), [data, pager.start, pager.end]);
   return (
 		<section
 			className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
@@ -83,12 +98,18 @@ export function TalentSection({
 					</Reveal>
 
 					<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-						{data.map((t, i) => (
+						{visible.map((t, i) => (
 							<Reveal key={t.slug} delayMs={i * 80}>
 								<TalentCard {...t} />
 							</Reveal>
 						))}
 					</div>
+					<Pagination
+						page={pager.page}
+						totalPages={pager.totalPages}
+						onPageChange={setPage}
+						className="mt-6"
+					/>
 
 					{data.length === 0 && (
 						<div className="mt-2 flex flex-col gap-5 max-w-4xl mx-auto h-40 items-center justify-center">

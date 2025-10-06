@@ -1,9 +1,12 @@
+"use client";
 import Link from "next/link";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArticleSectionProps } from "../type";
 import { Filter } from "../../filter/filter";
 import { ArticleGridMap } from "./article-grid-map";
+import { Pagination, usePagination } from "@/components/ui/pagination";
 import { ARTICLE_CATEGORIES } from "@/data/article";
 import {
   Card,
@@ -22,6 +25,10 @@ export function ArticleGridSection({
   viewAllHref,
   className,
 }: ArticleSectionProps) {
+  const [page, setPage] = React.useState(1);
+  const pageSize = 16;
+  const pager = usePagination(page, pageSize, articles.length);
+  const visible = React.useMemo(() => articles.slice(pager.start, pager.end), [articles, pager.start, pager.end]);
   return (
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
@@ -52,8 +59,15 @@ export function ArticleGridSection({
               hideReset
             />
           )}
-          <ArticleGridMap data={articles} />
+          <ArticleGridMap data={visible} />
         </CardContent>
+
+        <Pagination
+          page={pager.page}
+          totalPages={pager.totalPages}
+          onPageChange={setPage}
+          className="mt-6"
+        />
 
         {viewAllHref && (
           <CardFooter className="sm:hidden">

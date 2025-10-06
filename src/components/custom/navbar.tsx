@@ -258,7 +258,7 @@ function UserMenuDesktop({
   const initials = (name || email || "U").slice(0, 1).toUpperCase();
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger
         className="group flex items-center gap-2 rounded-full p-1 outline-none transition"
         onMouseEnter={() => setOpen(true)}

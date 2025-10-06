@@ -36,7 +36,7 @@ export function HubCard({
   const cardBody = (
     <Card
       className={cn(
-        "overflow-hidden transition-all",
+        "overflow-hidden transition-all h-full flex flex-col",
         "hover:-translate-y-0.5 hover:shadow-lg",
         className
       )}
@@ -72,7 +72,7 @@ export function HubCard({
       </div>
 
       {/* Content */}
-      <CardHeader className="space-y-2">
+      <CardHeader className="space-y-2 flex-1 min-h-[96px] sm:min-h-[110px]">
         <h3 className="line-clamp-1 text-base font-semibold leading-snug">
           {title}
         </h3>
@@ -83,7 +83,7 @@ export function HubCard({
 
       <CardContent />
 
-      <CardFooter className="justify-end">
+      <CardFooter className="justify-end mt-auto">
         <Button asChild size="sm">
           <Link href={"/zhub/" + slug} aria-label={`Buka program ${title}`}>
             Lihat Program
@@ -110,7 +110,7 @@ function getStatusConfig(status: HubCardProps["status"]) {
   switch (status) {
     case "active":
       return {
-        label: "Aktif",
+        label: "Sedang Berlangsung",
         badgeClass:
           "border-transparent bg-emerald-600 text-emerald-50 hover:bg-emerald-600",
         icon: CheckCircle2,
@@ -124,7 +124,7 @@ function getStatusConfig(status: HubCardProps["status"]) {
       };
     default:
       return {
-        label: "Tidak Aktif",
+        label: "Telah Berakhir",
         badgeClass:
           "border border-muted-foreground/20 bg-background text-muted-foreground",
         icon: PowerOff,

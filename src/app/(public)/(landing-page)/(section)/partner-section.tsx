@@ -175,7 +175,7 @@ function Logo({ item }: { item: PartnerItem }) {
       href={item.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group/link inline-flex shrink-0 items-center gap-3"
+      className="group/link inline-flex shrink-0 items-center"
       aria-label={item.name}
       title={item.name}
     >
@@ -188,9 +188,6 @@ function Logo({ item }: { item: PartnerItem }) {
           className="object-contain opacity-80 transition-opacity group-hover/link:opacity-100"
         />
       </div>
-      <span className="hidden text-sm text-muted-foreground sm:inline-block">
-        {item.name}
-      </span>
     </Link>
   );
 }

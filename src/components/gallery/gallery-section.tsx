@@ -9,8 +9,9 @@ import {
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { useFilter } from "../filter/filter-context";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Filter } from "../filter/filter";
+import { computeSearchScore } from "@/lib/search";
 import {
   Card,
   CardHeader,
@@ -20,6 +21,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Pagination, usePagination } from "@/components/ui/pagination";
 
 export interface GallerySectionProps {
   title?: string;
@@ -43,15 +45,29 @@ export function GallerySection({
     return Array.from(new Set(products.map((p) => p.category)));
   }, [products]);
   const data = useMemo(() => {
-    return products.filter(
-      (p) =>
-        p.title.toLowerCase().includes(search.toLowerCase()) &&
-        p.category.toLowerCase().includes(category.toLowerCase())
-    );
+    const filtered = products
+      .map((p) => ({
+        item: p,
+        score: computeSearchScore(p, search, {
+          title: { weight: 3, accessor: (x) => x.title },
+          tags: { weight: 2, accessor: (x) => (x.tags || []).join(" ") },
+          category: { weight: 1.5, accessor: (x) => x.category },
+          description: { weight: 1, accessor: (x) => x.description },
+          author: { weight: 0.8, accessor: (x) => [x.author.name, x.author.profession] },
+        }),
+      }))
+      .filter(({ score }) => (search ? score > 0 : true))
+      .filter(({ item }) =>
+        item.category.toLowerCase().includes(category.toLowerCase())
+      )
+      .sort((a, b) => b.score - a.score)
+      .map(({ item }) => item);
+    return filtered;
   }, [products, search, category]);
-  const visible = useMemo(() => {
-    return typeof limit === "number" && limit > 0 ? data.slice(0, limit) : data;
-  }, [data, limit]);
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
+  const pager = usePagination(page, pageSize, data.length);
+  const visible = useMemo(() => data.slice(pager.start, pager.end), [data, pager.start, pager.end]);
 
   return (
     <section
@@ -87,13 +103,21 @@ export function GallerySection({
             />
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch content-stretch">
             {visible.map((p, i) => (
               <Reveal key={p.slug} animation="fade-up" delayMs={i * 80}>
-                <GalleryCard {...p} />
+                <div className="h-full">
+                  <GalleryCard {...p} />
+                </div>
               </Reveal>
             ))}
           </div>
+          <Pagination
+            page={pager.page}
+            totalPages={pager.totalPages}
+            onPageChange={setPage}
+            className="mt-6"
+          />
           {visible.length === 0 && (
             <div className="mt-2 flex flex-col items-center justify-center gap-3 rounded-2xl border py-12 text-center">
               <div className="text-2xl">🔎</div>
