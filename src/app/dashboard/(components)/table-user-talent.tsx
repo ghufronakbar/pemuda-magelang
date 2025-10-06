@@ -608,9 +608,8 @@ function ActionButtons({
       {/* Delete */}
       {item.role !== Role.superadmin && type !== "talenta" && (
         <AlertConfirmation
-          title="Hapus Pengguna"
-          description={`Apakah Anda yakin ingin menghapus pengguna "${item.name}"? Data yang dihapus tidak dapat dikembalikan. Semua data terkait pengguna ini (artikel, produk, dll) juga akan dihapus.`}
           onConfirm={handleDelete}
+          description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data pengguna dan semua data yang terkait dengan pengguna tersebut."
         >
           <Button variant="destructive" size="sm">
             <Trash2 className="mr-2 h-4 w-4" />

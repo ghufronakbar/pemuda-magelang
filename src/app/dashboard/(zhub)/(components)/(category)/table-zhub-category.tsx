@@ -255,9 +255,8 @@ function ActionButtons({
         Edit
       </Button>
       <AlertConfirmation
-        title="Hapus Kategori Zhub"
-        description={`Apakah Anda yakin ingin menghapus kategori "${item.name}"? Data yang dihapus tidak dapat dikembalikan. Semua program dalam kategori ini juga akan terpengaruh.`}
         onConfirm={handleDelete}
+        description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data kategori ini dan semua data yang terkait dengan kategori ini."
       >
         <SubmitBtn label="Hapus" variant="destructive" icon={<Trash2 className="h-4 w-4" />} />
       </AlertConfirmation>

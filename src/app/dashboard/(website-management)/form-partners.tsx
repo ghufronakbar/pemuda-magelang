@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Loader2, Save } from "lucide-react";
 import { ImageUploader } from "@/components/custom/image-uploader";
+import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import {
   Select,
   SelectTrigger,
@@ -216,14 +217,19 @@ export const FormPartners = () => {
               />
 
               <div className="flex items-center justify-end">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => partnerArray.remove(i)}
+                <AlertConfirmation
+                  title="Hapus Partner"
+                  description="Apakah Anda yakin ingin menghapus partner ini? Tindakan ini tidak dapat dibatalkan."
+                  onConfirm={() => partnerArray.remove(i)}
                 >
-                  Hapus
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                  >
+                    Hapus
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </AlertConfirmation>
               </div>
             </div>
           ))}

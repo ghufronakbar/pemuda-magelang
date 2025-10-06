@@ -461,11 +461,7 @@ function ActionButtons({
       )}
 
       {!isAdmin && (
-        <AlertConfirmation
-          title="Hapus Produk"
-          description={`Apakah Anda yakin ingin menghapus produk "${product.title}"? Produk yang dihapus tidak dapat dikembalikan.`}
-          onConfirm={handleDelete}
-        >
+        <AlertConfirmation onConfirm={handleDelete}>
           <Button variant="destructive">
             <Trash2 className="mr-2 h-4 w-4" />
             Hapus

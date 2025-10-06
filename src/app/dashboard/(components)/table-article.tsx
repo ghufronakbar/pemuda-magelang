@@ -444,11 +444,7 @@ const ActionButtons = ({
         </Button>
       )}
       {(isOwner || isAdmin) && (
-        <AlertConfirmation
-          title="Hapus Artikel"
-          description={`Apakah Anda yakin ingin menghapus artikel "${article.title}"? Artikel yang dihapus tidak dapat dikembalikan.`}
-          onConfirm={handleDelete}
-        >
+        <AlertConfirmation onConfirm={handleDelete}>
           <Button variant="destructive">
             <Trash2 className="mr-2 h-4 w-4" />
             Hapus

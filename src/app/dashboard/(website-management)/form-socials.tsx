@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Loader2, Save } from "lucide-react";
+import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import {
   FormField,
   FormItem,
@@ -128,15 +129,20 @@ export const FormSocials = () => {
                 )}
               />
 
-              <Button
-                type="button"
-                variant="destructive"
-                className="sm:justify-self-end"
-                onClick={() => socialArray.remove(i)}
+              <AlertConfirmation
+                title="Hapus Media Sosial"
+                description="Apakah Anda yakin ingin menghapus media sosial ini? Tindakan ini tidak dapat dibatalkan."
+                onConfirm={() => socialArray.remove(i)}
               >
-                Hapus
-                <Trash2 className="h-4 w-4" />
-              </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  className="sm:justify-self-end"
+                >
+                  Hapus
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertConfirmation>
             </div>
           ))}
 

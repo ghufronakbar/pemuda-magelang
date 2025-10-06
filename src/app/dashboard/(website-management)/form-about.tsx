@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Loader2, Save } from "lucide-react";
+import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import {
   FormField,
   FormItem,
@@ -206,15 +207,20 @@ export const FormAboutHighlights = () => {
                       )}
                     />
                   </div>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    className="sm:justify-self-end ml-auto flex-shrink-0"
-                    onClick={() => aboutArray.remove(i)}
+                  <AlertConfirmation
+                    title="Hapus Item Highlight"
+                    description="Apakah Anda yakin ingin menghapus item highlight ini? Tindakan ini tidak dapat dibatalkan."
+                    onConfirm={() => aboutArray.remove(i)}
                   >
-                    Hapus
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="sm:justify-self-end ml-auto flex-shrink-0"
+                    >
+                      Hapus
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertConfirmation>
                 </div>
                 <FormField
                   control={form.control}
