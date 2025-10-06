@@ -26,6 +26,7 @@ import {
 import { SocialMediaPlatformEnum } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import { UrlInput } from "@/components/custom/url-input";
+import { Loader2 } from "lucide-react";
 
 export const FormSocials = () => {
   const { form, loading } = useFormAppData();
@@ -146,6 +147,14 @@ export const FormSocials = () => {
               mudah menghubungimu.
             </p>
           )}
+        </div>
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
         </div>
       </CardContent>
     </Card>

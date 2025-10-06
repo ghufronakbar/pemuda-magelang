@@ -25,7 +25,7 @@ import {
 import { Pagination } from "@/components/custom/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
@@ -159,16 +159,19 @@ export function TableUserTalent({
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
             </label>
-            <Input
-              placeholder={
-                type === "talenta"
-                  ? "Cari nama, email, profesi, industri…"
-                  : "Cari nama, email…"
-              }
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full"
-            />
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder={
+                  type === "talenta"
+                    ? "Cari nama, email, profesi, industri…"
+                    : "Cari nama, email…"
+                }
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-9"
+              />
+            </div>
           </div>
 
           {type === "talenta" && (
@@ -501,10 +504,12 @@ function SubmitBtn({
   label,
   variant,
   className,
+  icon,
 }: {
   label: string;
   variant?: "default" | "destructive" | "outline" | "ghost" | "link";
   className?: string;
+  icon?: React.ReactNode;
 }) {
   const { pending } = useFormStatus();
   return (
@@ -520,7 +525,10 @@ function SubmitBtn({
           <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses…
         </>
       ) : (
-        label
+        <>
+          {icon && <span className="mr-2">{icon}</span>}
+          {label}
+        </>
       )}
     </Button>
   );
@@ -581,6 +589,7 @@ function ActionButtons({
       {item.type === "talenta" && item.status === "approved" && (
         <Button asChild variant="outline">
           <Link href={`/talenta/${item.slug}`} target="_blank">
+            <Eye className="mr-2 h-4 w-4" />
             Lihat
           </Link>
         </Button>
@@ -593,6 +602,7 @@ function ActionButtons({
           description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data pengguna dan semua data yang terkait dengan pengguna tersebut."
         >
           <Button variant="destructive" size="sm">
+            <Trash2 className="mr-2 h-4 w-4" />
             Hapus
           </Button>
         </AlertConfirmation>
@@ -605,25 +615,25 @@ function ActionButtons({
             <>
               <form action={handleSet}>
                 <input type="hidden" name="status" value="approved" />
-                <SubmitBtn label="Setujui" />
+                <SubmitBtn label="Setujui" icon={<CheckCircle className="h-4 w-4" />} />
               </form>
 
               <form action={handleSet}>
                 <input type="hidden" name="status" value="rejected" />
-                <SubmitBtn label="Tolak" variant="outline" />
+                <SubmitBtn label="Tolak" variant="outline" icon={<XCircle className="h-4 w-4" />} />
               </form>
             </>
           )}
           {item.status === "approved" && (
             <form action={handleSet}>
               <input type="hidden" name="status" value="banned" />
-              <SubmitBtn label="Blokir" variant="destructive" />
+              <SubmitBtn label="Blokir" variant="destructive" icon={<Ban className="h-4 w-4" />} />
             </form>
           )}
           {item.status === "banned" && (
             <form action={handleSet}>
               <input type="hidden" name="status" value="approved" />
-              <SubmitBtn label="Aktifkan" />
+              <SubmitBtn label="Aktifkan" icon={<CheckCircle className="h-4 w-4" />} />
             </form>
           )}
         </div>

@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { ImageUploader } from "@/components/custom/image-uploader";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export const FormHero = () => {
   const { form, loading } = useFormAppData();
@@ -100,6 +102,14 @@ export const FormHero = () => {
               )}
             />
           </div>
+        </div>
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
         </div>
       </CardContent>
     </Card>

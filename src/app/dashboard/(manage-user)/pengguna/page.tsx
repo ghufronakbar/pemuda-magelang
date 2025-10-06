@@ -6,6 +6,7 @@ import {
 } from "../../(components)/table-user-talent";
 import { checkPermission, deleteUser, getAllUsers } from "@/actions/user";
 import { setStatusTalent } from "@/actions/talent";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const PenggunaPage = async () => {
   await checkPermission([Role.superadmin, Role.admin]);
@@ -36,27 +37,44 @@ const PenggunaPage = async () => {
   });
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 justify-between">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold">Pengguna</h1>
-          <p className="text-muted-foreground text-sm">
-            Pengguna yang terdaftar di platform ini
-          </p>
-        </div>
-      </div>
-      <TableUserTalent
-        users={mappedUsers}
-        onSetTalent={async (id, formData) => {
-          "use server";
-          await setStatusTalent(id, formData);
-        }}
-        onDelete={async (id) => {
-          "use server";
-          await deleteUser(id);
-        }}
-        type="pengguna"
-      />
+    <div className="space-y-6">
+      {/* Header Card */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2 justify-between">
+            <div className="flex flex-col">
+              <CardTitle className="text-2xl font-bold">Pengguna</CardTitle>
+              <CardDescription className="text-sm">
+                Pengguna yang terdaftar di platform ini
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Users Table Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Daftar Pengguna</CardTitle>
+          <CardDescription>
+            Kelola dan monitor pengguna yang terdaftar di platform
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TableUserTalent
+            users={mappedUsers}
+            onSetTalent={async (id, formData) => {
+              "use server";
+              await setStatusTalent(id, formData);
+            }}
+            onDelete={async (id) => {
+              "use server";
+              await deleteUser(id);
+            }}
+            type="pengguna"
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };

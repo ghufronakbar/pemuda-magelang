@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Pagination } from "@/components/custom/pagination";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2, Search } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { formatIDDate } from "@/lib/helper";
@@ -99,12 +99,15 @@ export function TableZHub({
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
             </label>
-            <Input
-              placeholder="Cari nama kategori…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full"
-            />
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Cari nama kategori…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-9"
+              />
+            </div>
           </div>
           <div>
             <label className="mb-1 block text-xs text-muted-foreground">
@@ -260,10 +263,12 @@ function SubmitBtn({
   label,
   variant,
   className,
+  icon,
 }: {
   label: string;
   variant?: "default" | "destructive" | "outline" | "ghost" | "link";
   className?: string;
+  icon?: React.ReactNode;
 }) {
   const { pending } = useFormStatus();
   return (
@@ -279,7 +284,10 @@ function SubmitBtn({
           <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses…
         </>
       ) : (
-        label
+        <>
+          {icon && <span className="mr-2">{icon}</span>}
+          {label}
+        </>
       )}
     </Button>
   );
@@ -318,7 +326,7 @@ function ActionButtons({
         onConfirm={handleDelete}
         description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data program ini dan semua data yang terkait dengan program ini."
       >
-        <SubmitBtn label="Hapus" variant="destructive" />
+        <SubmitBtn label="Hapus" variant="destructive" icon={<Trash2 className="h-4 w-4" />} />
       </AlertConfirmation>
     </div>
   );

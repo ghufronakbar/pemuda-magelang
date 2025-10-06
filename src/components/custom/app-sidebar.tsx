@@ -80,21 +80,9 @@ export function AppSidebar({ session }: { session: Session | null }) {
           roles: [Role.superadmin],
         },
         {
-          label: "Halaman Privasi",
-          href: "/dashboard/halaman-privasi",
-          icon: Lock,
-          roles: [Role.superadmin],
-        },
-        {
-          label: "Halaman Ketentuan",
-          href: "/dashboard/halaman-ketentuan",
-          icon: Paperclip,
-          roles: [Role.superadmin],
-        },
-        {
-          label: "Halaman FAQ",
-          href: "/dashboard/halaman-faq",
-          icon: HelpCircle,
+          label: "Manajemen Layanan",
+          href: "/dashboard/halaman-konten",
+          icon: FileText,
           roles: [Role.superadmin],
         },
       ],
@@ -120,6 +108,18 @@ export function AppSidebar({ session }: { session: Session | null }) {
           icon: ShieldCheck,
           roles: [Role.superadmin],
         },
+        {
+          label: "Komunitas",
+          href: "/dashboard/kelola-komunitas",
+          icon: RocketIcon,
+          roles: [Role.superadmin, Role.admin],
+        },
+        {
+          label: "Produk",
+          href: "/dashboard/produk",
+          icon: Package,
+          roles: [Role.superadmin, Role.admin, Role.user],
+        },
       ],
     },
     {
@@ -130,29 +130,6 @@ export function AppSidebar({ session }: { session: Session | null }) {
           href: "/dashboard/komunitas",
           icon: RocketIcon,
           roles: [Role.user],
-        },
-        {
-          label: "Kelola Komunitas",
-          href: "/dashboard/kelola-komunitas",
-          icon: RocketIcon,
-          roles: [Role.superadmin, Role.admin],
-        },
-      ],
-    },
-    {
-      section: "Manajemen Zhub",
-      items: [
-        {
-          label: "Kategori Zhub",
-          href: "/dashboard/kategori-zhub",
-          icon: Layers,
-          roles: [Role.superadmin, Role.admin],
-        },
-        {
-          label: "Program Zhub",
-          href: "/dashboard/program-zhub",
-          icon: Package,
-          roles: [Role.superadmin, Role.admin],
         },
       ],
     },
@@ -177,17 +154,17 @@ export function AppSidebar({ session }: { session: Session | null }) {
           icon: FolderArchive,
           roles: [Role.superadmin, Role.admin, Role.user],
         },
+        {
+          label: "Program Zhub",
+          href: "/dashboard/program-zhub",
+          icon: Package,
+          roles: [Role.superadmin, Role.admin],
+        },
       ],
     },
     {
       section: "Lainnya",
       items: [
-        {
-          label: "Produk",
-          href: "/dashboard/produk",
-          icon: Package,
-          roles: [Role.superadmin, Role.admin, Role.user],
-        },
         {
           label: "Pengaturan Akun",
           href: "/dashboard/akun",
@@ -208,14 +185,7 @@ export function AppSidebar({ session }: { session: Session | null }) {
     };
   }).filter((tree) => tree.items.length > 0);
 
-  const utilities = [
-    {
-      label: "Kembali Ke Web",
-      href: "/",
-      icon: Home,
-      roles: [Role.superadmin, Role.admin, Role.user],
-    },
-  ];
+  const utilities: NavTree[] = [];
 
   return (
     <Sidebar className="z-50">

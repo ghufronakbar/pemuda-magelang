@@ -25,6 +25,7 @@ const LABEL_MAP: Record<string, string> = {
   dashboard: "Dashboard",
   ringkasan: "Ringkasan",
   manajemen: "Manajemen Website",
+  "halaman-konten": "Manajemen Layanan",
   pengguna: "Manajemen Pengguna",
   talenta: "Manajemen Talent",
   admin: "Manajemen Admin",

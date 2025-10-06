@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form";
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { uploadImage } from "@/actions/image";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export const FormPrivacy = () => {
   const { form, loading } = useFormAppData();
@@ -59,6 +61,14 @@ export const FormPrivacy = () => {
             </FormItem>
           )}
         />
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

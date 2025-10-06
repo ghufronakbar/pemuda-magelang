@@ -17,7 +17,8 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FiExternalLink } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Pencil, ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { useState } from "react";
 
 export interface TopArticleCardProps {
   data: {
@@ -39,8 +40,21 @@ export interface TopArticleCardProps {
 export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role !== Role.user;
-  const slicedData = data.slice(0, 3);
-  const length = slicedData.length;
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = data.slice(startIndex, endIndex);
+
+  const handlePrevious = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   return (
     <Card className={className}>
@@ -61,7 +75,7 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
           <TableHead>Dikomentari</TableHead>
           <TableHead>Disukai</TableHead>
           <TableHead>Status</TableHead>
-          {slicedData.map((item) => (
+          {currentData.map((item) => (
             <TableRow key={item.id}>
               <TableCell>
                 <Image
@@ -99,7 +113,8 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
             </TableRow>
           ))}
         </Table>
-        {length === 0 && (
+        
+        {data.length === 0 && (
           <div className="flex flex-col gap-4 items-center justify-center min-h-40">
             <p className="text-sm text-muted-foreground">Belum ada artikel.</p>
             <Button asChild variant="outline">
@@ -107,11 +122,52 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
                 href={`/dashboard/${isAdmin ? "gerak" : "detak"}/buat-artikel`}
               >
                 <div className="flex items-center gap-2">
-                  <Pencil className="w-4 h-4" />
+                  <Plus className="w-4 h-4" />
                   Tulis artikel
                 </div>
               </Link>
             </Button>
+          </div>
+        )}
+
+        {data.length > 0 && totalPages > 1 && (
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-muted-foreground">
+              Menampilkan {startIndex + 1}-{Math.min(endIndex, data.length)} dari {data.length} artikel
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrevious}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Sebelumnya
+              </Button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    className="w-8 h-8 p-0"
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+              >
+                Selanjutnya
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>

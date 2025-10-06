@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { uploadImage } from "@/actions/image";
 import { cn } from "@/lib/utils";
-import { Loader2, ImageOffIcon } from "lucide-react";
+import { Loader2, Upload, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -45,56 +45,92 @@ export const ImageUploader = ({
       setLoading(false);
     }
   };
+
   return (
-    <div className={cn("flex flex-col gap-4")}>
+    <div className={cn("flex flex-col gap-3")}>
       <div
         className={cn(
-          "relative w-full p-2 border border-gray-200 rounded-md flex flex-col gap-4 !aspect-video items-center justify-center overflow-hidden",
+          "relative w-full aspect-video border-2 border-dashed rounded-xl overflow-hidden transition-all duration-200 hover:border-primary/50 hover:bg-muted/30",
           className,
-          errorMessage && "border-destructive"
+          errorMessage ? "border-destructive" : "border-muted-foreground/25",
+          !image && "cursor-pointer"
         )}
+        onClick={() => !image && document.getElementById(id)?.click()}
       >
         {loading && (
-          <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center bg-black/50 rounded-md w-full h-full">
-            <Loader2 className="w-8 h-8 animate-spin text-white" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              <span className="text-sm text-muted-foreground">Mengunggah...</span>
+            </div>
           </div>
         )}
+
         <input
           type="file"
           onChange={onChangeImage}
           className="hidden"
           id={id}
+          accept="image/*"
         />
+
         {image ? (
-          <Image
-            src={image}
-            alt="image"
-            width={400}
-            height={400}
-            className="object-cover w-full h-full rounded-md "
-          />
+          <>
+            <Image
+              src={image}
+              alt="Uploaded image"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-all duration-200 group">
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="bg-white/90 hover:bg-white text-black"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    document.getElementById(id)?.click();
+                  }}
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Ganti Gambar
+                </Button>
+              </div>
+            </div>
+          </>
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center gap-2 flex-col"
-            onClick={() => document.getElementById(id)?.click()}
-          >
-            <ImageOffIcon className="w-8 h-8" />
-            Belum ada gambar
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 p-6">
+            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+              <ImageIcon className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-medium text-foreground mb-1">
+                Unggah Gambar
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Klik untuk memilih file atau drag & drop
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById(id)?.click();
+              }}
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Pilih File
+            </Button>
           </div>
         )}
       </div>
-      <div className="flex flex-row items-center justify-between">
-        <p className={cn("text-destructive text-sm")}>{errorMessage}</p>
 
-        <Button
-          variant="outline"
-          onClick={() => document.getElementById(id)?.click()}
-          type="button"
-          disabled={loading}
-        >
-          {loading ? "Mengunggah..." : "Unggah Gambar"}
-        </Button>
-      </div>
+      {errorMessage && (
+        <p className="text-sm text-destructive">{errorMessage}</p>
+      )}
     </div>
   );
 };

@@ -27,7 +27,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2, Search } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -115,12 +115,15 @@ export function TableArticle({
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
             </label>
-            <Input
-              placeholder="Cari judul, tag..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full"
-            />
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Cari judul, tag..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-9"
+              />
+            </div>
           </div>
 
           <div>
@@ -428,7 +431,10 @@ const ActionButtons = ({
       )}
       {(isOwner || isAdmin) && (
         <AlertConfirmation onConfirm={handleDelete}>
-          <Button variant="destructive">Hapus</Button>
+          <Button variant="destructive">
+            <Trash2 className="mr-2 h-4 w-4" />
+            Hapus
+          </Button>
         </AlertConfirmation>
       )}
       {isOwner && status === ArticleStatusEnum.draft && (

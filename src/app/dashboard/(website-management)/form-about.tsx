@@ -30,19 +30,16 @@ import {
 import { Label } from "@/components/ui/label";
 import { IconEnum } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
+import { Loader2 } from "lucide-react";
 
 export const FormAbout = () => {
   const { form } = useFormAppData();
-  const aboutArray = useFieldArray({
-    control: form.control,
-    name: "aboutItems",
-  });
   return (
     <Card>
       <CardHeader>
         <CardTitle>About</CardTitle>
         <CardDescription>
-          Judul, deskripsi, gambar & highlight poin.
+          Judul, deskripsi, dan gambar untuk section About.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -104,11 +101,34 @@ export const FormAbout = () => {
             />
           </div>
         </div>
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
-        <Separator />
-
+export const FormAboutHighlights = () => {
+  const { form } = useFormAppData();
+  const aboutArray = useFieldArray({
+    control: form.control,
+    name: "aboutItems",
+  });
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Highlight</CardTitle>
+        <CardDescription>Poin highlight untuk About.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-medium">Highlight</h4>
+          <h4 className="text-sm font-medium">Daftar Highlight</h4>
           {aboutArray.fields.length < 4 && (
             <Button
               type="button"
@@ -195,10 +215,6 @@ export const FormAbout = () => {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-
-                {/* title */}
-
-                {/* description */}
                 <FormField
                   control={form.control}
                   name={`aboutItems.${i}.description`}
@@ -220,6 +236,14 @@ export const FormAbout = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
         </div>
       </CardContent>
     </Card>

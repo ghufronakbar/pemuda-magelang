@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useFormCategoryHub } from "@/context/form-category-hub-context";
 
 export const FormCategoryHub = () => {
@@ -71,7 +71,10 @@ export const FormCategoryHub = () => {
               ) : form.watch("id") ? (
                 "Edit Kategori Zhub"
               ) : (
-                "Buat Kategori Zhub"
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Buat Kategori Zhub
+                </>
               )}
             </Button>
           </form>

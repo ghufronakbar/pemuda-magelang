@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2, Trash } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 import type { UserProfileInput } from "@/validator/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper";
@@ -136,14 +136,14 @@ export function ProfileSection({ className }: ProfileSectionProps) {
               accept="image/*"
             />
             <div className="flex flex-col gap-2 self-center items-center">
-              <div className="w-24 h-24 relative overflow-hidden">
+              <div className="w-24 h-24 relative overflow-hidden group">
                 {uploading && (
                   <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center bg-black/50 rounded-full w-full h-full">
                     <Loader2 className="w-8 h-8 animate-spin text-white" />
                   </div>
                 )}
                 <Avatar
-                  className="w-full h-full"
+                  className="w-full h-full cursor-pointer"
                   onClick={() => {
                     if (uploading) return;
                     document.getElementById("profilePicture")?.click();
@@ -157,20 +157,15 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                     {getInitials(formProfile.watch("name"))}
                   </AvatarFallback>
                 </Avatar>
+                
+                {/* Hover overlay with upload text */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="flex flex-col items-center gap-1 text-white">
+                    <Upload className="w-5 h-5" />
+                    <span className="text-xs font-medium">Unggah Foto</span>
+                  </div>
+                </div>
               </div>
-              {formProfile.watch("profilePicture") && (
-                <Button
-                  size="sm"
-                  className="text-xs cursor-pointer"
-                  variant="destructive"
-                  onClick={() => {
-                    formProfile.setValue("profilePicture", null);
-                  }}
-                >
-                  <Trash className="w-4 h-4" />
-                  Hapus Foto
-                </Button>
-              )}
             </div>
 
             <FormField

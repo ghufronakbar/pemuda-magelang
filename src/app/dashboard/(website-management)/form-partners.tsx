@@ -31,6 +31,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UrlInput } from "@/components/custom/url-input";
+import { Loader2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const FormPartners = () => {
   const { form } = useFormAppData();
@@ -47,21 +50,29 @@ export const FormPartners = () => {
     type: PartnerTypeEnum;
     title: string;
     desc: string;
+    tabLabel: string;
+    tabValue: string;
   }> = [
     {
       type: PartnerTypeEnum.supported,
       title: "Supported",
       desc: "Partner pendukung utama.",
+      tabLabel: "Didukung / Sponsor",
+      tabValue: "supported",
     },
     {
       type: PartnerTypeEnum.collaborator,
       title: "Collaborator",
       desc: "Partner yang berkolaborasi pada inisiatif/kegiatan.",
+      tabLabel: "Kolaborator Partner",
+      tabValue: "collaborator",
     },
     {
       type: PartnerTypeEnum.media,
       title: "Media",
       desc: "Partner media & publikasi.",
+      tabLabel: "Media Partner",
+      tabValue: "media",
     },
   ];
 
@@ -225,6 +236,14 @@ export const FormPartners = () => {
             </div>
           )}
         </div>
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
+        </div>
       </div>
     );
   };
@@ -237,8 +256,25 @@ export const FormPartners = () => {
           Daftar partner yang tampil di landing, dikelompokkan per tipe.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
-        {groups.map((g) => renderSection(g.type))}
+      <CardContent className="space-y-4">
+        <Tabs defaultValue={groups[0].tabValue} className="w-full">
+          <div className="flex items-center justify-between">
+            <TabsList>
+              {groups.map((g) => (
+                <TabsTrigger key={g.tabValue} value={g.tabValue}>
+                  {g.tabLabel}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+           
+          </div>
+
+          {groups.map((g) => (
+            <TabsContent key={g.tabValue} value={g.tabValue} className="space-y-4">
+              {renderSection(g.type)}
+            </TabsContent>
+          ))}
+        </Tabs>
       </CardContent>
     </Card>
   );

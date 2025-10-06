@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 export const FormAdmin = () => {
   const { form, onSubmit, loading, setOpen, open } = useFormAdmin();
   return (
@@ -28,7 +28,10 @@ export const FormAdmin = () => {
         setOpen(false);
       }}
     >
-      <Button onClick={() => setOpen(true)}>Tambah Admin</Button>
+      <Button onClick={() => setOpen(true)}>
+        <Plus className="mr-2 h-4 w-4" />
+        Tambah Admin
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tambah Admin</DialogTitle>
@@ -68,7 +71,10 @@ export const FormAdmin = () => {
                   <span>Harap tunggu...</span>
                 </div>
               ) : (
-                "Buat Admin"
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Buat Admin
+                </>
               )}
             </Button>
           </form>

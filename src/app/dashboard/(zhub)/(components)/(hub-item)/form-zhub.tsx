@@ -28,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useFormHub } from "@/context/form-hub-context";
 import { hubStatusEnum } from "@/enum/hub-status-enum";
 import { HubCategory, HubStatusEnum } from "@prisma/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 interface FormHubProps {
   categories: HubCategory[];
@@ -204,7 +204,10 @@ export const FormHub = ({ categories }: FormHubProps) => {
               ) : form.watch("id") ? (
                 "Edit Program Zhub"
               ) : (
-                "Buat Program Zhub"
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Buat Program Zhub
+                </>
               )}
             </Button>
           </form>

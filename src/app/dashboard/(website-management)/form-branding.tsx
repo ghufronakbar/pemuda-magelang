@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UrlInput } from "@/components/custom/url-input";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export const FormBranding = () => {
   const { form } = useFormAppData();
@@ -75,6 +77,14 @@ export const FormBranding = () => {
             </FormItem>
           )}
         />
+        <div className="flex items-center justify-end">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Simpan
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

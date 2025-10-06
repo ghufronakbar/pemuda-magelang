@@ -181,6 +181,94 @@ export const getTotalTalent = (sess: Session | null) =>
     }
   );
 
+export const getTotalUsers = (sess: Session | null) =>
+  unstable_cache(
+    async () => {
+      if (!sess || sess.user.role === Role.user) {
+        return {
+          total: 0,
+          users: 0,
+          admins: 0,
+          superadmins: 0,
+        };
+      }
+      const users = await db.user.findMany({
+        select: {
+          role: true,
+        },
+      });
+      return {
+        total: users.length,
+        users: users.filter((user) => user.role === Role.user).length,
+        admins: users.filter((user) => user.role === Role.admin).length,
+        superadmins: users.filter((user) => user.role === Role.superadmin).length,
+      };
+    },
+    ["total-users"],
+    {
+      tags: [`total-users-${sess?.user.id}`],
+      revalidate: 60,
+    }
+  );
+
+export const getTotalCommunities = (sess: Session | null) =>
+  unstable_cache(
+    async () => {
+      if (!sess) {
+        return {
+          total: 0,
+          active: 0,
+          inactive: 0,
+        };
+      }
+      const communities = await db.community.findMany({
+        select: {
+          status: true,
+        },
+      });
+      return {
+        total: communities.length,
+        active: communities.filter((community) => community.status === "active").length,
+        inactive: communities.filter((community) => community.status === "inactive").length,
+      };
+    },
+    ["total-communities"],
+    {
+      tags: [`total-communities-${sess?.user.id}`],
+      revalidate: 60,
+    }
+  );
+
+export const getTotalZhubPrograms = (sess: Session | null) =>
+  unstable_cache(
+    async () => {
+      if (!sess) {
+        return {
+          total: 0,
+          active: 0,
+          inactive: 0,
+          soon: 0,
+        };
+      }
+      const programs = await db.hub.findMany({
+        select: {
+          status: true,
+        },
+      });
+      return {
+        total: programs.length,
+        active: programs.filter((program) => program.status === "active").length,
+        inactive: programs.filter((program) => program.status === "inactive").length,
+        soon: programs.filter((program) => program.status === "soon").length,
+      };
+    },
+    ["total-zhub-programs"],
+    {
+      tags: [`total-zhub-programs-${sess?.user.id}`],
+      revalidate: 60,
+    }
+  );
+
 export const getTags = async (sess: Session | null) => {
   if (!sess) {
     return [];
@@ -190,5 +278,8 @@ export const getTags = async (sess: Session | null) => {
     `total-product-${sess.user.id}`,
     `top-article-${sess.user.id}`,
     `total-talent-${sess.user.id}`,
+    `total-users-${sess.user.id}`,
+    `total-communities-${sess.user.id}`,
+    `total-zhub-programs-${sess.user.id}`,
   ];
 };
