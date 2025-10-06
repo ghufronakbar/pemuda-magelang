@@ -18,6 +18,9 @@ import {
 import { PLACEHOLDER_IMAGE } from "@/constants";
 import { formatIDR, getInitials } from "@/lib/helper";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface GalleryDetailProps {
   product: Product & {
@@ -34,6 +37,14 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
 
   const [current, setCurrent] = React.useState(0);
   const safeImages = images?.length ? images : [PLACEHOLDER_IMAGE];
+
+  const goPrev = React.useCallback(() => {
+    setCurrent((idx) => (idx - 1 + safeImages.length) % safeImages.length);
+  }, [safeImages.length]);
+
+  const goNext = React.useCallback(() => {
+    setCurrent((idx) => (idx + 1) % safeImages.length);
+  }, [safeImages.length]);
 
   React.useEffect(() => {
     if (current >= safeImages.length) setCurrent(0);
@@ -54,26 +65,82 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
   // Produk lain dari talent yang sama (kecuali produk sekarang)
   const otherProducts = (talent.products ?? []).filter((p) => p.slug !== slug);
 
+  const otherListRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollOtherPrev = React.useCallback(() => {
+    const el = otherListRef.current;
+    if (!el) return;
+    el.scrollBy({ left: -320, behavior: "smooth" });
+  }, []);
+
+  const scrollOtherNext = React.useCallback(() => {
+    const el = otherListRef.current;
+    if (!el) return;
+    el.scrollBy({ left: 320, behavior: "smooth" });
+  }, []);
+
   return (
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
     >
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <Card>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         {/* Media */}
         <div className="lg:col-span-7">
-          <div className="overflow-hidden rounded-2xl border bg-muted">
-            <div className="relative aspect-square w-full">
-              <Image
-                key={safeImages[current]}
-                src={safeImages[current]}
-                alt={title}
-                fill
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="overflow-hidden rounded-2xl border bg-muted cursor-zoom-in" aria-label="Perbesar gambar">
+                <div className="relative aspect-square w-full">
+                  <Image
+                    key={safeImages[current]}
+                    src={safeImages[current]}
+                    alt={title}
+                    fill
+                    sizes="(max-width:1024px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </DialogTrigger>
+            <DialogContent
+              showCloseButton
+              className="border-0 bg-black p-0 sm:max-w-3xl"
+            >
+              <div className="relative w-full h-[60vh]">
+                <Image
+                  key={`fullscreen-${safeImages[current]}`}
+                  src={safeImages[current]}
+                  alt={title}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                  priority
+                />
+                {safeImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label="Sebelumnya"
+                      onClick={goPrev}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 text-white backdrop-blur-sm transition hover:bg-white/20 focus:outline-hidden focus:ring-2 focus:ring-white/40"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Berikutnya"
+                      onClick={goNext}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 text-white backdrop-blur-sm transition hover:bg-white/20 focus:outline-hidden focus:ring-2 focus:ring-white/40"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
+                  </>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {safeImages.length > 1 && (
             <div className="p-2 flex gap-3 overflow-x-auto pb-1">
@@ -84,7 +151,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
                   aria-label={`Gambar ${idx + 1}`}
                   onClick={() => setCurrent(idx)}
                   className={cn(
-                    "relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border",
+                    "relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border",
                     current === idx
                       ? "ring-2 ring-primary"
                       : "opacity-90 hover:opacity-100"
@@ -104,23 +171,15 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
         </div>
 
         {/* Detail */}
-        <div className="lg:col-span-5">
-          {/* Tags */}
-          <div className="flex flex-wrap items-center gap-2">
-            {tags?.map((t) => (
-              <Badge key={t} variant="outline" className="rounded-full">
-                #{t}
-              </Badge>
-            ))}
-          </div>
+        <div className="lg:col-span-5 lg:sticky lg:top-24 self-start">
 
-          <h1 className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
+          <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             {title}
           </h1>
 
           {/* Price (opsional) */}
           {typeof price === "number" && price !== 0 && (
-            <div className="mt-2 text-xl font-semibold">{formatIDR(price)}</div>
+            <div className="mt-2 text-2xl font-semibold">{formatIDR(price)}</div>
           )}
 
           <div className="my-5">
@@ -147,7 +206,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
                 <Link href={`/talenta/${talent.slug}`}>Lihat Profil</Link>
               </Button>
               {ctaHref && (
-                <Button asChild size="sm">
+                <Button asChild size="sm" className="shadow-sm">
                   <Link
                     href={ctaHref}
                     target="_blank"
@@ -206,58 +265,97 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
           <div className="prose prose-neutral max-w-none text-sm">
             <p className="whitespace-pre-wrap">{description}</p>
           </div>
-        </div>
-      </div>
 
-      {/* Produk lain dari talent ini */}
-      {otherProducts.length > 0 && (
-        <>
-          <div className="my-8">
-            <Separator />
+          {/* Tags moved below description */}
+          {tags?.length ? (
+            <>
+              <div className="my-5">
+                <Separator />
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {tags.map((t) => (
+                  <Badge key={t} variant="outline" className="rounded-full">
+                    #{t}
+                  </Badge>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
           </div>
 
-          <section>
-            <h2 className="mb-3 text-lg font-semibold sm:text-xl">
-              Produk lain dari {talent.name}
-            </h2>
+          {/* Produk lain dari talent ini */}
+          {otherProducts.length > 0 && (
+            <>
+              <div className="my-8">
+                <Separator />
+              </div>
 
-            <div className="-mx-1 flex gap-4 overflow-x-auto pb-1 pl-1 pr-1">
-              {otherProducts.map((p) => {
-                const cover = p.images?.[0] ?? PLACEHOLDER_IMAGE;
-                return (
-                  <Link
-                    key={p.id}
-                    href={`/galeri/${p.slug}`}
-                    className="group w-[240px] shrink-0"
-                  >
-                    <div className="overflow-hidden rounded-xl border bg-muted">
-                      <div className="relative aspect-[4/3] w-full">
-                        <Image
-                          src={cover}
-                          alt={p.title}
-                          fill
-                          sizes="240px"
-                          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <div className="line-clamp-2 text-sm font-medium">
-                        {p.title}
-                      </div>
-                      {typeof p.price === "number" && (
-                        <div className="text-xs text-muted-foreground">
-                          {formatIDR(p.price)}
+              <section className="relative">
+                <h2 className="mb-3 text-lg font-semibold sm:text-xl">
+                  Produk lain dari {talent.name}
+                </h2>
+
+                <div
+                  ref={otherListRef}
+                  className="-mx-1 flex gap-4 overflow-x-auto pb-1 pl-1 pr-1 scroll-smooth"
+                >
+                  {otherProducts.map((p) => {
+                    const cover = p.images?.[0] ?? PLACEHOLDER_IMAGE;
+                    return (
+                      <Link
+                        key={p.id}
+                        href={`/galeri/${p.slug}`}
+                        className="group w-[240px] shrink-0"
+                      >
+                        <div className="overflow-hidden rounded-xl border bg-muted">
+                          <div className="relative aspect-[4/3] w-full">
+                            <Image
+                              src={cover}
+                              alt={p.title}
+                              fill
+                              sizes="240px"
+                              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            />
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        </>
-      )}
+                        <div className="mt-2">
+                          <div className="line-clamp-2 text-sm font-medium">
+                            {p.title}
+                          </div>
+                          {typeof p.price === "number" && (
+                            <div className="text-xs text-muted-foreground">
+                              {formatIDR(p.price)}
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* Nav buttons */}
+                <button
+                  type="button"
+                  aria-label="Sebelumnya"
+                  onClick={scrollOtherPrev}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full border border-foreground/10 bg-background/80 p-2 text-foreground shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 transition hover:bg-background focus:outline-hidden focus:ring-2 focus:ring-ring"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Berikutnya"
+                  onClick={scrollOtherNext}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full border border-foreground/10 bg-background/80 p-2 text-foreground shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 transition hover:bg-background focus:outline-hidden focus:ring-2 focus:ring-ring"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </section>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </section>
   );
 }

@@ -12,6 +12,15 @@ import { toast } from "sonner";
 import CommentSection from "./comment-section";
 import { formatIDDate, getInitials } from "@/lib/helper";
 import { Session } from "next-auth";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardAction,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 export interface CommentWithUser extends Comment {
   user: User;
@@ -87,95 +96,91 @@ export async function ArticleDetail({
     <section
       className={cn("mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8", className)}
     >
-      {/* Header */}
-      <section className="mb-6 w-full flex flex-row">
-        <div className="flex items-center gap-3 w-full">
-          <div className="flex flex-row justify-between flex-wrap w-full">
-            <div>
-              <div className="mb-3 flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="rounded-full">
-                  {category}
-                </Badge>
-              </div>
-              <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-                {title}
-              </h1>
-
-              <LinkOrNot
-                className="mt-4 flex items-center gap-3"
-                href={`/${
-                  author.type === "dampak"
-                    ? "komunitas"
-                    : author.type === "detak"
-                    ? "talenta"
-                    : "EXPECTED_ERROR"
-                }/${encodeURIComponent(author.slug ?? "")}`}
-              >
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={authorAvatar} alt={authorName} />
-                  <AvatarFallback>{authorInitials}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium">
-                    {authorName}
-                  </div>
-                  <div className="truncate text-xs text-muted-foreground">
-                    {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
-                    {_count.trackViews}x dibaca
-                  </div>
-                </div>
-              </LinkOrNot>
+      <Card className="bg-card/50 backdrop-blur">
+        <CardHeader className="border-b">
+          <div>
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <Badge variant="secondary" className="rounded-full">
+                {category}
+              </Badge>
             </div>
-            <div className="flex items-center gap-3 mt-4">
+            <CardTitle className="text-2xl sm:text-3xl font-bold leading-tight">
+              {title}
+            </CardTitle>
+            <LinkOrNot
+              className="mt-4 flex items-center gap-3"
+              href={`/${
+                author.type === "dampak"
+                  ? "komunitas"
+                  : author.type === "detak"
+                  ? "talenta"
+                  : "EXPECTED_ERROR"
+              }/${encodeURIComponent(author.slug ?? "")}`}
+            >
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={authorAvatar} alt={authorName} />
+                <AvatarFallback>{authorInitials}</AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <div className="truncate text-sm font-medium">{authorName}</div>
+                <div className="truncate text-xs text-muted-foreground">
+                  {authorRoleOrProfession} • {publishedDate} • {reading} • {_count.trackViews}x dibaca
+                </div>
+              </div>
+            </LinkOrNot>
+          </div>
+          <CardAction>
+            <div className="flex items-center gap-3 mt-4 sm:mt-0">
               <ActionButtonArticle
                 article={article}
                 onLikeArticle={handleLikeArticle}
                 session={session}
               />
             </div>
-          </div>
-        </div>
-      </section>
+          </CardAction>
+        </CardHeader>
 
-      {/* Thumbnail */}
-      {thumbnailImage ? (
-        <div className="mb-6 overflow-hidden rounded-2xl border bg-muted">
-          <div className="relative aspect-[16/9] w-full">
-            <Image
-              src={thumbnailImage}
-              alt={title}
-              fill
-              sizes="(max-width:768px) 100vw, 768px"
-              className="object-cover"
-              priority={false}
-            />
-          </div>
-        </div>
-      ) : null}
+        <CardContent>
+          {thumbnailImage ? (
+            <div className="mb-6 overflow-hidden rounded-2xl border bg-muted">
+              <div className="relative aspect-[16/9] w-full">
+                <Image
+                  src={thumbnailImage}
+                  alt={title}
+                  fill
+                  sizes="(max-width:768px) 100vw, 768px"
+                  className="object-cover"
+                  priority={false}
+                />
+              </div>
+            </div>
+          ) : null}
 
-      <RichTextStyles
-        content={content}
-        className="!prose !prose-neutral !max-w-none !!w-full"
-      />
+          <RichTextStyles
+            content={content}
+            className="!prose !prose-neutral !max-w-none !!w-full"
+          />
 
-      {/* Tags */}
-      {tags?.length ? (
-        <>
-          <Separator className="my-6" />
-          <div className="flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <Badge
-                key={t}
-                variant="outline"
-                className="rounded-full px-2.5 py-0.5 text-xs"
-              >
-                #{t}
-              </Badge>
-            ))}
-          </div>
-        </>
-      ) : null}
-      <CommentSection article={article} className="mt-6" session={session} />
+          {tags?.length ? (
+            <>
+              <Separator className="my-6" />
+              <div className="flex flex-wrap gap-2">
+                {tags.map((t) => (
+                  <Badge
+                    key={t}
+                    variant="outline"
+                    className="rounded-full px-2.5 py-0.5 text-xs"
+                  >
+                    #{t}
+                  </Badge>
+                ))}
+              </div>
+            </>
+          ) : null}
+
+          <CommentSection article={article} className="mt-6" session={session} />
+        </CardContent>
+      </Card>
     </section>
   );
 }

@@ -16,12 +16,14 @@ interface Props {
   categories: string[];
   className?: string;
   placeholder?: string;
+  hideReset?: boolean;
 }
 
 export const Filter = ({
   categories,
   className,
   placeholder = "Cari artikel...",
+  hideReset = false,
 }: Props) => {
   const { search, setSearch, category, setCategory } = useFilter();
   const handleReset = () => {
@@ -35,11 +37,17 @@ export const Filter = ({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <Select value={category} onValueChange={(value) => setCategory(value)}>
+      <Select
+        value={category === "" ? "all" : category}
+        onValueChange={(value) => setCategory(value === "all" ? "" : value)}
+      >
         <SelectTrigger>
           <SelectValue placeholder="Pilih kategori" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem key="__all__" value="all">
+            Semua
+          </SelectItem>
           {categories.map((category) => (
             <SelectItem
               key={category}
@@ -51,9 +59,11 @@ export const Filter = ({
           ))}
         </SelectContent>
       </Select>
-      <Button variant="outline" onClick={handleReset}>
-        Reset
-      </Button>
+      {!hideReset && (
+        <Button variant="outline" onClick={handleReset}>
+          Reset
+        </Button>
+      )}
     </div>
   );
 };

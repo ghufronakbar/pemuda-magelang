@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 import { ArticleSectionProps } from "../type";
 import { Filter } from "../../filter/filter";
 import { ArticleGridMap } from "./article-grid-map";
+import { ARTICLE_CATEGORIES } from "@/data/article";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardAction,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 export function ArticleGridSection({
   title = "Artikel",
@@ -16,37 +26,43 @@ export function ArticleGridSection({
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
     >
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
-          {description && (
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      <Card className="bg-card/50 backdrop-blur">
+        <CardHeader className="border-b">
+          <div>
+            <CardTitle className="text-xl sm:text-2xl font-semibold">{title}</CardTitle>
+            {description && (
+              <CardDescription className="mt-1">{description}</CardDescription>
+            )}
+          </div>
+          {viewAllHref && (
+            <CardAction>
+              <Button asChild variant="ghost" className="hidden sm:inline-flex">
+                <Link href={viewAllHref}>Lihat semua →</Link>
+              </Button>
+            </CardAction>
           )}
-        </div>
+        </CardHeader>
+
+        <CardContent>
+          {!viewAllHref && (
+            <Filter
+              categories={ARTICLE_CATEGORIES}
+              className="mb-4"
+              placeholder="Cari artikel..."
+              hideReset
+            />
+          )}
+          <ArticleGridMap data={articles} />
+        </CardContent>
 
         {viewAllHref && (
-          <Button asChild variant="ghost" className="hidden sm:inline-flex">
-            <Link href={viewAllHref}>Lihat semua →</Link>
-          </Button>
+          <CardFooter className="sm:hidden">
+            <Button asChild variant="outline" className="w-full">
+              <Link href={viewAllHref}>Lihat semua</Link>
+            </Button>
+          </CardFooter>
         )}
-      </div>
-
-      {!viewAllHref && (
-        <Filter
-          categories={Array.from(new Set(articles.map((a) => a.category)))}
-          className="mb-4"
-          placeholder="Cari artikel..."
-        />
-      )}
-      <ArticleGridMap data={articles} />
-
-      {viewAllHref && (
-        <div className="mt-6 flex justify-center sm:hidden">
-          <Button asChild variant="outline" className="w-full sm:w-auto">
-            <Link href={viewAllHref}>Lihat semua</Link>
-          </Button>
-        </div>
-      )}
+      </Card>
     </section>
   );
 }

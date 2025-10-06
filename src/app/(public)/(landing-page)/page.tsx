@@ -1,93 +1,42 @@
-import { HubCardProps, HubSection } from "./(section)/hub-section";
+// removed HubSection
+// import { HubCardProps, HubSection } from "./(section)/hub-section";
 import { AboutSection } from "./(section)/about-section";
 import { HeroSection } from "./(section)/hero-section";
-import { ArticleSectionLanding } from "./(section)/article-section-landing";
+// removed ArticleSectionLanding
+// import { ArticleSectionLanding } from "./(section)/article-section-landing";
 import { PartnerSection } from "./(section)/partner-section";
 import { MenuSection } from "./(section)/menu-section";
 import { BrandingSection } from "./(section)/branding-section";
 import { getAppData } from "@/actions/app-data";
-import {
-  ArticleStatusEnum,
-  ArticleTypeEnum,
-  CommunityStatusEnum,
-  HubStatusEnum,
-  PartnerTypeEnum,
-  TalentStatusEnum,
-} from "@prisma/client";
-import { getAllHubs } from "@/actions/zhub";
-import { getArticles } from "@/actions/article";
 import { getAllTalents } from "@/actions/talent";
 import { getAllCommunities } from "@/actions/community";
-import { ArticleCardProps } from "@/components/article/type";
 
 const LandingPage = async () => {
-  const [articles, appData, talents, communities, hubs] = await Promise.all([
-    getArticles(),
+  const [appData, talents, communities] = await Promise.all([
     getAppData(),
     getAllTalents(),
     getAllCommunities(),
-    getAllHubs(),
   ]);
-  const mappedArticles: ArticleCardProps[] = articles
-    .filter(
-      (article) =>
-        article.status === ArticleStatusEnum.published &&
-        article.type === ArticleTypeEnum.detak
-    )
-    .map((article) => {
-      return {
-        category: article.category,
-        author: {
-          image: article.user.profilePicture,
-          name: article.user.name,
-          profession:
-            article.user.role === "user"
-              ? article.user.talent?.profession ?? "Penulis"
-              : "Admin",
-        },
-        content: article.content,
-        publishedAt: article.createdAt,
-        slug: article.slug,
-        title: article.title,
-        thumbnail: article.thumbnailImage,
-        tags: article.tags,
-        commentsCount: article._count.comments,
-        likesCount: article._count.articleUserLikes,
-        isCommunity: article.type === ArticleTypeEnum.dampak,
-        isTalent: article.type === ArticleTypeEnum.detak,
-      };
-    });
-  const mappedHubs: HubCardProps[] = hubs
-    .flatMap((h) => h.hubs)
-    .filter((hub) => hub.status === HubStatusEnum.active)
-    .map((hub) => {
-      return {
-        title: hub.name,
-        description: hub.description,
-        image: hub.image,
-        slug: hub.slug,
-        status: hub.status,
-      };
-    });
+
+  type PartnerLite = { type?: string };
+  type HasStatus = { status?: string };
 
   const supported = appData.partners.filter(
-    (partner) => partner.type === PartnerTypeEnum.supported
+    (partner: PartnerLite) => partner?.type === "supported"
   );
   const collabs = appData.partners.filter(
-    (partner) => partner.type === PartnerTypeEnum.collaborator
+    (partner: PartnerLite) => partner?.type === "collaborator"
   );
   const medias = appData.partners.filter(
-    (partner) => partner.type === PartnerTypeEnum.media
+    (partner: PartnerLite) => partner?.type === "media"
   );
   const countTalent = talents.filter(
-    (talent) => talent.status === TalentStatusEnum.approved
+    (talent: HasStatus) => talent?.status === "approved"
   ).length;
   const countCommunity = communities.filter(
-    (community) => community.status === CommunityStatusEnum.approved
+    (community: HasStatus) => community?.status === "approved"
   ).length;
-  const countZhub = hubs
-    .flatMap((h) => h.hubs)
-    .filter((hub) => hub.status === HubStatusEnum.active).length;
+  const countZhub = 0;
 
   return (
     <main>
@@ -114,12 +63,7 @@ const LandingPage = async () => {
         className="py-26"
       />
       <MenuSection className="min-h-[calc(100vh-200px)] flex flex-col justify-center" />
-      <HubSection viewAllHref="/zhub" className="py-10" hubs={mappedHubs} />
-      <ArticleSectionLanding
-        viewAllHref="/detak"
-        className="py-10"
-        articles={mappedArticles}
-      />
+      {/** Zhub and Article sections removed from homepage as requested */}
       <PartnerSection
         supportedPartners={supported}
         collaborators={collabs}

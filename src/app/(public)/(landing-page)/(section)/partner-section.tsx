@@ -45,16 +45,16 @@ export function PartnerSection({
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header center */}
-        <div className="mb-6 text-center">
+        <div className="mb-6 sm:mb-8 text-center">
           <h2 className="text-2xl font-semibold sm:text-3xl">{title}</h2>
           {description && (
-            <p className="mx-auto mt-1 max-w-2xl text-sm text-muted-foreground">
+            <p className="mx-auto mt-2 sm:mt-3 max-w-2xl text-base text-muted-foreground">
               {description}
             </p>
           )}
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {supportedPartners.length > 0 && (
             <Row
               label="Didukung oleh"

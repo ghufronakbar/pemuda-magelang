@@ -40,8 +40,8 @@ export function AboutSection({
       id="about"
     >
       {/* Header */}
-      <div className="mb-6">
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border bg-muted shadow-sm block lg:hidden mb-4">
+      <div className="mb-6 sm:mb-8">
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border bg-muted/50 shadow-sm backdrop-blur block lg:hidden mb-4">
           {image ? (
             <Image
               src={image}
@@ -58,34 +58,29 @@ export function AboutSection({
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/10 to-transparent" />
         </div>
-        <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
+        <h2 className="text-2xl font-semibold sm:text-3xl">{title}</h2>
         {description && (
-          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+          <p className="mt-2 sm:mt-3 max-w-3xl text-base text-muted-foreground">
             {description}
           </p>
         )}
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:gap-10 lg:grid-cols-12">
         {/* Highlights / copy */}
         <div className="lg:col-span-7">
-          <div className="mb-4">
-            <Badge variant="secondary" className="rounded-full">
-              Kota Magelang
-            </Badge>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2">
             {highlights.map((h, index) => (
-              <Card key={index} className="border-muted">
-                <CardContent className="flex gap-3 p-4">
+              <Card key={index} className="border-muted/60">
+                <CardContent className="flex gap-3 p-4 sm:p-5">
                   {h.icon
                     ? iconEnum.getIcon(h.icon, "mt-0.5 h-5 w-5 text-primary")
                     : null}
                   <div>
-                    <h3 className="text-sm font-medium">{h.key}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <h3 className="text-sm font-medium leading-6">{h.key}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground leading-6">
                       {h.value}
                     </p>
                   </div>
@@ -94,9 +89,9 @@ export function AboutSection({
             ))}
           </div>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row">
             {isAuthed ? null : (
-              <Button asChild size="lg" className="w-full sm:w-auto">
+              <Button asChild size="lg" className="w-full sm:w-auto shadow-sm">
                 <Link href={ctaPrimary.href}>{ctaPrimary.label}</Link>
               </Button>
             )}
@@ -105,7 +100,7 @@ export function AboutSection({
 
         {/* Image */}
         <div className="lg:col-span-5">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border bg-muted shadow-sm hidden lg:block">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border bg-muted/50 shadow-sm backdrop-blur hidden lg:block">
             {image ? (
               <Image
                 src={image}
@@ -120,7 +115,7 @@ export function AboutSection({
                 Tambahkan gambar…
               </div>
             )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/10 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/5 to-transparent" />
           </div>
         </div>
       </div>

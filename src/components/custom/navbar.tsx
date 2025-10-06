@@ -62,6 +62,16 @@ interface NavbarProps {
 export function Navbar({ session, categoriesHubs }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 4);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const dashboardHref = "/dashboard";
 
@@ -117,7 +127,13 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 bg-white",
+        // smooth transition + subtle border/shadow
+        "transition-all duration-300 border-b shadow-sm"
+      )}
+    >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Logo */}
         <Link href="/" aria-label="Beranda" className="flex items-center gap-2">
@@ -134,7 +150,7 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
         {/* Desktop nav */}
         <nav className="hidden md:block">
           <NavigationMenu viewport={false}>
-            <NavigationMenuList className="gap-4">
+          <NavigationMenuList className="gap-4">
               {LINK_ITEMS.map((item, idx) => (
                 <NavigationMenuItem key={idx}>
                   {/* Simple link (no children) */}
@@ -142,23 +158,30 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
                     <NavigationMenuLink
                       asChild
                       className={cn(
-                        navigationMenuTriggerStyle(),
-                        "bg-transparent hover:bg-primary/90 hover:text-white",
-                        pathname === item.href &&
-                          "bg-primary text-primary-foreground"
+                      navigationMenuTriggerStyle(),
+                      // modern minimal hover/active
+                      "relative rounded-md bg-transparent text-foreground hover:text-primary hover:bg-primary/5",
+                      "focus-visible:ring-2 focus-visible:ring-primary/20",
+                      pathname === item.href && "text-primary bg-primary/5"
                       )}
                     >
-                      <Link href={item.href}>{item.title}</Link>
+                    <Link href={item.href} className="inline-block">
+                      <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">
+                        {item.title}
+                      </span>
+                    </Link>
                     </NavigationMenuLink>
                   )}
 
                   {/* With children */}
                   {!item.href && item.items.length > 0 && (
                     <>
-                      <NavigationMenuTrigger className="bg-transparent hover:bg-primary/50">
+                    <NavigationMenuTrigger className="relative rounded-md bg-transparent text-foreground hover:text-primary hover:bg-primary/5 focus-visible:ring-2 focus-visible:ring-primary/20 data-[state=open]:text-primary data-[state=open]:bg-primary/5">
+                      <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 data-[state=open]:after:w-full">
                         {item.title}
+                      </span>
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent>
+                    <NavigationMenuContent className="data-[motion=from-start]:animate-in data-[motion=from-start]:fade-in-0 data-[motion=from-start]:zoom-in-95 data-[motion=from-end]:animate-in data-[motion=from-end]:fade-in-0 data-[motion=from-end]:zoom-in-95">
                         <ul className="grid w-[260px] gap-2 p-3 md:w-[320px]">
                           {item.items.map((child, i) => (
                             <ListItem
@@ -319,7 +342,7 @@ function MobileMenu({
       <SheetTrigger asChild>
         <button
           aria-label="Buka menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-primary hover:text-white transition-all duration-300"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md outline-none transition-all duration-300 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -347,15 +370,17 @@ function MobileMenu({
                 const active = pathname === item.href;
                 return (
                   <li key={`m-${idx}`}>
-                    <Link
+                  <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className={cn(
-                        "block rounded-md px-4 py-3 text-sm hover:bg-primary/90 hover:text-white",
-                        active && "bg-primary text-primary-foreground"
+                    className={cn(
+                      "block rounded-md px-4 py-3 text-sm hover:text-primary hover:bg-primary/5",
+                        active && "text-primary"
                       )}
                     >
-                      {item.title}
+                      <span className="relative after:absolute after:left-4 after:bottom-[6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 group-hover:after:w-[calc(100%-2rem)]">
+                        {item.title}
+                      </span>
                     </Link>
                   </li>
                 );
@@ -379,19 +404,18 @@ function MobileMenu({
                                   href={child.href}
                                   onClick={() => setOpen(false)}
                                   className={cn(
-                                    "block px-8 py-2.5 text-sm hover:bg-primary/90 hover:text-white group rounded-md",
-                                    active &&
-                                      "bg-primary text-primary-foreground"
+                                    "block rounded-md px-8 py-2.5 text-sm group hover:text-primary hover:bg-primary/5",
+                                    active && "text-primary"
                                   )}
                                 >
-                                  <div className="font-medium">
+                                  <div className="font-medium relative after:absolute after:left-8 after:bottom-[-4px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 group-hover:after:w-[calc(100%-2rem)]">
                                     {child.title}
                                   </div>
                                   {child.description && (
                                     <p
                                       className={cn(
-                                        "text-xs text-muted-foreground group-hover:text-white",
-                                        active && "text-white"
+                                        "text-xs text-muted-foreground group-hover:text-primary",
+                                        active && "text-primary"
                                       )}
                                     >
                                       {child.description}
@@ -492,7 +516,7 @@ function ListItem({
         <Link
           href={href}
           className="block rounded-md p-3 text-foreground transition-colors
-                     hover:bg-primary/90
+                     hover:text-white
                      hover:[&>div]:text-white
                      hover:[&>p]:text-white
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

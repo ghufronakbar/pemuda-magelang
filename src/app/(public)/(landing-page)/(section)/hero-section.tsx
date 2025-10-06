@@ -30,7 +30,6 @@ export function HeroSection({
     <section
       className={cn(
         "relative overflow-hidden",
-        "bg-gradient-to-b from-background via-background to-background",
         className
       )}
     >
@@ -43,17 +42,10 @@ export function HeroSection({
           className="object-cover w-full h-full"
           priority
         />
-        {/* <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent z-10" /> */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20 z-10" />
       </div>
 
-      {/* Decorative background */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-[-10%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute right-[-10%] bottom-[-10%] h-[28rem] w-[28rem] rounded-full bg-blue-500/10 blur-3xl" />
-      </div>
 
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:py-24 lg:px-8 z-10">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:py-28 lg:px-8 z-10">
         {/* Left: copy & CTAs */}
         <div className="order-2 lg:order-1 lg:col-span-6">
           <div className="mb-4">
@@ -62,22 +54,22 @@ export function HeroSection({
             </Badge>
           </div>
 
-          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl text-white">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl text-black">
             {title}
           </h1>
-          <p className="mt-3 max-w-prose text-sm text-gray-200 sm:text-base">
+          <p className="mt-3 max-w-prose text-base text-black sm:text-lg">
             {subtitle}
           </p>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild size="lg" className="w-full sm:w-auto">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button asChild size="lg" className="w-full sm:w-auto shadow-sm">
               <Link href={"/register"}>Gabung Komunitas</Link>
             </Button>
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto border-primary text-primary hover:bg-primary hover:text-white transition-colors"
             >
               <Link href={"/zhub"}>Lihat Program</Link>
             </Button>
@@ -85,26 +77,26 @@ export function HeroSection({
 
           {/* Stats */}
 
-          <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border bg-background/60 p-4">
+          <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
               <dt className="text-xs text-muted-foreground">
                 Talenta terdaftar
               </dt>
-              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+              <dd className="mt-1 text-2xl font-semibold sm:text-3xl text-black">
                 {countTalent}
               </dd>
             </div>
-            <div className="rounded-lg border bg-background/60 p-4">
+            <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
               <dt className="text-xs text-muted-foreground">
                 Komunitas tergabung
               </dt>
-              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+              <dd className="mt-1 text-2xl font-semibold sm:text-3xl text-black">
                 {countCommunity}
               </dd>
             </div>
-            <div className="rounded-lg border bg-background/60 p-4">
+            <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
               <dt className="text-xs text-muted-foreground">Program aktif</dt>
-              <dd className="mt-1 text-lg font-semibold sm:text-xl">
+              <dd className="mt-1 text-2xl font-semibold sm:text-3xl text-black">
                 {countZhub}
               </dd>
             </div>
@@ -113,7 +105,7 @@ export function HeroSection({
 
         {/* Right: hero image / collage */}
         <div className="order-1 lg:order-2 lg:col-span-6">
-          <div className="relative mx-auto aspect-[5/4] w-full max-w-xl overflow-hidden rounded-2xl border bg-muted shadow-sm">
+          <div className="relative mx-auto aspect-[5/4] w-full max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-sm backdrop-blur">
             {heroImage ? (
               <Image
                 src={heroImage}
@@ -129,8 +121,7 @@ export function HeroSection({
               </div>
             )}
 
-            {/* subtle overlay gradient */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
+            
           </div>
         </div>
       </div>

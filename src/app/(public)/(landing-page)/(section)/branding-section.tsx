@@ -29,14 +29,19 @@ export function BrandingSection({
     <section
       className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
     >
-      {/* White container with split layout */}
-      <div className="relative overflow-visible rounded-2xl border bg-primary shadow-sm">
-        <div className="grid grid-cols-1 items-center gap-6 p-4 sm:p-6 lg:grid-cols-12 lg:gap-8 lg:p-8">
+      {/* Container with neutral, modern styling */}
+      <div className="relative overflow-hidden rounded-3xl border shadow-sm backdrop-blur">
+        {/* Mobile background rotated 90deg, normal on sm+ */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 bg-[url('/videosection.svg')] bg-cover bg-center rotate-90 sm:rotate-0"
+        />
+        <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 p-5 sm:p-7 lg:grid-cols-12 lg:gap-10 lg:p-10">
           {/* Left: Video (sticks out to the left on larger screens) */}
           <div className="lg:col-span-7">
             <div
               className={cn(
-                "relative aspect-video w-full overflow-hidden rounded-xl border bg-black shadow"
+                "relative aspect-video w-full overflow-hidden rounded-2xl border bg-black shadow"
                 // sengaja keluar kiri: kecil di sm, lebih besar di lg
                 // "-ml-2 sm:-ml-4 lg:-ml-16"
               )}
@@ -56,12 +61,12 @@ export function BrandingSection({
 
           {/* Right: Text */}
           <div className="lg:col-span-5">
-            <div className="space-y-3">
-              <h3 className="text-2xl font-semibold sm:text-3xl text-white">{title}</h3>
-              <p className="text-sm text-white">{description}</p>
+            <div className="space-y-2 sm:space-y-3">
+              <h3 className="text-2xl font-semibold sm:text-3xl text-black">{title}</h3>
+              <p className="text-base text-black">{description}</p>
               {ctaHref && (
                 <div className="pt-2">
-                  <Button asChild size="lg">
+                  <Button asChild size="lg" className="shadow-sm">
                     <Link href={ctaHref}>{ctaLabel}</Link>
                   </Button>
                 </div>

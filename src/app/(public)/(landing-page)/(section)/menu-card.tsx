@@ -53,13 +53,7 @@ export function MenuCard({
         <CardContent />
 
         <CardFooter className="justify-center mt-auto">
-          <Button
-            size="sm"
-            variant="outline"
-            className="transition-transform group-hover:translate-x-0.5 hover:bg-primary"
-          >
-            Buka →
-          </Button>
+          {/* Removed explicit Buka button for cleaner card; whole card is clickable */}
         </CardFooter>
       </Card>
     </Link>

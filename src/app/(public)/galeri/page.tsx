@@ -27,7 +27,13 @@ const GaleriPage = async () => {
         title: product.title,
       };
     });
-  return <GallerySection className="py-26" products={mappedProducts} />;
+  return (
+    <GallerySection
+      className="py-26"
+      products={mappedProducts}
+      limit={4}
+    />
+  );
 };
 
 export default GaleriPage;

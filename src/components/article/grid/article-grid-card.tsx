@@ -35,7 +35,7 @@ export function ArticleGridCard({
     >
       <Card
         className={cn(
-          "overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg",
+          "overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg h-full flex flex-col",
           className
         )}
       >
@@ -58,7 +58,7 @@ export function ArticleGridCard({
         </div>
 
         {/* Content */}
-        <CardHeader className="space-y-2">
+        <CardHeader className="space-y-2 flex-1">
           <h3 className="line-clamp-1 text-base font-semibold leading-snug">
             {title}
           </h3>
