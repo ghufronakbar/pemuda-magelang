@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { useFormUser } from "@/context/form-user-context";
 import { ProfileSection } from "./profile-section";
-import { TalentSection } from "./talent-section";
 import { PasswordSection } from "./password-section";
 
 export function FormProfile() {
@@ -38,16 +37,6 @@ export function FormProfile() {
             <div className="h-10 w-full rounded bg-muted" />
           </CardContent>
         </Card>
-        <Card className="animate-pulse col-span-1 lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Memuat Data</CardTitle>
-            <CardDescription>Harap tunggu</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="h-10 w-full rounded bg-muted" />
-            <div className="h-10 w-full rounded bg-muted" />
-          </CardContent>
-        </Card>
       </div>
     );
   }
@@ -56,7 +45,6 @@ export function FormProfile() {
     <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
       <ProfileSection className="col-span-1" />
       <PasswordSection className="col-span-1" />
-      <TalentSection className="col-span-1 lg:col-span-2" />
     </div>
   );
 }

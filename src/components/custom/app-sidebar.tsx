@@ -96,10 +96,10 @@ export function AppSidebar({ session }: { session: Session | null }) {
       ],
     },
     {
-      section: "Komunitas",
+      section: "Kelola Akun",
       items: [
         {
-          label: "Komunitas",
+          label: "Kelola Akun",
           href: "/dashboard/komunitas",
           icon: RocketIcon,
           roles: [Role.user],
