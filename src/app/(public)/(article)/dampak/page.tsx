@@ -44,7 +44,8 @@ const DampakPage = async () => {
       className="py-26"
       articles={mappedArticles}
       title="Artikel Dampak"
-      description="Dampak kepemudaan di Kota Magelang."
+      description="Dampak kepemudaan dari berbagai komunitas."
+      type="dampak"
     />
   );
 };

@@ -1,7 +1,7 @@
 import { getArticles } from "@/actions/article";
 import { ArticleCardProps } from "@/components/article/type";
-import { ArticleListSection } from "@/components/article/list/article-list-section";
-import { ArticleStatusEnum, ArticleTypeEnum, Role } from "@prisma/client";
+import { ArticleStatusEnum, ArticleTypeEnum } from "@prisma/client";
+import { ArticleGridSection } from "@/components/article/grid/article-grid-section";
 
 const ArtikelDetakPage = async () => {
   const articles = await getArticles();
@@ -9,7 +9,6 @@ const ArtikelDetakPage = async () => {
     .filter(
       (article) =>
         article.status === ArticleStatusEnum.published &&
-        article.user.role === Role.user &&
         article.type === ArticleTypeEnum.detak
     )
     .map((article) => {
@@ -36,11 +35,12 @@ const ArtikelDetakPage = async () => {
       };
     });
   return (
-    <ArticleListSection
+    <ArticleGridSection
       className="py-26"
       articles={mappedArticles}
       title="Artikel Detak"
-      description="Kolom opini berbagai topik."
+      description="Opini dari berbagai berita."
+      type="detak"
     />
   );
 };

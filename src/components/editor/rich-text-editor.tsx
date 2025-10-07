@@ -99,32 +99,37 @@ const MainToolbarContent = ({
     <ToolbarGroup className="flex flex-row">
       <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
       <ListDropdownMenu
-        types={["bulletList", "orderedList", "taskList"]}
+        types={["bulletList", "orderedList"]}
         portal={isMobile}
       />
-      <BlockquoteButton />
-      <CodeBlockButton />
+      {/* <BlockquoteButton />
+      <CodeBlockButton /> */}
     </ToolbarGroup>
     <ToolbarSeparator />
     <ToolbarGroup className="flex flex-row">
       <MarkButton type="bold" className="text-white" />
       <MarkButton type="italic" />
-      <MarkButton type="strike" />
-      <MarkButton type="code" />
+      {/* <MarkButton type="strike" /> */}
+      {/* <MarkButton type="code" /> */}
       <MarkButton type="underline" />
+
+      {/* 
+
       {!isMobile ? (
         <ColorHighlightPopover />
       ) : (
         <ColorHighlightPopoverButton onClick={onHighlighterClick} />
       )}
+ */}
+
       {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
     </ToolbarGroup>
     <ToolbarSeparator />
-    <ToolbarGroup className="flex flex-row">
+    {/* <ToolbarGroup className="flex flex-row">
       <MarkButton type="superscript" />
       <MarkButton type="subscript" />
     </ToolbarGroup>
-    <ToolbarSeparator />
+    <ToolbarSeparator /> */}
     <ToolbarGroup className="flex flex-row">
       <TextAlignButton align="left" />
       <TextAlignButton align="center" />

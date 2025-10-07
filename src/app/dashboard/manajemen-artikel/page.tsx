@@ -1,5 +1,10 @@
-import { Role } from "@prisma/client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { ManajemenArtikelContent } from "./(components)/manajemen-artikel-content";
 
 const ManajemenArtikelPage = async () => {
@@ -10,9 +15,12 @@ const ManajemenArtikelPage = async () => {
         <CardHeader>
           <div className="flex items-center gap-2 justify-between">
             <div className="flex flex-col">
-              <CardTitle className="text-2xl font-bold">Manajemen Artikel</CardTitle>
+              <CardTitle className="text-2xl font-bold">
+                Manajemen Artikel
+              </CardTitle>
               <CardDescription className="text-sm">
-                Kelola artikel Detak, Gerak, Dampak, dan Program Zhub dalam satu tempat
+                Kelola artikel Detak, Gerak, Dampak, dan Program Zhub dalam satu
+                tempat
               </CardDescription>
             </div>
           </div>
@@ -36,4 +44,3 @@ const ManajemenArtikelPage = async () => {
 };
 
 export default ManajemenArtikelPage;
-

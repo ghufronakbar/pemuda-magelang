@@ -26,7 +26,16 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2, Trash2, Search, ChevronLeft, ChevronRight, FileText, PenTool, TrendingUp } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  PenTool,
+  TrendingUp,
+} from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -106,65 +115,65 @@ export function TableArticle({
   }, [query, status, category, pageSize]);
 
   return (
-      <section className={cn("space-y-4", className)}>
-        {/* Controls */}
-        <div className="flex gap-3 items-end">
-          <div className="flex-1">
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Cari
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Cari judul, tag, penulis…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full pl-9"
-              />
-            </div>
-          </div>
-
-          <div className="flex-shrink-0">
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Kategori
-            </label>
-            <Select value={category} onValueChange={(v) => setCategory(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua kategori" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex-shrink-0">
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Status
-            </label>
-            <Select
-              value={status}
-              onValueChange={(v) => setStatus(v as ArticleStatusEnum)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Semua status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua</SelectItem>
-                {Object.values(ArticleStatusEnum).map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {articleStatusEnum.getLabel(status)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+    <section className={cn("space-y-4", className)}>
+      {/* Controls */}
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Cari
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Cari judul, tag, penulis…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full pl-9"
+            />
           </div>
         </div>
+
+        <div className="flex-shrink-0">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Kategori
+          </label>
+          <Select value={category} onValueChange={(v) => setCategory(v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Semua kategori" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {c}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex-shrink-0">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Status
+          </label>
+          <Select
+            value={status}
+            onValueChange={(v) => setStatus(v as ArticleStatusEnum)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Semua status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua</SelectItem>
+              {Object.values(ArticleStatusEnum).map((status) => (
+                <SelectItem key={status} value={status}>
+                  {articleStatusEnum.getLabel(status)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">
@@ -193,24 +202,31 @@ export function TableArticle({
           <TableBody>
             {pageItems.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="py-16 text-center"
-                >
+                <TableCell colSpan={9} className="py-16 text-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
-                      {type === "gerak" && <FileText className="w-8 h-8 text-muted-foreground/60" />}
-                      {type === "detak" && <PenTool className="w-8 h-8 text-muted-foreground/60" />}
-                      {type === "dampak" && <TrendingUp className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "gerak" && (
+                        <FileText className="w-8 h-8 text-muted-foreground/60" />
+                      )}
+                      {type === "detak" && (
+                        <PenTool className="w-8 h-8 text-muted-foreground/60" />
+                      )}
+                      {type === "dampak" && (
+                        <TrendingUp className="w-8 h-8 text-muted-foreground/60" />
+                      )}
                     </div>
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-foreground">
-                        {type === "gerak" && "Tidak ada artikel gerak ditemukan"}
-                        {type === "detak" && "Tidak ada artikel detak ditemukan"}
-                        {type === "dampak" && "Tidak ada artikel dampak ditemukan"}
+                        {type === "gerak" &&
+                          "Tidak ada artikel gerak ditemukan"}
+                        {type === "detak" &&
+                          "Tidak ada artikel detak ditemukan"}
+                        {type === "dampak" &&
+                          "Tidak ada artikel dampak ditemukan"}
                       </h3>
                       <p className="text-xs text-muted-foreground max-w-sm">
-                        Coba ubah kata kunci pencarian atau filter untuk menemukan artikel yang Anda cari
+                        Coba ubah kata kunci pencarian atau filter untuk
+                        menemukan artikel yang Anda cari
                       </p>
                     </div>
                   </div>
@@ -299,9 +315,10 @@ export function TableArticle({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-row flex-wrap items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari {total} artikel
+            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari{" "}
+            {total} artikel
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -315,7 +332,7 @@ export function TableArticle({
             </Button>
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum;
+                let pageNum: number;
                 if (totalPages <= 5) {
                   pageNum = i + 1;
                 } else if (currentPage <= 3) {

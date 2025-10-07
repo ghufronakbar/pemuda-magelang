@@ -8,6 +8,7 @@ import {
 } from "@/validator/community";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Community, CommunityStatusEnum, User } from "@prisma/client";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -45,14 +46,18 @@ const FormCommunityProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetchCommunity();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const pathname = usePathname();
+  const isDashboard = pathname.includes("dashboard");
 
   const fetchCommunity = async () => {
     try {
       setFetching(true);
       const res = await fetch(`/api/community`);
       const data = (await res.json()) as FetchCommunityResponse;
+      console.log("fetchCommunity", data);
       if (!res.ok) {
         setCommunityStatus(null);
         throw new Error("Gagal mengambil data komunitas");
@@ -71,7 +76,9 @@ const FormCommunityProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Gagal mengambil data komunitas");
+      if (isDashboard) {
+        toast.error("Gagal mengambil data komunitas");
+      }
     } finally {
       setFetching(false);
     }

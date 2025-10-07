@@ -21,6 +21,7 @@ import {
   User,
   SocialMedia,
 } from "@prisma/client";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -45,6 +46,8 @@ interface FormUserContext {
 const FormUserContext = createContext<FormUserContext | null>(null);
 
 const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  const isDashboard = pathname.includes("dashboard");
   const [loading, setLoading] = useState(false);
   const [talentStatus, setTalentStatus] = useState<TalentStatusEnum | null>(
     null
@@ -121,13 +124,15 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.error(error);
-        toast.error("Gagal mengambil data user");
+        if (isDashboard) {
+          toast.error("Gagal mengambil data user");
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchUser();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -30,19 +30,20 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  Form,
 } from "@/components/ui/form";
 import { UrlInput } from "@/components/custom/url-input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const FormPartners = () => {
-  const { form } = useFormAppData();
+  const { form, onSubmit } = useFormAppData();
   const partnerArray = useFieldArray({
-    control: form.control,
+    control: form.partners.control,
     name: "partners",
   });
 
   // pantau seluruh partners agar bisa dikelompokkan
-  const partners = form.watch("partners") ?? [];
+  const partners = form.partners.watch("partners") ?? [];
 
   // Helper grouping
   const groups: Array<{
@@ -57,21 +58,21 @@ export const FormPartners = () => {
       title: "Supported",
       desc: "Partner pendukung utama.",
       tabLabel: "Didukung / Sponsor",
-      tabValue: "supported",
+      tabValue: PartnerTypeEnum.supported,
     },
     {
       type: PartnerTypeEnum.collaborator,
       title: "Collaborator",
       desc: "Partner yang berkolaborasi pada inisiatif/kegiatan.",
       tabLabel: "Kolaborator Partner",
-      tabValue: "collaborator",
+      tabValue: PartnerTypeEnum.collaborator,
     },
     {
       type: PartnerTypeEnum.media,
       title: "Media",
       desc: "Partner media & publikasi.",
       tabLabel: "Media Partner",
-      tabValue: "media",
+      tabValue: PartnerTypeEnum.media,
     },
   ];
 
@@ -92,6 +93,8 @@ export const FormPartners = () => {
       .filter((i) => partners?.[i]?.type === type);
 
     const count = indexes.length;
+
+    // return null;
 
     return (
       <div key={type} className="space-y-4">
@@ -123,15 +126,21 @@ export const FormPartners = () => {
         </div>
 
         {/* Grid kartu partner per kelompok */}
+
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
           {indexes.map((i) => (
             <div
               key={partnerArray.fields[i].id}
               className="flex flex-col gap-2"
             >
+              <input
+                type="hidden"
+                name={`partners.${i}.type`}
+                value={partnerArray.fields[i].type}
+              />
               {/* Gambar */}
               <FormField
-                control={form.control}
+                control={form.partners.control}
                 name={`partners.${i}.image`}
                 render={({ field }) => (
                   <FormItem className="w-full">
@@ -142,7 +151,8 @@ export const FormPartners = () => {
                         image={field.value}
                         setImage={(url) => field.onChange(url)}
                         errorMessage={
-                          form.formState.errors.partners?.[i]?.image?.message
+                          form.partners.formState.errors.partners?.[i]?.image
+                            ?.message
                         }
                       />
                     </FormControl>
@@ -153,7 +163,7 @@ export const FormPartners = () => {
 
               {/* Nama */}
               <FormField
-                control={form.control}
+                control={form.partners.control}
                 name={`partners.${i}.name`}
                 render={({ field }) => (
                   <FormItem>
@@ -168,7 +178,7 @@ export const FormPartners = () => {
 
               {/* URL situs */}
               <FormField
-                control={form.control}
+                control={form.partners.control}
                 name={`partners.${i}.href`}
                 render={({ field }) => (
                   <FormItem>
@@ -185,47 +195,13 @@ export const FormPartners = () => {
                 )}
               />
 
-              {/* Pindah kelompok (opsional) */}
-              <FormField
-                control={form.control}
-                name={`partners.${i}.type`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs">Kelompok</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={String(field.value ?? "")}
-                        onValueChange={(v) =>
-                          field.onChange(v as PartnerTypeEnum)
-                        }
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Pilih kelompok" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.values(PartnerTypeEnum).map((opt) => (
-                            <SelectItem key={opt} value={opt}>
-                              {partnerTypeEnum.getLabel(opt)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <div className="flex items-center justify-end">
                 <AlertConfirmation
                   title="Hapus Partner"
                   description="Apakah Anda yakin ingin menghapus partner ini? Tindakan ini tidak dapat dibatalkan."
                   onConfirm={() => partnerArray.remove(i)}
                 >
-                  <Button
-                    type="button"
-                    variant="destructive"
-                  >
+                  <Button type="button" variant="destructive">
                     Hapus
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -241,9 +217,10 @@ export const FormPartners = () => {
             </div>
           )}
         </div>
+
         <div className="flex items-center justify-end">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? (
+          <Button type="submit" disabled={form.partners.formState.isSubmitting}>
+            {form.partners.formState.isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Save className="mr-2 h-4 w-4" />
@@ -256,36 +233,44 @@ export const FormPartners = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Partners</CardTitle>
-        <CardDescription>
-          Daftar partner yang tampil di landing, dikelompokkan per tipe.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Tabs defaultValue={groups[0].tabValue} className="w-full">
-          <div className="space-y-4">
-            <TabsList className="flex w-full h-12 gap-1 bg-muted/50 p-1 rounded-xl">
-              {groups.map((g) => (
-                <TabsTrigger 
-                  key={g.tabValue} 
-                  value={g.tabValue}
-                  className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
-                >
-                  {g.tabLabel}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
+    <Form {...form.partners}>
+      <form onSubmit={onSubmit.partners}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Partners</CardTitle>
+            <CardDescription>
+              Daftar partner yang tampil di landing, dikelompokkan per tipe.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Tabs defaultValue={groups[0].tabValue} className="w-full">
+              <div className="space-y-4">
+                <TabsList className="flex w-full h-12 gap-1 bg-muted/50 p-1 rounded-xl overflow-x-auto items-center justify-start">
+                  {groups.map((g) => (
+                    <TabsTrigger
+                      key={g.tabValue}
+                      value={g.tabValue}
+                      className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+                    >
+                      {g.tabLabel}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
 
-          {groups.map((g) => (
-            <TabsContent key={g.tabValue} value={g.tabValue} className="space-y-4">
-              {renderSection(g.type)}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </CardContent>
-    </Card>
+              {groups.map((g) => (
+                <TabsContent
+                  key={g.tabValue}
+                  value={g.tabValue}
+                  className="space-y-4"
+                >
+                  {renderSection(g.type)}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </CardContent>
+        </Card>
+      </form>
+    </Form>
   );
 };

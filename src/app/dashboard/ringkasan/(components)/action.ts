@@ -201,7 +201,8 @@ export const getTotalUsers = (sess: Session | null) =>
         total: users.length,
         users: users.filter((user) => user.role === Role.user).length,
         admins: users.filter((user) => user.role === Role.admin).length,
-        superadmins: users.filter((user) => user.role === Role.superadmin).length,
+        superadmins: users.filter((user) => user.role === Role.superadmin)
+          .length,
       };
     },
     ["total-users"],
@@ -228,8 +229,12 @@ export const getTotalCommunities = (sess: Session | null) =>
       });
       return {
         total: communities.length,
-        active: communities.filter((community) => community.status === "active").length,
-        inactive: communities.filter((community) => community.status === "inactive").length,
+        active: communities.filter(
+          (community) => community.status === "approved"
+        ).length,
+        inactive: communities.filter(
+          (community) => community.status === "rejected"
+        ).length,
       };
     },
     ["total-communities"],
@@ -257,8 +262,10 @@ export const getTotalZhubPrograms = (sess: Session | null) =>
       });
       return {
         total: programs.length,
-        active: programs.filter((program) => program.status === "active").length,
-        inactive: programs.filter((program) => program.status === "inactive").length,
+        active: programs.filter((program) => program.status === "active")
+          .length,
+        inactive: programs.filter((program) => program.status === "inactive")
+          .length,
         soon: programs.filter((program) => program.status === "soon").length,
       };
     },

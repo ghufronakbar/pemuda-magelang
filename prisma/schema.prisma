@@ -62,7 +62,7 @@ model Talent {
   status TalentStatusEnum @default(approved)
 
   userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   products     Product[]
   socialMedias SocialMedia[]
@@ -75,7 +75,7 @@ model WorkExperience {
   id String @id @default(uuid())
 
   talentId String
-  talent   Talent @relation(fields: [talentId], references: [id])
+  talent   Talent @relation(fields: [talentId], references: [id], onDelete: Cascade)
 
   companyName String
   position    String
@@ -92,7 +92,7 @@ model Education {
   id String @id @default(uuid())
 
   talentId String
-  talent   Talent @relation(fields: [talentId], references: [id])
+  talent   Talent @relation(fields: [talentId], references: [id], onDelete: Cascade)
 
   degree      String
   schoolName  String
@@ -109,7 +109,7 @@ model Award {
   id String @id @default(uuid())
 
   talentId String
-  talent   Talent @relation(fields: [talentId], references: [id])
+  talent   Talent @relation(fields: [talentId], references: [id], onDelete: Cascade)
 
   image       String?
   name        String
@@ -133,7 +133,7 @@ model SocialMedia {
   url      String
 
   talentId String
-  talent   Talent @relation(fields: [talentId], references: [id])
+  talent   Talent @relation(fields: [talentId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -169,7 +169,7 @@ model Article {
   status     ArticleStatusEnum @default(draft)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   type ArticleTypeEnum
 
@@ -177,7 +177,7 @@ model Article {
   comments         Comment[]
 
   communityId String?
-  community   Community? @relation(fields: [communityId], references: [id])
+  community   Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -188,7 +188,7 @@ model TrackView {
 
   ip        String
   articleId String
-  article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 }
 
 enum ArticleTypeEnum {
@@ -202,10 +202,10 @@ model ArticleUserLike {
   id String @id @default(uuid())
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   articleId String
-  article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -217,10 +217,10 @@ model Comment {
   id String @id @default(uuid())
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   articleId String
-  article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -246,7 +246,7 @@ model Product {
   category    String
 
   talentId String
-  talent   Talent @relation(fields: [talentId], references: [id])
+  talent   Talent @relation(fields: [talentId], references: [id], onDelete: Cascade)
 
   status ProductStatusEnum
 
@@ -280,7 +280,7 @@ model Hub {
   status      HubStatusEnum @default(active)
 
   hubCategoryId String
-  hubCategory   HubCategory @relation(fields: [hubCategoryId], references: [id])
+  hubCategory   HubCategory @relation(fields: [hubCategoryId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -328,7 +328,7 @@ model AboutItem {
   icon  IconEnum
 
   appDataId String
-  appData   AppData @relation(fields: [appDataId], references: [id])
+  appData   AppData @relation(fields: [appDataId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -364,7 +364,7 @@ model Partner {
   type PartnerTypeEnum
 
   appDataId String
-  appData   AppData @relation(fields: [appDataId], references: [id])
+  appData   AppData @relation(fields: [appDataId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -382,7 +382,7 @@ model AppSocialMedia {
   url      String
 
   appDataId String
-  appData   AppData @relation(fields: [appDataId], references: [id])
+  appData   AppData @relation(fields: [appDataId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -403,7 +403,7 @@ model Community {
   status   CommunityStatusEnum @default(pending)
 
   userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   articles Article[]
 

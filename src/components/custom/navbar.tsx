@@ -101,17 +101,17 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
         {
           title: "Detak",
           href: "/detak",
-          description: "Kolom opini berbagai topik",
+          description: "Opini dari berbagai berita",
         },
         {
           title: "Gerak",
           href: "/gerak",
-          description: "Jurnal giat kepemudaan",
+          description: "Kegiatan talenta muda Magelang",
         },
         {
           title: "Dampak",
           href: "/dampak",
-          description: "Dampak kepemudaan",
+          description: "Dampak kepemudaan dari berbagai komunitas",
         },
       ],
     },
@@ -150,7 +150,7 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
         {/* Desktop nav */}
         <nav className="hidden md:block">
           <NavigationMenu viewport={false}>
-          <NavigationMenuList className="gap-4">
+            <NavigationMenuList className="gap-4">
               {LINK_ITEMS.map((item, idx) => (
                 <NavigationMenuItem key={idx}>
                   {/* Simple link (no children) */}
@@ -158,30 +158,30 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
                     <NavigationMenuLink
                       asChild
                       className={cn(
-                      navigationMenuTriggerStyle(),
-                      // modern minimal hover/active
-                      "relative rounded-md bg-transparent text-foreground hover:text-primary hover:bg-primary/5",
-                      "focus-visible:ring-2 focus-visible:ring-primary/20",
-                      pathname === item.href && "text-primary bg-primary/5"
+                        navigationMenuTriggerStyle(),
+                        // modern minimal hover/active
+                        "relative rounded-md bg-transparent text-foreground hover:text-primary hover:bg-primary/5",
+                        "focus-visible:ring-2 focus-visible:ring-primary/20",
+                        pathname === item.href && "text-primary bg-primary/5"
                       )}
                     >
-                    <Link href={item.href} className="inline-block">
-                      <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">
-                        {item.title}
-                      </span>
-                    </Link>
+                      <Link href={item.href} className="inline-block">
+                        <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">
+                          {item.title}
+                        </span>
+                      </Link>
                     </NavigationMenuLink>
                   )}
 
                   {/* With children */}
                   {!item.href && item.items.length > 0 && (
                     <>
-                    <NavigationMenuTrigger className="relative rounded-md bg-transparent text-foreground hover:text-primary hover:bg-primary/5 focus-visible:ring-2 focus-visible:ring-primary/20 data-[state=open]:text-primary data-[state=open]:bg-primary/5">
-                      <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 data-[state=open]:after:w-full">
-                        {item.title}
-                      </span>
+                      <NavigationMenuTrigger className="relative rounded-md bg-transparent text-foreground hover:text-primary hover:!bg-primary/5 focus-visible:ring-2 focus-visible:ring-primary/20 data-[state=open]:text-primary data-[state=open]:bg-primary/5">
+                        <span className="relative after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 data-[state=open]:after:w-full">
+                          {item.title}
+                        </span>
                       </NavigationMenuTrigger>
-                    <NavigationMenuContent className="data-[motion=from-start]:animate-in data-[motion=from-start]:fade-in-0 data-[motion=from-start]:zoom-in-95 data-[motion=from-end]:animate-in data-[motion=from-end]:fade-in-0 data-[motion=from-end]:zoom-in-95">
+                      <NavigationMenuContent className="data-[motion=from-start]:animate-in data-[motion=from-start]:fade-in-0 data-[motion=from-start]:zoom-in-95 data-[motion=from-end]:animate-in data-[motion=from-end]:fade-in-0 data-[motion=from-end]:zoom-in-95">
                         <ul className="grid w-[260px] gap-2 p-3 md:w-[320px]">
                           {item.items.map((child, i) => (
                             <ListItem
@@ -370,11 +370,11 @@ function MobileMenu({
                 const active = pathname === item.href;
                 return (
                   <li key={`m-${idx}`}>
-                  <Link
+                    <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                    className={cn(
-                      "block rounded-md px-4 py-3 text-sm hover:text-primary hover:bg-primary/5",
+                      className={cn(
+                        "block rounded-md px-4 py-3 text-sm hover:text-primary hover:bg-primary/5",
                         active && "text-primary"
                       )}
                     >

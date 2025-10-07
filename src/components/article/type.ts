@@ -24,4 +24,5 @@ export interface ArticleSectionProps {
   articles: ArticleCardProps[];
   viewAllHref?: string;
   className?: string;
+  type: "detak" | "gerak" | "dampak";
 }

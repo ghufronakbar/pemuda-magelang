@@ -1,8 +1,8 @@
 import { getArticles } from "@/actions/article";
 import { ArticleCardProps } from "@/components/article/type";
-import { ArticleGridSection } from "@/components/article/grid/article-grid-section";
-import { ArticleTypeEnum, Role } from "@prisma/client";
+import { ArticleTypeEnum } from "@prisma/client";
 import { ArticleStatusEnum } from "@prisma/client";
+import { ArticleListSection } from "@/components/article/list/article-list-section";
 
 const ArtikelPage = async () => {
   const articles = await getArticles();
@@ -10,8 +10,6 @@ const ArtikelPage = async () => {
     .filter(
       (article) =>
         article.status === ArticleStatusEnum.published &&
-        (article.user.role === Role.admin ||
-          article.user.role === Role.superadmin) &&
         article.type === ArticleTypeEnum.gerak
     )
     .map((article) => {
@@ -38,11 +36,12 @@ const ArtikelPage = async () => {
       };
     });
   return (
-    <ArticleGridSection
+    <ArticleListSection
       className="py-26"
       articles={mappedArticles}
       title="Artikel Gerak"
-      description="Jurnal giat kepemudaan"
+      description="Kegiatan talenta muda Magelang"
+      type="gerak"
     />
   );
 };

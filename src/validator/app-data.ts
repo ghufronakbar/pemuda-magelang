@@ -5,70 +5,98 @@ import {
   SocialMediaPlatformEnum,
 } from "@prisma/client";
 
-const AboutItemSchema = z.object({
-  id: z.string().optional(),
-  title: z.string().min(1, "Wajib diisi"),
-  description: z.string().min(1, "Wajib diisi"),
-  icon: z.enum(IconEnum),
-});
-
-const PartnerSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().min(1, "Wajib diisi"),
-  image: z.string().url("URL tidak valid"),
-  href: z.string().url("URL tidak valid"),
-  type: z.nativeEnum(PartnerTypeEnum),
-});
-
-const AppDataOnlySchema = z.object({
+// new
+export const AppDataHeroSchema = z.object({
   heroTitle: z.string().min(1, "Wajib diisi"),
   heroDescription: z.string().min(1, "Wajib diisi"),
-  heroImage: z.string().url("URL tidak valid"),
+  heroImage: z.string().url("Gambar tidak valid"),
+});
 
+export type AppDataHero = z.infer<typeof AppDataHeroSchema>;
+
+export const AppDataAboutSchema = z.object({
   aboutTitle: z.string().min(1, "Wajib diisi"),
   aboutDescription: z.string().min(1, "Wajib diisi"),
-  aboutImage: z.string().url("URL tidak valid"),
+  aboutImage: z.string().url("Gambar tidak valid"),
+});
 
+export type AppDataAbout = z.infer<typeof AppDataAboutSchema>;
+
+export const AppDataAboutItemsSchema = z.object({
+  aboutItems: z.array(
+    z.object({
+      title: z.string().min(1, "Wajib diisi"),
+      description: z.string().min(1, "Wajib diisi"),
+      icon: z.enum(IconEnum),
+    })
+  ),
+});
+
+export type AppDataAboutItems = z.infer<typeof AppDataAboutItemsSchema>;
+
+export const AppDataBrandingSchema = z.object({
   brandingTitle: z.string().min(1, "Wajib diisi"),
   brandingDescription: z.string().min(1, "Wajib diisi"),
-  brandingVideo: z.string().url("URL tidak valid"),
-
-  pageTerms: z.string().min(1, "Wajib diisi"),
-  pagePrivacy: z.string().min(1, "Wajib diisi"),
-  pageFaq: z.string().min(1, "Wajib diisi"),
+  brandingVideo: z
+    .string()
+    .url("URL tidak valid")
+    .refine((url) => url.startsWith("http"), {
+      message: "URL tidak valid",
+    }),
 });
 
-const AppSocialMediaSchema = z.object({
-  id: z.string().optional(),
-  platform: z.enum(SocialMediaPlatformEnum),
-  url: z.string().url("URL tidak valid"),
+export type AppDataBranding = z.infer<typeof AppDataBrandingSchema>;
+
+export const AppDataPartnerItemsSchema = z.object({
+  partners: z.array(
+    z.object({
+      name: z.string().min(1, "Wajib diisi"),
+      image: z.string().url("Gambar tidak valid"),
+      href: z
+        .string()
+        .url("URL tidak valid")
+        .refine((url) => url.startsWith("http"), {
+          message: "URL tidak valid",
+        }),
+      type: z.enum(PartnerTypeEnum),
+    })
+  ),
 });
 
-export const UpsertAppDataSchema = z.object({
-  appData: AppDataOnlySchema,
-  aboutItems: z.array(AboutItemSchema),
-  partners: z.array(PartnerSchema),
-  appSocialMedias: z.array(AppSocialMediaSchema),
+export type AppDataPartnerItems = z.infer<typeof AppDataPartnerItemsSchema>;
+
+export const AppDataSocialMediaItemsSchema = z.object({
+  socials: z.array(
+    z.object({
+      platform: z.enum(SocialMediaPlatformEnum),
+      url: z
+        .string()
+        .url("URL tidak valid")
+        .refine((url) => url.startsWith("http"), {
+          message: "URL tidak valid",
+        }),
+    })
+  ),
 });
 
-export type UpsertAppDataInput = z.infer<typeof UpsertAppDataSchema>;
+export type AppDataSocialMediaItems = z.infer<
+  typeof AppDataSocialMediaItemsSchema
+>;
 
-export const initialUpsertAppDataInput: UpsertAppDataInput = {
-  appData: {
-    heroTitle: "",
-    heroDescription: "",
-    heroImage: "",
-    aboutTitle: "",
-    aboutDescription: "",
-    aboutImage: "",
-    brandingTitle: "",
-    brandingDescription: "",
-    brandingVideo: "",
-    pageTerms: "",
-    pagePrivacy: "",
-    pageFaq: "",
-  },
-  aboutItems: [],
-  partners: [],
-  appSocialMedias: [],
-};
+export const AppDataPrivacySchema = z.object({
+  privacy: z.string().min(1, "Wajib diisi"),
+});
+
+export type AppDataPrivacy = z.infer<typeof AppDataPrivacySchema>;
+
+export const AppDataTermsSchema = z.object({
+  terms: z.string().min(1, "Wajib diisi"),
+});
+
+export type AppDataTerms = z.infer<typeof AppDataTermsSchema>;
+
+export const AppDataFaqSchema = z.object({
+  faq: z.string().min(1, "Wajib diisi"),
+});
+
+export type AppDataFaq = z.infer<typeof AppDataFaqSchema>;

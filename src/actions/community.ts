@@ -143,6 +143,12 @@ const _createUpdateCommunity = async (formData: FormData) => {
   }
 
   if (parseData.data.id) {
+    const checkCommunity = await db.community.findUnique({
+      where: { id: parseData.data.id },
+    });
+    if (!checkCommunity) {
+      return { ok: false, error: "COMMUNITY_NOT_FOUND" };
+    }
     const community = await db.community.update({
       where: {
         id: parseData.data.id,
@@ -155,6 +161,10 @@ const _createUpdateCommunity = async (formData: FormData) => {
         ctaText: parseData.data.ctaText,
         ctaLink: parseData.data.ctaLink,
         category: parseData.data.category,
+        status:
+          checkCommunity.status === CommunityStatusEnum.rejected
+            ? CommunityStatusEnum.pending
+            : checkCommunity.status,
         slug: generateSlug(parseData.data.name),
       },
     });

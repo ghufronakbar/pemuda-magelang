@@ -14,7 +14,10 @@ import { TableArticle } from "../../(components)/table-article";
 import { getDetailCommunityByUserId } from "@/actions/community";
 import { CommunitySection } from "../../(komunitas)/komunitas/(components)/community-section";
 import { deleteHub, getAllHubs } from "@/actions/zhub";
-import { DataHub, TableZHub } from "../../(zhub)/(components)/(hub-item)/table-zhub";
+import {
+  DataHub,
+  TableZHub,
+} from "../../(zhub)/(components)/(hub-item)/table-zhub";
 import { FormHub } from "../../(zhub)/(components)/(hub-item)/form-zhub";
 
 export async function ManajemenArtikelContent() {
@@ -24,21 +27,21 @@ export async function ManajemenArtikelContent() {
     getAllHubs(),
   ]);
 
-  const isAdmin = user?.user.role === Role.admin || user?.user.role === Role.superadmin;
+  const isAdmin =
+    user?.user.role === Role.admin || user?.user.role === Role.superadmin;
   const comm = await getDetailCommunityByUserId(user?.user.id ?? "")();
   const isApproved = comm?.status === CommunityStatusEnum.approved;
 
   // Filter articles by type
-  const detakArticles = articles
-    .filter((item) => item.type === ArticleTypeEnum.detak)
+  const detakArticles = articles.filter(
+    (item) => item.type === ArticleTypeEnum.detak
+  );
+  const gerakArticles = articles
+    .filter((item) => item.type === ArticleTypeEnum.gerak)
     .filter((item) => {
       if (isAdmin) return true;
       else return item.userId === user?.user.id;
     });
-
-  const gerakArticles = articles.filter(
-    (item) => item.user.role !== Role.user
-  );
 
   const dampakArticles = articles
     .filter((item) => item.type === ArticleTypeEnum.dampak)
@@ -71,57 +74,21 @@ export async function ManajemenArtikelContent() {
   });
 
   // Determine which tabs to show based on role
-  const showDetak = true; // Everyone can see Detak
-  const showGerak = isAdmin; // Only admin
-  const showDampak = true; // Everyone can see (but with different permissions)
+  const showDetak = isAdmin; // Cuma admin (artikel admin)
+  const showGerak = true; // Semua (artikel user)
+  const showDampak = true; // Semua (artikel komunitas)
   const showZhub = isAdmin; // Only admin
 
   return (
-    <Tabs defaultValue="detak" className="w-full">
-      <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
-        {showDetak && <TabsTrigger value="detak">Detak</TabsTrigger>}
+    <Tabs defaultValue="gerak" className="w-full">
+      <TabsList
+        className={`grid w-full ${isAdmin ? "grid-cols-4" : "grid-cols-2"}`}
+      >
         {showGerak && <TabsTrigger value="gerak">Gerak</TabsTrigger>}
+        {showDetak && <TabsTrigger value="detak">Detak</TabsTrigger>}
         {showDampak && <TabsTrigger value="dampak">Dampak</TabsTrigger>}
         {showZhub && <TabsTrigger value="zhub">Program Zhub</TabsTrigger>}
       </TabsList>
-
-      {/* Detak Tab */}
-      {showDetak && (
-        <TabsContent value="detak" className="mt-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              {!isAdmin && (
-                <Button asChild>
-                  <Link href="/dashboard/detak/buat-artikel">
-                    <Plus />
-                    Buat Artikel
-                  </Link>
-                </Button>
-              )}
-            </div>
-            <div>
-              <h4 className="text-sm font-medium mb-2">Daftar Artikel Detak</h4>
-              <p className="text-xs text-muted-foreground mb-4">
-                {isAdmin
-                  ? "Kelola dan monitor semua artikel detak yang terdaftar di platform"
-                  : "Kelola artikel detak yang anda tulis"}
-              </p>
-              <TableArticle
-                articles={detakArticles}
-                onSetStatus={async (slug, formData) => {
-                  "use server";
-                  await setArticleStatus(slug, formData);
-                }}
-                onDelete={async (slug) => {
-                  "use server";
-                  await deleteArticle(slug);
-                }}
-                type="detak"
-              />
-            </div>
-          </div>
-        </TabsContent>
-      )}
 
       {/* Gerak Tab */}
       {showGerak && (
@@ -130,7 +97,7 @@ export async function ManajemenArtikelContent() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium">Daftar Artikel Gerak</h4>
-                {isAdmin && (
+                {!isAdmin && (
                   <Button asChild>
                     <Link href="/dashboard/gerak/buat-artikel">
                       <Plus />
@@ -140,7 +107,9 @@ export async function ManajemenArtikelContent() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground mb-4">
-                Kelola dan monitor jurnal giat kepemudaan yang dibuat oleh admin
+                {isAdmin
+                  ? "Kelola dan monitor semua artikel detak yang terdaftar di platform"
+                  : "Kelola artikel detak yang anda tulis"}
               </p>
               <TableArticle
                 articles={gerakArticles}
@@ -153,6 +122,42 @@ export async function ManajemenArtikelContent() {
                   await deleteArticle(slug);
                 }}
                 type="gerak"
+              />
+            </div>
+          </div>
+        </TabsContent>
+      )}
+
+      {/* Detak Tab */}
+      {showDetak && (
+        <TabsContent value="detak" className="mt-4">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              {isAdmin && (
+                <Button asChild>
+                  <Link href="/dashboard/detak/buat-artikel">
+                    <Plus />
+                    Buat Artikel
+                  </Link>
+                </Button>
+              )}
+            </div>
+            <div>
+              <h4 className="text-sm font-medium mb-2">Daftar Artikel Detak</h4>
+              <p className="text-xs text-muted-foreground mb-4">
+                Kelola dan monitor jurnal giat kepemudaan yang dibuat oleh admin
+              </p>
+              <TableArticle
+                articles={detakArticles}
+                onSetStatus={async (slug, formData) => {
+                  "use server";
+                  await setArticleStatus(slug, formData);
+                }}
+                onDelete={async (slug) => {
+                  "use server";
+                  await deleteArticle(slug);
+                }}
+                type="detak"
               />
             </div>
           </div>
@@ -176,7 +181,9 @@ export async function ManajemenArtikelContent() {
             <div>
               {isApproved || isAdmin ? (
                 <>
-                  <h4 className="text-sm font-medium mb-2">Daftar Artikel Dampak</h4>
+                  <h4 className="text-sm font-medium mb-2">
+                    Daftar Artikel Dampak
+                  </h4>
                   <p className="text-xs text-muted-foreground mb-4">
                     {isAdmin
                       ? "Kelola dan monitor semua artikel dampak dari komunitas"
@@ -213,7 +220,8 @@ export async function ManajemenArtikelContent() {
                 <FormHub categories={hubs} />
               </div>
               <p className="text-xs text-muted-foreground mb-4">
-                Kelola dan monitor program-program Zhub yang tersedia untuk pengguna
+                Kelola dan monitor program-program Zhub yang tersedia untuk
+                pengguna
               </p>
               <TableZHub
                 data={mappedPrograms}
@@ -229,4 +237,3 @@ export async function ManajemenArtikelContent() {
     </Tabs>
   );
 }
-

@@ -1,10 +1,36 @@
 "use client";
 
-import { getAppData, upsertAppDataFromForm } from "@/actions/app-data";
 import {
-  UpsertAppDataInput,
-  UpsertAppDataSchema,
-  initialUpsertAppDataInput,
+  getAppData,
+  upsertAppDataAbout,
+  upsertAppDataAboutItems,
+  upsertAppDataBranding,
+  upsertAppDataFaq,
+  upsertAppDataHero,
+  upsertAppDataPartners,
+  upsertAppDataPrivacy,
+  upsertAppDataSocialMedias,
+  upsertAppDataTerms,
+} from "@/actions/app-data";
+import {
+  AppDataAbout,
+  AppDataAboutItems,
+  AppDataAboutItemsSchema,
+  AppDataAboutSchema,
+  AppDataBranding,
+  AppDataBrandingSchema,
+  AppDataFaq,
+  AppDataFaqSchema,
+  AppDataHero,
+  AppDataHeroSchema,
+  AppDataPartnerItems,
+  AppDataPartnerItemsSchema,
+  AppDataPrivacy,
+  AppDataPrivacySchema,
+  AppDataSocialMediaItems,
+  AppDataSocialMediaItemsSchema,
+  AppDataTerms,
+  AppDataTermsSchema,
 } from "@/validator/app-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -12,9 +38,29 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 
 interface FormAppDataContext {
-  form: UseFormReturn<UpsertAppDataInput>;
+  form: {
+    hero: UseFormReturn<AppDataHero>;
+    about: UseFormReturn<AppDataAbout>;
+    aboutItems: UseFormReturn<AppDataAboutItems>;
+    branding: UseFormReturn<AppDataBranding>;
+    partners: UseFormReturn<AppDataPartnerItems>;
+    appSocialMedias: UseFormReturn<AppDataSocialMediaItems>;
+    privacy: UseFormReturn<AppDataPrivacy>;
+    terms: UseFormReturn<AppDataTerms>;
+    faq: UseFormReturn<AppDataFaq>;
+  };
   loading: boolean;
-  onSubmit: () => Promise<void>;
+  onSubmit: {
+    hero: () => Promise<void>;
+    about: () => Promise<void>;
+    aboutItems: () => Promise<void>;
+    branding: () => Promise<void>;
+    partners: () => Promise<void>;
+    appSocialMedias: () => Promise<void>;
+    privacy: () => Promise<void>;
+    terms: () => Promise<void>;
+    faq: () => Promise<void>;
+  };
   submitting: boolean;
 }
 
@@ -23,37 +69,95 @@ const FormAppDataContext = createContext<FormAppDataContext | null>(null);
 const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const form = useForm<UpsertAppDataInput>({
-    resolver: zodResolver(UpsertAppDataSchema),
-    defaultValues: initialUpsertAppDataInput,
+  const formHero = useForm<AppDataHero>({
+    resolver: zodResolver(AppDataHeroSchema),
+    defaultValues: {
+      heroTitle: "",
+      heroDescription: "",
+      heroImage: "",
+    },
   });
-
+  const formAbout = useForm<AppDataAbout>({
+    resolver: zodResolver(AppDataAboutSchema),
+    defaultValues: {
+      aboutTitle: "",
+      aboutDescription: "",
+      aboutImage: "",
+    },
+  });
+  const formAboutItems = useForm<AppDataAboutItems>({
+    resolver: zodResolver(AppDataAboutItemsSchema),
+    defaultValues: {
+      aboutItems: [],
+    },
+  });
+  const formBranding = useForm<AppDataBranding>({
+    resolver: zodResolver(AppDataBrandingSchema),
+    defaultValues: {
+      brandingTitle: "",
+      brandingDescription: "",
+      brandingVideo: "",
+    },
+  });
+  const formPartners = useForm<AppDataPartnerItems>({
+    resolver: zodResolver(AppDataPartnerItemsSchema),
+    defaultValues: {
+      partners: [],
+    },
+  });
+  const formAppSocialMedias = useForm<AppDataSocialMediaItems>({
+    resolver: zodResolver(AppDataSocialMediaItemsSchema),
+    defaultValues: {
+      socials: [],
+    },
+  });
+  const formPrivacy = useForm<AppDataPrivacy>({
+    resolver: zodResolver(AppDataPrivacySchema),
+    defaultValues: {
+      privacy: "",
+    },
+  });
+  const formTerms = useForm<AppDataTerms>({
+    resolver: zodResolver(AppDataTermsSchema),
+    defaultValues: {
+      terms: "",
+    },
+  });
+  const formFaq = useForm<AppDataFaq>({
+    resolver: zodResolver(AppDataFaqSchema),
+    defaultValues: {
+      faq: "",
+    },
+  });
   useEffect(() => {
     setLoading(true);
     const fetchAppData = async () => {
       try {
         const res = await getAppData();
-        form.reset({
-          appData: {
-            heroTitle: res.heroTitle,
-            heroDescription: res.heroDescription,
-            heroImage: res.heroImage ?? "",
-            aboutTitle: res.aboutTitle,
-            aboutDescription: res.aboutDescription,
-            aboutImage: res.aboutImage ?? "",
-            brandingTitle: res.brandingTitle,
-            brandingDescription: res.brandingDescription,
-            brandingVideo: res.brandingVideo ?? "",
-            pageTerms: res.pageTerms,
-            pagePrivacy: res.pagePrivacy,
-            pageFaq: res.pageFaq,
-          },
-          aboutItems: res.aboutItems.map((item) => ({
+        formHero.reset({
+          heroTitle: res.heroTitle,
+          heroDescription: res.heroDescription,
+          heroImage: res.heroImage ?? "",
+        });
+        formAbout.reset({
+          aboutTitle: res.aboutTitle,
+          aboutDescription: res.aboutDescription,
+          aboutImage: res.aboutImage ?? "",
+        });
+        formAboutItems.reset({
+          aboutItems: res.aboutItems?.map((item) => ({
             id: item.id,
+            icon: item.icon,
             title: item.key,
             description: item.value,
-            icon: item.icon,
           })),
+        });
+        formBranding.reset({
+          brandingTitle: res.brandingTitle,
+          brandingDescription: res.brandingDescription,
+          brandingVideo: res.brandingVideo ?? "",
+        });
+        formPartners.reset({
           partners: res.partners.map((item) => ({
             id: item.id,
             name: item.name,
@@ -61,11 +165,22 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
             image: item.image,
             type: item.type,
           })),
-          appSocialMedias: res.appSocialMedias.map((item) => ({
+        });
+        formAppSocialMedias.reset({
+          socials: res.appSocialMedias.map((item) => ({
             id: item.id,
             platform: item.platform,
             url: item.url,
           })),
+        });
+        formPrivacy.reset({
+          privacy: res.pagePrivacy,
+        });
+        formTerms.reset({
+          terms: res.pageTerms,
+        });
+        formFaq.reset({
+          faq: res.pageFaq,
         });
       } catch (error) {
         console.error(error);
@@ -75,17 +190,15 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchAppData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = form.handleSubmit(async (data) => {
+  const onSubmitHero = formHero.handleSubmit(async (data) => {
     try {
-      if (loading) return;
-      if (submitting) return;
       setSubmitting(true);
       const fd = new FormData();
       fd.append("payload", JSON.stringify(data));
-      const res = await upsertAppDataFromForm(fd);
+      const res = await upsertAppDataHero(fd);
       if (res.error) {
         toast.error(res.error);
       } else {
@@ -97,6 +210,176 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
       setSubmitting(false);
     }
   });
+
+  const onSubmitAbout = formAbout.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataAbout(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitAboutItems = formAboutItems.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataAboutItems(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitBranding = formBranding.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataBranding(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitPartners = formPartners.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataPartners(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitAppSocialMedias = formAppSocialMedias.handleSubmit(
+    async (data) => {
+      try {
+        setSubmitting(true);
+        const fd = new FormData();
+        fd.append("payload", JSON.stringify(data));
+        const res = await upsertAppDataSocialMedias(fd);
+        if (res?.error) {
+          toast.error(res.error);
+        } else {
+          toast.success("Data berhasil diubah");
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setSubmitting(false);
+      }
+    }
+  );
+
+  const onSubmitPrivacy = formPrivacy.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataPrivacy(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitTerms = formTerms.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataTerms(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmitFaq = formFaq.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataFaq(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
+  const onSubmit = {
+    hero: onSubmitHero,
+    about: onSubmitAbout,
+    aboutItems: onSubmitAboutItems,
+    branding: onSubmitBranding,
+    partners: onSubmitPartners,
+    appSocialMedias: onSubmitAppSocialMedias,
+    privacy: onSubmitPrivacy,
+    terms: onSubmitTerms,
+    faq: onSubmitFaq,
+  };
+
+  const form = {
+    hero: formHero,
+    about: formAbout,
+    aboutItems: formAboutItems,
+    branding: formBranding,
+    partners: formPartners,
+    appSocialMedias: formAppSocialMedias,
+    privacy: formPrivacy,
+    terms: formTerms,
+    faq: formFaq,
+  };
 
   return (
     <FormAppDataContext.Provider

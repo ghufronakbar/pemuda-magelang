@@ -9,6 +9,7 @@ import {
   ArticleStatusEnum,
   ArticleTypeEnum,
   CommunityStatusEnum,
+  Role,
 } from "@prisma/client";
 import { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
@@ -181,6 +182,8 @@ const _createUpdateArticle = async (formData: FormData) => {
     return { ok: false, error: "UNAUTHORIZED" };
   }
 
+  const isAdmin = user.user.role !== Role.user;
+
   const parseData = ArticleInputSchema.safeParse({
     id: formData.get("id"),
     title: formData.get("title") as string,
@@ -249,7 +252,7 @@ const _createUpdateArticle = async (formData: FormData) => {
         title: parseData.data.title,
         userId: user.user.id,
         slug: generateSlug(parseData.data.title),
-        type: parseData.data.type,
+        type: communityId ? "dampak" : isAdmin ? "detak" : "gerak",
         communityId: communityId || null,
       },
     });

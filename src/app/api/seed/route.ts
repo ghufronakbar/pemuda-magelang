@@ -12,36 +12,7 @@ import {
   SocialMediaPlatformEnum,
 } from "@prisma/client";
 
-export const runtime = "nodejs"; // penting utk Prisma
-
-// ====== Hardcoded IDs (boleh kamu ganti) ======
-const IDS = {
-  users: {
-    superadmin: "11111111-1111-1111-1111-111111111111",
-    admin: "22222222-2222-2222-2222-222222222222",
-    user: "33333333-3333-3333-3333-333333333333",
-    user2: "44444444-4444-4444-4444-444444444444",
-  },
-  talents: {
-    alya: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-    bima: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
-  },
-  socials: {
-    alyaIg: "aaaa1111-1111-1111-1111-111111111111",
-    alyaLi: "aaaa2222-2222-2222-2222-222222222222",
-    bimaX: "bbbb1111-1111-1111-1111-111111111111",
-  },
-  articles: {
-    a1: "44444444-4444-4444-4444-444444444444",
-    a2: "55555555-5555-5555-5555-555555555555",
-    a3: "66666666-6666-6666-6666-666666666666",
-  },
-  products: {
-    p1: "77777777-7777-7777-7777-777777777777",
-    p2: "88888888-8888-8888-8888-888888888888",
-    p3: "99999999-9999-9999-9999-999999999999",
-  },
-};
+export const runtime = "nodejs";
 
 interface HubCategory {
   id: string;
@@ -179,35 +150,12 @@ export async function GET() {
     // ===== Users =====
     const usersSeed = [
       {
-        id: IDS.users.superadmin,
+        id: "c50759d4-83e8-44e8-8c5e-a46014d39652",
         name: "Super Admin",
         email: "superadmin@pemudamagelang.id",
         password: passwordHash,
         role: Role.superadmin,
-        profilePicture: "https://i.pravatar.cc/300?img=1",
-      },
-      {
-        id: IDS.users.admin,
-        name: "Admin",
-        email: "admin@pemudamagelang.id",
-        password: passwordHash,
-        role: Role.admin,
-        profilePicture: "https://i.pravatar.cc/300?img=2",
-      },
-      {
-        id: IDS.users.user,
-        name: "Alya Putri",
-        email: "alya@pemudamagelang.id",
-        password: passwordHash,
-        role: Role.user,
-        profilePicture: "https://i.pravatar.cc/300?img=3",
-      },
-      {
-        id: IDS.users.user2,
-        name: "Bima Ardiansyah",
-        email: "bima@pemudamagelang.id",
-        password: passwordHash,
-        role: Role.user,
+        profilePicture: null,
       },
     ];
 
@@ -217,184 +165,6 @@ export async function GET() {
         await db.user.create({ data: u });
         summary.created.users++;
       } else summary.skipped.users++;
-    }
-
-    // ===== Talents (relasi ke user) =====
-    const talentsSeed = [
-      {
-        id: IDS.talents.alya,
-        name: "Alya Putri",
-        slug: generateSlug("Alya Putri"),
-        profession: "Product Designer",
-        industry: "Design",
-        profilePicture: "https://i.pravatar.cc/300?img=3",
-        bannerPicture:
-          "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
-        description:
-          "Desainer produk yang fokus pada sistem desain, aksesibilitas, dan pengalaman pengguna.",
-        isVerified: true,
-        userId: IDS.users.user,
-      },
-      {
-        id: IDS.talents.bima,
-        name: "Bima Ardiansyah",
-        slug: generateSlug("Bima Ardiansyah"),
-        profession: "Software Engineer",
-        industry: "Technology",
-        profilePicture: "https://i.pravatar.cc/300?img=4",
-        bannerPicture:
-          "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
-        description:
-          "Engineer yang suka membangun produk web performa tinggi dan DX yang asyik.",
-        isVerified: false,
-        userId: IDS.users.user2, // contoh: admin juga punya talent
-      },
-    ];
-
-    for (const t of talentsSeed) {
-      const exist = await db.talent.findUnique({ where: { id: t.id } });
-      if (!exist) {
-        await db.talent.create({ data: t });
-        summary.created.talents++;
-      } else summary.skipped.talents++;
-    }
-
-    // ===== Social Medias =====
-    const socialsSeed = [
-      {
-        id: IDS.socials.alyaIg,
-        platform: SocialMediaPlatformEnum.instagram,
-        url: "https://instagram.com/alya.design",
-        talentId: IDS.talents.alya,
-      },
-      {
-        id: IDS.socials.alyaLi,
-        platform: SocialMediaPlatformEnum.linkedin,
-        url: "https://www.linkedin.com/in/alya-putri",
-        talentId: IDS.talents.alya,
-      },
-      {
-        id: IDS.socials.bimaX,
-        platform: SocialMediaPlatformEnum.twitter,
-        url: "https://x.com/bima_dev",
-        talentId: IDS.talents.bima,
-      },
-    ];
-
-    for (const s of socialsSeed) {
-      const exist = await db.socialMedia.findUnique({ where: { id: s.id } });
-      if (!exist) {
-        await db.socialMedia.create({ data: s });
-        summary.created.socials++;
-      } else summary.skipped.socials++;
-    }
-
-    // ===== Articles =====
-    const articlesSeed = [
-      {
-        id: IDS.articles.a1,
-        slug: generateSlug("Mendesain Sistem Design Tokens di Skala Besar"),
-        title: "Mendesain Sistem Design Tokens di Skala Besar",
-        thumbnailImage:
-          "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop",
-        content: `<p>Mengelola design tokens untuk multi brand dan platform membutuhkan strategi yang matang. 
-          Artikel ini membahas arsitektur token, penskalaan, dan automasi.</p>`,
-        category: "Design",
-        tags: ["design-system", "tokens", "scale"],
-        status: ArticleStatusEnum.published,
-        userId: IDS.users.user,
-      },
-      {
-        id: IDS.articles.a2,
-        slug: generateSlug("Membangun API yang Tahan Skala"),
-        title: "Membangun API yang Tahan Skala",
-        thumbnailImage:
-          "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
-        content: `<p>Dari pagination hingga idempotency: praktik terbaik untuk API yang stabil, aman, dan siap tumbuh.</p>`,
-        category: "Technology",
-        tags: ["api", "scalability", "best-practices"],
-        status: ArticleStatusEnum.published,
-        userId: IDS.users.admin,
-      },
-      {
-        id: IDS.articles.a3,
-        slug: generateSlug("Strategi Monetisasi untuk Kreator"),
-        title: "Strategi Monetisasi untuk Kreator",
-        thumbnailImage:
-          "https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=1200&auto=format&fit=crop",
-        content: `<p>Langganan, kursus, sponsor, dan merchandise—mana yang paling cocok untukmu? Kita bedah pro-kontra dan metriknya.</p>`,
-        category: "Business",
-        tags: ["monetization", "creator-economy"],
-        status: ArticleStatusEnum.draft,
-        userId: IDS.users.user,
-      },
-    ];
-
-    for (const a of articlesSeed) {
-      const exist = await db.article.findUnique({ where: { id: a.id } });
-      if (!exist) {
-        await db.article.create({
-          data: {
-            ...a,
-            type: ArticleTypeEnum.detak, // TOOD: fix seeder
-          },
-        });
-        summary.created.articles++;
-      } else summary.skipped.articles++;
-    }
-
-    // ===== Products =====
-    const productsSeed = [
-      {
-        id: IDS.products.p1,
-        slug: generateSlug("Kamera Mirrorless Alpha X"),
-        title: "Kamera Mirrorless Alpha X",
-        images: [
-          "https://images.unsplash.com/photo-1519183071298-a2962be96f83?q=80&w=1200&auto=format&fit=crop",
-        ],
-        description:
-          "Kamera ringkas dengan sensor full-frame dan stabilisasi 5-axis untuk hasil jernih.",
-        price: 14990000,
-        talentId: IDS.talents.alya,
-        status: ProductStatusEnum.published,
-        category: "Camera",
-      },
-      {
-        id: IDS.products.p2,
-        slug: generateSlug("Sneakers Urban Runner"),
-        title: "Sneakers Urban Runner",
-        images: [
-          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop",
-        ],
-        description:
-          "Nyaman untuk aktivitas harian dengan outsole grip kuat dan upper berpori.",
-        price: 899000,
-        talentId: IDS.talents.bima,
-        status: ProductStatusEnum.published,
-        category: "Sneakers",
-      },
-      {
-        id: IDS.products.p3,
-        slug: generateSlug("Manual Brew Set"),
-        title: "Manual Brew Set",
-        images: [
-          "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1200&auto=format&fit=crop",
-        ],
-        description:
-          "Set kopi manual untuk pour-over; nikmati aroma dan rasa yang lebih kompleks.",
-        price: 559000,
-        talentId: IDS.talents.alya,
-        status: ProductStatusEnum.published,
-        category: "Coffee",
-      },
-    ];
-
-    for (const p of productsSeed) {
-      const exist = await db.product.findUnique({ where: { id: p.id } });
-      if (!exist) {
-        await db.product.create({ data: p });
-        summary.created.products++;
-      } else summary.skipped.products++;
     }
 
     for await (const hc of DUMMY_HUB_CATEGORIES) {

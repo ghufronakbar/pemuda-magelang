@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* @import "../styles/_variables.scss";
-@import "../styles/_keyframe-animations.scss"; */
+@import "../styles/_variables.scss";
+/* @import "../styles/_keyframe-animations.scss"; */
 
 @theme inline {
   --text-2xs: 0.625rem;
@@ -67,7 +67,7 @@
   --popover-foreground: oklch(0.145 0 0);
 
   /* Brand */
-  --primary: #23E3BD; /* oklch(0.624 0.102 185.583) */
+  --primary: #1bd0ac; /* oklch(0.624 0.102 185.583) */
   --primary-foreground: oklch(0.985 0 0);
 
   --secondary: #f9a95e; /* oklch(0.798 0.131 62.200) */

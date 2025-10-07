@@ -19,6 +19,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { FormArticlePublic } from "@/app/(public)/(article)/(components)/form-article-public";
 
 export function ArticleListSection({
   title = "Artikel",
@@ -26,11 +27,15 @@ export function ArticleListSection({
   articles,
   viewAllHref,
   className,
+  type,
 }: ArticleSectionProps) {
   const [page, setPage] = useState(1);
   const pageSize = 16;
   const pager = usePagination(page, pageSize, articles.length);
-  const visible = useMemo(() => articles.slice(pager.start, pager.end), [articles, pager.start, pager.end]);
+  const visible = useMemo(
+    () => articles.slice(pager.start, pager.end),
+    [articles, pager.start, pager.end]
+  );
 
   return (
     <section
@@ -39,7 +44,9 @@ export function ArticleListSection({
       <Card className="bg-card/50 backdrop-blur">
         <CardHeader className="border-b">
           <div>
-            <CardTitle className="text-xl sm:text-2xl font-semibold">{title}</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl font-semibold">
+              {title}
+            </CardTitle>
             {description && (
               <CardDescription className="mt-1">{description}</CardDescription>
             )}
@@ -54,9 +61,11 @@ export function ArticleListSection({
         </CardHeader>
 
         <CardContent>
-          {!viewAllHref && (
-            <Filter categories={ARTICLE_CATEGORIES} hideReset />
-          )}
+          <FormArticlePublic type={type} />
+        </CardContent>
+
+        <CardContent>
+          {!viewAllHref && <Filter categories={ARTICLE_CATEGORIES} hideReset />}
           <ArticleListMap data={visible} />
         </CardContent>
 
@@ -64,8 +73,9 @@ export function ArticleListSection({
         {pager.totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
-              Menampilkan {articles.length === 0 ? 0 : pager.start + 1}
-              –{Math.min(pager.end, articles.length)} dari {articles.length} artikel
+              Menampilkan {articles.length === 0 ? 0 : pager.start + 1}–
+              {Math.min(pager.end, articles.length)} dari {articles.length}{" "}
+              artikel
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -78,34 +88,39 @@ export function ArticleListSection({
                 Sebelumnya
               </Button>
               <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(pager.totalPages, 5) }, (_, i) => {
-                  let pageNum: number;
-                  if (pager.totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (pager.page <= 3) {
-                    pageNum = i + 1;
-                  } else if (pager.page >= pager.totalPages - 2) {
-                    pageNum = pager.totalPages - 4 + i;
-                  } else {
-                    pageNum = pager.page - 2 + i;
+                {Array.from(
+                  { length: Math.min(pager.totalPages, 5) },
+                  (_, i) => {
+                    let pageNum: number;
+                    if (pager.totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (pager.page <= 3) {
+                      pageNum = i + 1;
+                    } else if (pager.page >= pager.totalPages - 2) {
+                      pageNum = pager.totalPages - 4 + i;
+                    } else {
+                      pageNum = pager.page - 2 + i;
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={pager.page === pageNum ? "default" : "outline"}
+                        size="sm"
+                        className="w-8 h-8 p-0"
+                        onClick={() => setPage(pageNum)}
+                      >
+                        {pageNum}
+                      </Button>
+                    );
                   }
-                  return (
-                    <Button
-                      key={pageNum}
-                      variant={pager.page === pageNum ? "default" : "outline"}
-                      size="sm"
-                      className="w-8 h-8 p-0"
-                      onClick={() => setPage(pageNum)}
-                    >
-                      {pageNum}
-                    </Button>
-                  );
-                })}
+                )}
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setPage((prev) => Math.min(prev + 1, pager.totalPages))}
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, pager.totalPages))
+                }
                 disabled={pager.page === pager.totalPages}
               >
                 Selanjutnya
