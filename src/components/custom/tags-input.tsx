@@ -110,7 +110,7 @@ export function TagsInput({
           variant="secondary"
           className="flex items-center gap-1 rounded-full"
         >
-          #{tag}
+          {tag}
           <button
             type="button"
             aria-label={`Hapus ${tag}`}
@@ -123,30 +123,30 @@ export function TagsInput({
         </Badge>
       ))}
 
-      {/* input */}
-      <Input
-        value={input}
-        onChange={(e) => {
-          setMessageError("");
-          setInput(e.target.value);
-        }}
-        onKeyDown={onKeyDown}
-        onPaste={onPaste}
-        disabled={disabled}
-        placeholder={value.length === 0 ? placeholder : ""}
-      />
-
-      {/* tombol tambah manual (opsional) */}
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="h-8"
-        onClick={() => input.trim() && addTag(input)}
-        disabled={disabled || input.trim() === ""}
-      >
-        <Plus className="mr-1 h-4 w-4" /> Tambah
-      </Button>
+      {/* input dengan tombol tambah di dalam */}
+      <div className="relative flex-1 min-w-[160px]">
+        <Input
+          value={input}
+          onChange={(e) => {
+            setMessageError("");
+            setInput(e.target.value);
+          }}
+          onKeyDown={onKeyDown}
+          onPaste={onPaste}
+          disabled={disabled}
+          placeholder={value.length === 0 ? placeholder : ""}
+          className="pr-10"
+        />
+        <button
+          type="button"
+          aria-label="Tambah tag"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground hover:text-primary hover:bg-muted"
+          onClick={() => input.trim() && addTag(input)}
+          disabled={disabled || input.trim() === ""}
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      </div>
 
       {messageError && <p className="text-sm text-red-500">{messageError}</p>}
     </div>

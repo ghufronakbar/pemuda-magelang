@@ -74,8 +74,8 @@ export function CommunitySection({
     );
   }
   return (
-    <Card className={className}>
-      <CardHeader>
+    <Card className={cn("rounded-xl border-muted/40 shadow-sm", className)}>
+      <CardHeader className="pb-4 border-b border-muted/40">
         <CardTitle>{title ?? "Komunitas"}</CardTitle>
         <CardDescription>
           {description
@@ -89,7 +89,7 @@ export function CommunitySection({
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
         {((isRegistered && communityStatus !== "approved") || !showForm) && (
-          <div className="rounded-md border p-3 text-sm flex flex-col gap-2">
+          <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <CommunityStatusBadge status={communityStatus!} />
               <span className="font-medium">{statusText(communityStatus)}</span>
@@ -134,7 +134,7 @@ export function CommunitySection({
               </Button>
             )}
 
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl">
               <DialogHeader>
                 <DialogTitle>Daftar Komunitas</DialogTitle>
                 <DialogDescription>

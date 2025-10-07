@@ -106,8 +106,8 @@ export function TalentSection({
 
   if (session?.user?.role !== "user") return null;
   return (
-    <Card className={className}>
-      <CardHeader>
+    <Card className={cn("rounded-xl border-muted/40 shadow-sm", className)}>
+      <CardHeader className="pb-4 border-b border-muted/40">
         <CardTitle>{title ?? "Talenta"}</CardTitle>
         <CardDescription>
           {description
@@ -121,7 +121,7 @@ export function TalentSection({
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
         {((isRegistered && talentStatus !== "approved") || !showForm) && (
-          <div className="rounded-md border p-3 text-sm flex flex-col gap-2">
+          <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <TalentStatusBadge status={talentStatus!} />
               <span className="font-medium">{statusText(talentStatus)}</span>
@@ -163,7 +163,7 @@ export function TalentSection({
               </Button>
             )}
 
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl">
               <DialogHeader>
                 <DialogTitle>Daftar Talenta</DialogTitle>
                 <DialogDescription>

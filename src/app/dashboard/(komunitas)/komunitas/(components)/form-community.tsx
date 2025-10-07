@@ -42,7 +42,7 @@ export function FormCommunity({
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-8">
+      <form onSubmit={onSubmit} className="space-y-6">
         {/* ===== Basic ===== */}
         <FormField
           control={form.control}
@@ -105,6 +105,32 @@ export function FormCommunity({
             </FormItem>
           )}
         />
+        {/* ===== Banner ===== */}
+        <div>
+          <FormLabel className="mb-2 block">Banner</FormLabel>
+          <FormField
+            control={form.control}
+            name="bannerPicture"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <ImageUploader
+                    image={field.value ?? null}
+                    id="bannerPictureCommunity"
+                    containerClassName="w-full aspect-[4/1] md:aspect-[5/1]"
+                    setImage={(url) => field.onChange(url ?? "")}
+                    errorMessage={form.formState.errors.bannerPicture?.message}
+                  />
+                </FormControl>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Saran ukuran: 1600×400px (rasio 4:1) • Maks 1MB • Format JPG/PNG
+                </p>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* ===== Nama & Kategori ===== */}
         <div className="grid gap-4 md:grid-cols-2 items-start">
           <FormField
             control={form.control}
@@ -149,27 +175,6 @@ export function FormCommunity({
                   </Select>
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* ===== Banner ===== */}
-        <div>
-          <FormLabel className="mb-2 block">Banner</FormLabel>
-          <FormField
-            control={form.control}
-            name="bannerPicture"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <ImageUploader
-                    image={field.value ?? null}
-                    id="bannerPictureCommunity"
-                    setImage={(url) => field.onChange(url ?? "")}
-                    errorMessage={form.formState.errors.bannerPicture?.message}
-                  />
-                </FormControl>
               </FormItem>
             )}
           />

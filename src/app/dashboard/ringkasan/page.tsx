@@ -74,7 +74,7 @@ const RingkasanPage = async () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <TotalZhubProgramsCard className="col-span-1" data={totalZhubPrograms} />
             <TotalUsersCard className="col-span-1" data={totalUsers} />
-            <TalentCard className="col-span-1" />
+            {session?.user?.role !== "user" && <TalentCard className="col-span-1" />}
             <TotalTalentCard className="col-span-1" data={totalTalent} />
             <TotalCommunitiesCard className="col-span-1" data={totalCommunities} />
             <TotalProductCard className="col-span-1" data={totalProduct} />
