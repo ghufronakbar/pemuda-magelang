@@ -1,6 +1,5 @@
 import { Role } from "@prisma/client";
 import { checkPermission } from "@/actions/user";
-import { FormCategoryHub } from "../(components)/(category)/form-category-zhub";
 import {
   DataCategoryHub,
   TableZHubCategory,
@@ -24,14 +23,11 @@ const KategoriZhubPage = async () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 justify-between">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold">Kategori Zhub</h1>
-          <p className="text-muted-foreground text-sm">
-            Kategori Zhub yang terdaftar di platform ini
-          </p>
-        </div>
-        <FormCategoryHub />
+      <div className="flex flex-col">
+        <h1 className="text-2xl font-bold">Kategori Zhub</h1>
+        <p className="text-muted-foreground text-sm">
+          Kategori Zhub yang terdaftar di platform ini
+        </p>
       </div>
       <TableZHubCategory
         data={mappedCategories}

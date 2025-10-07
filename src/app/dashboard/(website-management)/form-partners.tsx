@@ -32,7 +32,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UrlInput } from "@/components/custom/url-input";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const FormPartners = () => {
@@ -266,15 +265,18 @@ export const FormPartners = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Tabs defaultValue={groups[0].tabValue} className="w-full">
-          <div className="flex items-center justify-between">
-            <TabsList>
+          <div className="space-y-4">
+            <TabsList className="flex w-full h-12 gap-1 bg-muted/50 p-1 rounded-xl">
               {groups.map((g) => (
-                <TabsTrigger key={g.tabValue} value={g.tabValue}>
+                <TabsTrigger 
+                  key={g.tabValue} 
+                  value={g.tabValue}
+                  className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+                >
                   {g.tabLabel}
                 </TabsTrigger>
               ))}
             </TabsList>
-           
           </div>
 
           {groups.map((g) => (

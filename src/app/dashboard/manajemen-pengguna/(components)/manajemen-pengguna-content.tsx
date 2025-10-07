@@ -7,7 +7,6 @@ import {
 } from "../../(components)/table-user-talent";
 import { TableCommunity } from "../../(komunitas)/kelola-komunitas/(components)/table-community";
 import { TableProduct } from "../../(components)/table-product";
-import { FormAdmin } from "../../(components)/form-admin";
 import { deleteUser, getAllUsers } from "@/actions/user";
 import { setStatusTalent } from "@/actions/talent";
 import { 
@@ -21,6 +20,7 @@ import {
   setStatusProduct 
 } from "@/actions/product";
 import { auth } from "@/auth";
+import { Users, Star, Shield, Users2, Package } from "lucide-react";
 
 export async function ManajemenPenggunaContent() {
   const session = await auth();
@@ -105,104 +105,273 @@ export async function ManajemenPenggunaContent() {
   const isSuperAdmin = role === Role.superadmin;
 
   return (
-    <Tabs defaultValue="pengguna" className="w-full">
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-lg font-semibold">Daftar Pengguna</h3>
-          <p className="text-sm text-muted-foreground">
-            Kelola dan monitor data pengguna, talenta, admin, komunitas, dan produk
-          </p>
-        </div>
-        <TabsList className={`grid w-full ${isSuperAdmin ? 'grid-cols-5' : 'grid-cols-4'}`}>
-          <TabsTrigger value="pengguna">Pengguna</TabsTrigger>
-          <TabsTrigger value="talent">Talent</TabsTrigger>
-          {isSuperAdmin && <TabsTrigger value="admin">Admin</TabsTrigger>}
-          <TabsTrigger value="komunitas">Komunitas</TabsTrigger>
-          <TabsTrigger value="produk">Produk</TabsTrigger>
-        </TabsList>
+    <div className="w-full space-y-6">
+      {/* Header Section */}
+      <div className="space-y-2">
+        <h3 className="text-2xl font-bold tracking-tight">Manajemen Pengguna</h3>
+        <p className="text-muted-foreground">
+          Kelola dan monitor data pengguna, talenta, admin, komunitas, dan produk secara terpusat
+        </p>
       </div>
 
-      {/* Pengguna Tab */}
-      <TabsContent value="pengguna" className="mt-4">
-        <TableUserTalent
-            users={mappedPengguna}
-            onSetTalent={async (id, formData) => {
-              "use server";
-              await setStatusTalent(id, formData);
-            }}
-            onDelete={async (id) => {
-              "use server";
-              await deleteUser(id);
-            }}
-            type="pengguna"
-          />
-      </TabsContent>
+      {/* Enhanced Tabs */}
+      <Tabs defaultValue="pengguna" className="w-full">
+        <div className="space-y-4">
+          {/* Desktop Tabs */}
+          <div className="hidden sm:block">
+            <TabsList className={`grid w-full h-12 ${isSuperAdmin ? 'grid-cols-5' : 'grid-cols-4'} gap-1 bg-muted/50 p-1 rounded-xl`}>
+              <TabsTrigger 
+                value="pengguna" 
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+              >
+                <Users className="h-4 w-4" />
+                <span className="hidden lg:inline">Pengguna</span>
+                <span className="lg:hidden">User</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="talent" 
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+              >
+                <Star className="h-4 w-4" />
+                <span className="hidden lg:inline">Talent</span>
+                <span className="lg:hidden">Talent</span>
+              </TabsTrigger>
+              {isSuperAdmin && (
+                <TabsTrigger 
+                  value="admin" 
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+                >
+                  <Shield className="h-4 w-4" />
+                  <span className="hidden lg:inline">Admin</span>
+                  <span className="lg:hidden">Admin</span>
+                </TabsTrigger>
+              )}
+              <TabsTrigger 
+                value="komunitas" 
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+              >
+                <Users2 className="h-4 w-4" />
+                <span className="hidden lg:inline">Komunitas</span>
+                <span className="lg:hidden">Kom</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="produk" 
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg"
+              >
+                <Package className="h-4 w-4" />
+                <span className="hidden lg:inline">Produk</span>
+                <span className="lg:hidden">Prod</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-      {/* Talent Tab */}
-      <TabsContent value="talent" className="mt-4">
-        <TableUserTalent
-            users={mappedTalent}
-            onSetTalent={async (id, formData) => {
-              "use server";
-              await setStatusTalent(id, formData);
-            }}
-            onDelete={async (id) => {
-              "use server";
-              await deleteUser(id);
-            }}
-            type="talenta"
-          />
-      </TabsContent>
+          {/* Mobile Tabs - Scrollable */}
+          <div className="sm:hidden">
+            <div className="overflow-x-auto scrollbar-hide">
+              <TabsList className={`inline-flex w-max h-12 gap-1 bg-muted/50 p-1 rounded-xl ${isSuperAdmin ? 'min-w-[400px]' : 'min-w-[320px]'}`}>
+                <TabsTrigger 
+                  value="pengguna" 
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg whitespace-nowrap"
+                >
+                  <Users className="h-4 w-4" />
+                  Pengguna
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="talent" 
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg whitespace-nowrap"
+                >
+                  <Star className="h-4 w-4" />
+                  Talent
+                </TabsTrigger>
+                {isSuperAdmin && (
+                  <TabsTrigger 
+                    value="admin" 
+                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg whitespace-nowrap"
+                  >
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </TabsTrigger>
+                )}
+                <TabsTrigger 
+                  value="komunitas" 
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg whitespace-nowrap"
+                >
+                  <Users2 className="h-4 w-4" />
+                  Komunitas
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="produk" 
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-background/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-lg whitespace-nowrap"
+                >
+                  <Package className="h-4 w-4" />
+                  Produk
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </div>
+        </div>
 
-      {/* Admin Tab */}
-      {isSuperAdmin && (
-        <TabsContent value="admin" className="mt-4">
-          <TableUserTalent
-            users={mappedAdmin}
-            onSetTalent={async (id, formData) => {
-              "use server";
-              await setStatusTalent(id, formData);
-            }}
-            onDelete={async (id) => {
-              "use server";
-              await deleteUser(id);
-            }}
-            type="admin"
-            actionButton={<FormAdmin />}
-          />
+        {/* Pengguna Tab */}
+        <TabsContent value="pengguna" className="mt-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-semibold flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Daftar Pengguna
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Kelola pengguna terdaftar dalam sistem
+                </p>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total: {mappedPengguna.length} pengguna
+              </div>
+            </div>
+            <TableUserTalent
+              users={mappedPengguna}
+              onSetTalent={async (id, formData) => {
+                "use server";
+                await setStatusTalent(id, formData);
+              }}
+              onDelete={async (id) => {
+                "use server";
+                await deleteUser(id);
+              }}
+              type="pengguna"
+            />
+          </div>
         </TabsContent>
-      )}
 
-      {/* Komunitas Tab */}
-      <TabsContent value="komunitas" className="mt-4">
-        <TableCommunity
-            communities={communities}
-            onSetStatus={async (id, formData) => {
-              "use server";
-              await setCommunityStatus(id, formData);
-            }}
-            onDelete={async (id) => {
-              "use server";
-              await deleteCommunity(id);
-            }}
-          />
-      </TabsContent>
+        {/* Talent Tab */}
+        <TabsContent value="talent" className="mt-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-semibold flex items-center gap-2">
+                  <Star className="h-5 w-5" />
+                  Daftar Talent
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Kelola talenta yang telah terverifikasi
+                </p>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total: {mappedTalent.length} talent
+              </div>
+            </div>
+            <TableUserTalent
+              users={mappedTalent}
+              onSetTalent={async (id, formData) => {
+                "use server";
+                await setStatusTalent(id, formData);
+              }}
+              onDelete={async (id) => {
+                "use server";
+                await deleteUser(id);
+              }}
+              type="talenta"
+            />
+          </div>
+        </TabsContent>
 
-      {/* Produk Tab */}
-      <TabsContent value="produk" className="mt-4">
-        <TableProduct
-            products={products}
-            onSetStatus={async (slug, formData) => {
-              "use server";
-              await setStatusProduct(slug, formData);
-            }}
-            onDelete={async (slug) => {
-              "use server";
-              await deleteProduct(slug);
-            }}
-          />
-      </TabsContent>
-    </Tabs>
+        {/* Admin Tab */}
+        {isSuperAdmin && (
+          <TabsContent value="admin" className="mt-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-lg font-semibold flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    Daftar Admin
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Kelola administrator sistem
+                  </p>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Total: {mappedAdmin.length} admin
+                </div>
+              </div>
+              <TableUserTalent
+                users={mappedAdmin}
+                onSetTalent={async (id, formData) => {
+                  "use server";
+                  await setStatusTalent(id, formData);
+                }}
+                onDelete={async (id) => {
+                  "use server";
+                  await deleteUser(id);
+                }}
+                type="admin"
+              />
+            </div>
+          </TabsContent>
+        )}
+
+        {/* Komunitas Tab */}
+        <TabsContent value="komunitas" className="mt-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-semibold flex items-center gap-2">
+                  <Users2 className="h-5 w-5" />
+                  Daftar Komunitas
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Kelola komunitas yang terdaftar
+                </p>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total: {communities.length} komunitas
+              </div>
+            </div>
+            <TableCommunity
+              communities={communities}
+              onSetStatus={async (id, formData) => {
+                "use server";
+                await setCommunityStatus(id, formData);
+              }}
+              onDelete={async (id) => {
+                "use server";
+                await deleteCommunity(id);
+              }}
+            />
+          </div>
+        </TabsContent>
+
+        {/* Produk Tab */}
+        <TabsContent value="produk" className="mt-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-semibold flex items-center gap-2">
+                  <Package className="h-5 w-5" />
+                  Daftar Produk
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Kelola produk yang telah dipublikasikan
+                </p>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total: {products.length} produk
+              </div>
+            </div>
+            <TableProduct
+              products={products}
+              onSetStatus={async (slug, formData) => {
+                "use server";
+                await setStatusProduct(slug, formData);
+              }}
+              onDelete={async (slug) => {
+                "use server";
+                await deleteProduct(slug);
+              }}
+            />
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
 

@@ -69,7 +69,7 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-50 flex h-16 md:h-14 items-center gap-3 md:gap-4 bg-background/95 backdrop-blur-md border-b px-4 md:px-6 shadow-sm">
-      <SidebarTrigger className="-ml-1 hover:bg-accent hover:text-accent-foreground transition-colors rounded-md" />
+      <SidebarTrigger className="-ml-1 hover:bg-primary hover:text-primary-foreground transition-colors rounded-md" />
       <Separator orientation="vertical" className="h-6 md:h-7 bg-border/60" />
 
       <Breadcrumb className="flex-1 overflow-hidden">

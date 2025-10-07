@@ -138,10 +138,7 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
         )}
 
         {data.length > 0 && totalPages > 1 && (
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              Menampilkan {startIndex + 1}-{Math.min(endIndex, data.length)} dari {data.length} artikel
-            </div>
+          <div className="flex items-center justify-end">
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"

@@ -17,6 +17,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -141,7 +142,7 @@ export function AppSidebar({ session }: { session: Session | null }) {
   }).filter((tree) => tree.items.length > 0);
 
   return (
-    <Sidebar className="z-50">
+    <Sidebar className="z-50" collapsible="icon">
       <SidebarHeader>
         {session?.user ? (
           <div className="flex items-center gap-2 p-2">
@@ -193,15 +194,7 @@ export function AppSidebar({ session }: { session: Session | null }) {
                 ))}
                 {/* Add Logout to Lainnya section */}
                 {section.section === "Lainnya" && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => signOutClient({ callbackUrl: "/" })}
-                      className="text-destructive hover:text-destructive data-[active=true]:text-destructive"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Logout</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  <LogoutItem />
                 )}
               </SidebarMenu>
             </SidebarGroupContent>
@@ -209,6 +202,25 @@ export function AppSidebar({ session }: { session: Session | null }) {
         ))}
       </SidebarContent>
     </Sidebar>
+  );
+}
+
+/* ====== Logout Item helper ====== */
+function LogoutItem() {
+  const { state, isMobile } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        onClick={() => signOutClient({ callbackUrl: "/" })}
+        tooltip={isCollapsed ? "Logout" : undefined}
+        className="text-destructive hover:text-destructive data-[active=true]:text-destructive"
+      >
+        <LogOut className="mr-2 h-4 w-4" />
+        <span>Logout</span>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   );
 }
 
@@ -224,10 +236,14 @@ function Item({
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   active?: boolean;
 }) {
+  const { state, isMobile } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
+
   return (
     <SidebarMenuItem data-active={active}>
       <SidebarMenuButton
         asChild
+        tooltip={isCollapsed ? label : undefined}
         className={cn(active && "bg-primary text-primary-foreground")}
       >
         <Link href={href}>

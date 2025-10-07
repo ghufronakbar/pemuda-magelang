@@ -28,6 +28,7 @@ import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { formatIDDate } from "@/lib/helper";
 import { useFormCategoryHub } from "@/context/form-category-hub-context";
+import { FormCategoryHub, FormCategoryHubButton } from "./form-category-zhub";
 
 /* ================== Types ================== */
 
@@ -77,52 +78,27 @@ export function TableZHubCategory({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="w-full flex flex-row gap-4 flex-wrap">
-          <div>
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Cari
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Cari nama kategori…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full pl-9"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground">Tampil</label>
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="w-[84px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[5, 10, 20, 50].map((n) => (
-                <SelectItem key={n} value={String(n)}>
-                  {n}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setQuery("");
-            }}
-          >
-            Reset
-          </Button>
-        </div>
-      </div>
+       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+         <div className="w-full flex flex-row gap-4 flex-wrap items-end">
+           <div className="flex-1">
+             <label className="mb-1 block text-xs text-muted-foreground">
+               Cari
+             </label>
+             <div className="relative">
+               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+               <Input
+                 placeholder="Cari nama kategori…"
+                 value={query}
+                 onChange={(e) => setQuery(e.target.value)}
+                 className="w-full pl-9"
+               />
+             </div>
+           </div>
+           <div className="flex items-end">
+             <FormCategoryHubButton />
+           </div>
+         </div>
+       </div>
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">
@@ -183,6 +159,9 @@ export function TableZHubCategory({
         totalPages={totalPages}
         setPage={setPage}
       />
+      
+      {/* Dialog */}
+      <FormCategoryHub />
     </section>
   );
 }

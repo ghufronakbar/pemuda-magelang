@@ -19,8 +19,27 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Plus } from "lucide-react";
 import { useFormCategoryHub } from "@/context/form-category-hub-context";
 
+export const FormCategoryHubButton = () => {
+  const { form, setOpen } = useFormCategoryHub();
+  
+  return (
+    <Button
+      onClick={() => {
+        setOpen(true);
+        form.reset({
+          id: null,
+          name: "",
+        });
+      }}
+    >
+      <Plus className="mr-2 h-4 w-4" />
+      Tambah Kategori Zhub
+    </Button>
+  );
+};
+
 export const FormCategoryHub = () => {
-  const { form, onSubmit, setOpen, open, onClose, loading } =
+  const { form, onSubmit, open, onClose, loading } =
     useFormCategoryHub();
   return (
     <Dialog
@@ -29,18 +48,6 @@ export const FormCategoryHub = () => {
         onClose();
       }}
     >
-      <Button
-        onClick={() => {
-          setOpen(true);
-          form.reset({
-            id: null,
-            name: "",
-          });
-        }}
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Tambah Kategori Zhub
-      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
