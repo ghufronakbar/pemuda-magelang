@@ -22,9 +22,8 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Pagination } from "@/components/custom/pagination";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2, Trash2, Search } from "lucide-react";
+import { Loader2, Trash2, Search, Building, ChevronLeft, ChevronRight } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { formatIDDate } from "@/lib/helper";
@@ -93,89 +92,59 @@ export function TableZHub({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="w-full flex flex-row gap-4 flex-wrap">
-          <div>
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Cari
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Cari nama kategori…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full pl-9"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Kategori
-            </label>
-            <Select value={category} onValueChange={(v) => setCategory(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua kategori" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Status
-            </label>
-            <Select value={status} onValueChange={(v) => setStatus(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua</SelectItem>
-                {Object.values(HubStatusEnum).map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {hubStatusEnum.getIcon(s)}
-                    <span>{hubStatusEnum.getLabel(s)}</span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Cari
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Cari nama program, kategori…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full pl-9"
+            />
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground">Tampil</label>
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => setPageSize(Number(v))}
-          >
-            <SelectTrigger className="w-[84px]">
-              <SelectValue />
+        <div className="flex-shrink-0">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Kategori
+          </label>
+          <Select value={category} onValueChange={(v) => setCategory(v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Semua kategori" />
             </SelectTrigger>
             <SelectContent>
-              {[5, 10, 20, 50].map((n) => (
-                <SelectItem key={n} value={String(n)}>
-                  {n}
+              <SelectItem value="all">Semua</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {c}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setQuery("");
-              setCategory("all");
-              setStatus("all");
-            }}
-          >
-            Reset
-          </Button>
+        </div>
+
+        <div className="flex-shrink-0">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Status
+          </label>
+          <Select value={status} onValueChange={(v) => setStatus(v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Semua status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua</SelectItem>
+              {Object.values(HubStatusEnum).map((s) => (
+                <SelectItem key={s} value={s}>
+                  {hubStatusEnum.getIcon(s)}
+                  <span>{hubStatusEnum.getLabel(s)}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -203,9 +172,21 @@ export function TableZHub({
               <TableRow>
                 <TableCell
                   colSpan={6}
-                  className="py-10 text-center text-sm text-muted-foreground"
+                  className="py-16 text-center"
                 >
-                  Tidak ada data yang cocok.
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+                      <Building className="w-8 h-8 text-muted-foreground/60" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Tidak ada program zhub ditemukan
+                      </h3>
+                      <p className="text-xs text-muted-foreground max-w-sm">
+                        Coba ubah kata kunci pencarian atau filter untuk menemukan program yang Anda cari
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
@@ -250,11 +231,59 @@ export function TableZHub({
       </div>
 
       {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setPage={setPage}
-      />
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Menampilkan {total === 0 ? 0 : start + 1}–
+            {Math.min(start + pageSize, total)} dari {total} program
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Sebelumnya
+            </Button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let pageNum: number;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    className="w-8 h-8 p-0"
+                    onClick={() => setPage(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Selanjutnya
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

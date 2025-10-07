@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2, Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Loader2, Trash2, ChevronLeft, ChevronRight, Search, Users } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -106,8 +106,8 @@ export function TableCommunity({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex gap-3">
-        <div>
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
           </label>
@@ -122,7 +122,7 @@ export function TableCommunity({
           </div>
         </div>
 
-        <div>
+        <div className="flex-shrink-0">
           <label className="mb-1 block text-xs text-muted-foreground">
             Status
           </label>
@@ -141,7 +141,7 @@ export function TableCommunity({
           </Select>
         </div>
 
-        <div>
+        <div className="flex-shrink-0">
           <label className="mb-1 block text-xs text-muted-foreground">
             Kategori
           </label>
@@ -176,6 +176,29 @@ export function TableCommunity({
             </TableRow>
           </TableHeader>
           <TableBody>
+            {currentCommunities.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="py-16 text-center"
+                >
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+                      <Users className="w-8 h-8 text-muted-foreground/60" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Tidak ada komunitas ditemukan
+                      </h3>
+                      <p className="text-xs text-muted-foreground max-w-sm">
+                        Coba ubah kata kunci pencarian atau filter untuk menemukan komunitas yang Anda cari
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+
             {currentCommunities.map((community) => (
               <TableRow key={community.id}>
                 <TableCell>

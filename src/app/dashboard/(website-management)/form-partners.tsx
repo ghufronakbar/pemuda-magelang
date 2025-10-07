@@ -113,6 +113,7 @@ export const FormPartners = () => {
             type="button"
             size="sm"
             variant="default"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={() => appendFor(type)}
           >
             <Plus className="h-4 w-4" />

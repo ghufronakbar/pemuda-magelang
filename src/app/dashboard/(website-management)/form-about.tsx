@@ -135,7 +135,8 @@ export const FormAboutHighlights = () => {
             <Button
               type="button"
               size="sm"
-              variant="secondary"
+              variant="default"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
               onClick={() =>
                 aboutArray.append({
                   title: "",

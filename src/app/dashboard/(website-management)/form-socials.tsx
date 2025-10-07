@@ -64,6 +64,7 @@ export const FormSocials = () => {
               type="button"
               size="sm"
               variant="default"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
               onClick={() =>
                 socialArray.append({ platform: "instagram", url: "" })
               }

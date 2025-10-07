@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Role, TalentStatusEnum } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   DataTableUserTalent, 
@@ -8,7 +8,7 @@ import {
 import { TableCommunity } from "../../(komunitas)/kelola-komunitas/(components)/table-community";
 import { TableProduct } from "../../(components)/table-product";
 import { FormAdmin } from "../../(components)/form-admin";
-import { checkPermission, deleteUser, getAllUsers } from "@/actions/user";
+import { deleteUser, getAllUsers } from "@/actions/user";
 import { setStatusTalent } from "@/actions/talent";
 import { 
   deleteCommunity, 
@@ -101,30 +101,30 @@ export async function ManajemenPenggunaContent() {
     slug: null,
   }));
 
-  // Check if user is admin
-  const isAdmin = role === Role.admin || role === Role.superadmin;
+  // Check if user is super admin
   const isSuperAdmin = role === Role.superadmin;
 
   return (
     <Tabs defaultValue="pengguna" className="w-full">
-      <TabsList className={`grid w-full ${isSuperAdmin ? 'grid-cols-5' : 'grid-cols-4'}`}>
-        <TabsTrigger value="pengguna">Pengguna</TabsTrigger>
-        <TabsTrigger value="talent">Talent</TabsTrigger>
-        {isSuperAdmin && <TabsTrigger value="admin">Admin</TabsTrigger>}
-        <TabsTrigger value="komunitas">Komunitas</TabsTrigger>
-        <TabsTrigger value="produk">Produk</TabsTrigger>
-      </TabsList>
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg font-semibold">Daftar Pengguna</h3>
+          <p className="text-sm text-muted-foreground">
+            Kelola dan monitor data pengguna, talenta, admin, komunitas, dan produk
+          </p>
+        </div>
+        <TabsList className={`grid w-full ${isSuperAdmin ? 'grid-cols-5' : 'grid-cols-4'}`}>
+          <TabsTrigger value="pengguna">Pengguna</TabsTrigger>
+          <TabsTrigger value="talent">Talent</TabsTrigger>
+          {isSuperAdmin && <TabsTrigger value="admin">Admin</TabsTrigger>}
+          <TabsTrigger value="komunitas">Komunitas</TabsTrigger>
+          <TabsTrigger value="produk">Produk</TabsTrigger>
+        </TabsList>
+      </div>
 
       {/* Pengguna Tab */}
       <TabsContent value="pengguna" className="mt-4">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold">Daftar Pengguna</h3>
-            <p className="text-sm text-muted-foreground">
-              Kelola dan monitor pengguna yang terdaftar di platform
-            </p>
-          </div>
-          <TableUserTalent
+        <TableUserTalent
             users={mappedPengguna}
             onSetTalent={async (id, formData) => {
               "use server";
@@ -136,19 +136,11 @@ export async function ManajemenPenggunaContent() {
             }}
             type="pengguna"
           />
-        </div>
       </TabsContent>
 
       {/* Talent Tab */}
       <TabsContent value="talent" className="mt-4">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold">Daftar Talenta</h3>
-            <p className="text-sm text-muted-foreground">
-              Kelola dan monitor talenta yang terdaftar di platform, serta persetujuan status talenta
-            </p>
-          </div>
-          <TableUserTalent
+        <TableUserTalent
             users={mappedTalent}
             onSetTalent={async (id, formData) => {
               "use server";
@@ -160,48 +152,30 @@ export async function ManajemenPenggunaContent() {
             }}
             type="talenta"
           />
-        </div>
       </TabsContent>
 
       {/* Admin Tab */}
       {isSuperAdmin && (
         <TabsContent value="admin" className="mt-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Daftar Admin</h3>
-                <p className="text-sm text-muted-foreground">
-                  Kelola admin dan super admin yang memiliki akses ke dashboard manajemen
-                </p>
-              </div>
-              <FormAdmin />
-            </div>
-            <TableUserTalent
-              users={mappedAdmin}
-              onSetTalent={async (id, formData) => {
-                "use server";
-                await setStatusTalent(id, formData);
-              }}
-              onDelete={async (id) => {
-                "use server";
-                await deleteUser(id);
-              }}
-              type="admin"
-            />
-          </div>
+          <TableUserTalent
+            users={mappedAdmin}
+            onSetTalent={async (id, formData) => {
+              "use server";
+              await setStatusTalent(id, formData);
+            }}
+            onDelete={async (id) => {
+              "use server";
+              await deleteUser(id);
+            }}
+            type="admin"
+            actionButton={<FormAdmin />}
+          />
         </TabsContent>
       )}
 
       {/* Komunitas Tab */}
       <TabsContent value="komunitas" className="mt-4">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold">Daftar Komunitas</h3>
-            <p className="text-sm text-muted-foreground">
-              Kelola dan monitor komunitas yang terdaftar di platform, serta persetujuan status komunitas
-            </p>
-          </div>
-          <TableCommunity
+        <TableCommunity
             communities={communities}
             onSetStatus={async (id, formData) => {
               "use server";
@@ -212,21 +186,11 @@ export async function ManajemenPenggunaContent() {
               await deleteCommunity(id);
             }}
           />
-        </div>
       </TabsContent>
 
       {/* Produk Tab */}
       <TabsContent value="produk" className="mt-4">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold">Daftar Produk</h3>
-            <p className="text-sm text-muted-foreground">
-              {isAdmin 
-                ? "Kelola dan monitor semua produk yang terdaftar di platform" 
-                : "Kelola produk yang anda daftarkan di platform"}
-            </p>
-          </div>
-          <TableProduct
+        <TableProduct
             products={products}
             onSetStatus={async (slug, formData) => {
               "use server";
@@ -237,7 +201,6 @@ export async function ManajemenPenggunaContent() {
               await deleteProduct(slug);
             }}
           />
-        </div>
       </TabsContent>
     </Tabs>
   );

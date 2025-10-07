@@ -8,7 +8,7 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { Table, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { Table, TableCell, TableHead, TableRow, TableHeader, TableBody } from "@/components/ui/table";
 import { articleStatusEnum } from "@/enum/article-status-enum";
 import { cn } from "@/lib/utils";
 import { ArticleStatusEnum, Role } from "@prisma/client";
@@ -68,50 +68,57 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Table>
-          <TableHead></TableHead>
-          <TableHead>Judul</TableHead>
-          <TableHead>Kategori</TableHead>
-          <TableHead>Dibaca</TableHead>
-          <TableHead>Dikomentari</TableHead>
-          <TableHead>Disukai</TableHead>
-          <TableHead>Status</TableHead>
-          {currentData.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  width={50}
-                  height={50}
-                  className="w-10 h-10 object-cover rounded-md"
-                />
-              </TableCell>
-              <TableCell className="max-w-40 truncate">{item.title}</TableCell>
-              <TableCell>{item.category}</TableCell>
-              <TableCell>{item.views}</TableCell>
-              <TableCell>{item.comments}</TableCell>
-              <TableCell>{item.likes}</TableCell>
-              <TableCell>
-                <Badge
-                  className={cn(
-                    articleStatusEnum.getColor(item.status),
-                    "text-xs"
-                  )}
-                >
-                  {articleStatusEnum.getLabel(item.status)}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Link
-                  href={`/artikel/${item.slug}`}
-                  target="_blank"
-                  className="cursor-pointer"
-                >
-                  <FiExternalLink className="w-4 h-4" />
-                </Link>
-              </TableCell>
+          <TableHeader>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Judul</TableHead>
+              <TableHead>Kategori</TableHead>
+              <TableHead>Dibaca</TableHead>
+              <TableHead>Dikomentari</TableHead>
+              <TableHead>Disukai</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Aksi</TableHead>
             </TableRow>
-          ))}
+          </TableHeader>
+          <TableBody>
+            {currentData.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <Image
+                    src={item.thumbnail}
+                    alt={item.title}
+                    width={50}
+                    height={50}
+                    className="w-10 h-10 object-cover rounded-md"
+                  />
+                </TableCell>
+                <TableCell className="max-w-40 truncate">{item.title}</TableCell>
+                <TableCell>{item.category}</TableCell>
+                <TableCell>{item.views}</TableCell>
+                <TableCell>{item.comments}</TableCell>
+                <TableCell>{item.likes}</TableCell>
+                <TableCell>
+                  <Badge
+                    className={cn(
+                      articleStatusEnum.getColor(item.status),
+                      "text-xs"
+                    )}
+                  >
+                    {articleStatusEnum.getLabel(item.status)}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={`/artikel/${item.slug}`}
+                    target="_blank"
+                    className="cursor-pointer"
+                  >
+                    <FiExternalLink className="w-4 h-4" />
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
         
         {data.length === 0 && (

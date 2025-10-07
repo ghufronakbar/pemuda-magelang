@@ -24,12 +24,7 @@ const ManajemenPenggunaPage = async () => {
 
       {/* User Management Content Card */}
       <Card>
-        <CardHeader>
-          <CardTitle>Data Pengguna</CardTitle>
-          <CardDescription>
-            Kelola berbagai aspek pengguna seperti pengguna umum, talent, admin, komunitas, dan produk
-          </CardDescription>
-        </CardHeader>
+        
         <CardContent>
           <ManajemenPenggunaContent />
         </CardContent>

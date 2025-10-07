@@ -90,12 +90,6 @@ export async function ManajemenArtikelContent() {
         <TabsContent value="detak" className="mt-4">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Detak</h3>
-                <p className="text-sm text-muted-foreground">
-                  Kolom opini berbagai topik
-                </p>
-              </div>
               {!isAdmin && (
                 <Button asChild>
                   <Link href="/dashboard/detak/buat-artikel">
@@ -133,24 +127,18 @@ export async function ManajemenArtikelContent() {
       {showGerak && (
         <TabsContent value="gerak" className="mt-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Gerak</h3>
-                <p className="text-sm text-muted-foreground">
-                  Jurnal giat kepemudaan
-                </p>
-              </div>
-              {isAdmin && (
-                <Button asChild>
-                  <Link href="/dashboard/gerak/buat-artikel">
-                    <Plus />
-                    Buat Artikel
-                  </Link>
-                </Button>
-              )}
-            </div>
             <div>
-              <h4 className="text-sm font-medium mb-2">Daftar Artikel Gerak</h4>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium">Daftar Artikel Gerak</h4>
+                {isAdmin && (
+                  <Button asChild>
+                    <Link href="/dashboard/gerak/buat-artikel">
+                      <Plus />
+                      Buat Artikel
+                    </Link>
+                  </Button>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground mb-4">
                 Kelola dan monitor jurnal giat kepemudaan yang dibuat oleh admin
               </p>
@@ -176,12 +164,6 @@ export async function ManajemenArtikelContent() {
         <TabsContent value="dampak" className="mt-4">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Dampak</h3>
-                <p className="text-sm text-muted-foreground">
-                  Dampak kepemudaan
-                </p>
-              </div>
               {!isAdmin && isApproved && (
                 <Button asChild>
                   <Link href="/dashboard/dampak/buat-artikel">
@@ -225,17 +207,11 @@ export async function ManajemenArtikelContent() {
       {showZhub && (
         <TabsContent value="zhub" className="mt-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Program Zhub</h3>
-                <p className="text-sm text-muted-foreground">
-                  Program Zhub yang terdaftar di platform ini
-                </p>
-              </div>
-              <FormHub categories={hubs} />
-            </div>
             <div>
-              <h4 className="text-sm font-medium mb-2">Daftar Program Zhub</h4>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium">Daftar Program Zhub</h4>
+                <FormHub categories={hubs} />
+              </div>
               <p className="text-xs text-muted-foreground mb-4">
                 Kelola dan monitor program-program Zhub yang tersedia untuk pengguna
               </p>

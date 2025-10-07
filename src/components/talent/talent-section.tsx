@@ -22,7 +22,8 @@ import {
 	CardTitle,
 	CardDescription,
 } from "@/components/ui/card";
-import { Pagination, usePagination } from "@/components/ui/pagination";
+import { usePagination } from "@/components/ui/pagination";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface TalentSectionProps {
   title?: string;
@@ -104,12 +105,60 @@ export function TalentSection({
 							</Reveal>
 						))}
 					</div>
-					<Pagination
-						page={pager.page}
-						totalPages={pager.totalPages}
-						onPageChange={setPage}
-						className="mt-6"
-					/>
+					{/* Pagination - match user management style */}
+					{pager.totalPages > 1 && (
+						<div className="mt-6 flex items-center justify-between">
+							<div className="text-sm text-muted-foreground">
+								Menampilkan {data.length === 0 ? 0 : pager.start + 1}
+								–{Math.min(pager.end, data.length)} dari {data.length} talenta
+							</div>
+							<div className="flex items-center gap-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+									disabled={pager.page === 1}
+								>
+									<ChevronLeft className="w-4 h-4" />
+									Sebelumnya
+								</Button>
+								<div className="flex items-center gap-1">
+									{Array.from({ length: Math.min(pager.totalPages, 5) }, (_, i) => {
+										let pageNum: number;
+										if (pager.totalPages <= 5) {
+											pageNum = i + 1;
+										} else if (pager.page <= 3) {
+											pageNum = i + 1;
+										} else if (pager.page >= pager.totalPages - 2) {
+											pageNum = pager.totalPages - 4 + i;
+										} else {
+											pageNum = pager.page - 2 + i;
+										}
+										return (
+											<Button
+												key={pageNum}
+												variant={pager.page === pageNum ? "default" : "outline"}
+												size="sm"
+												className="w-8 h-8 p-0"
+												onClick={() => setPage(pageNum)}
+											>
+												{pageNum}
+											</Button>
+										);
+									})}
+								</div>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setPage((prev) => Math.min(prev + 1, pager.totalPages))}
+									disabled={pager.page === pager.totalPages}
+								>
+									Selanjutnya
+									<ChevronRight className="w-4 h-4" />
+								</Button>
+							</div>
+						</div>
+					)}
 
 					{data.length === 0 && (
 						<div className="mt-2 flex flex-col gap-5 max-w-4xl mx-auto h-40 items-center justify-center">

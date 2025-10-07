@@ -26,7 +26,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, Trash2, Search, ChevronLeft, ChevronRight, FileText, PenTool, TrendingUp } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -108,15 +108,15 @@ export function TableArticle({
   return (
       <section className={cn("space-y-4", className)}>
         {/* Controls */}
-        <div className="flex gap-3">
-          <div>
+        <div className="flex gap-3 items-end">
+          <div className="flex-1">
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
             </label>
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Cari judul, tag..."
+                placeholder="Cari judul, tag, penulis…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full pl-9"
@@ -124,7 +124,26 @@ export function TableArticle({
             </div>
           </div>
 
-          <div>
+          <div className="flex-shrink-0">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Kategori
+            </label>
+            <Select value={category} onValueChange={(v) => setCategory(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Semua kategori" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex-shrink-0">
             <label className="mb-1 block text-xs text-muted-foreground">
               Status
             </label>
@@ -140,25 +159,6 @@ export function TableArticle({
                 {Object.values(ArticleStatusEnum).map((status) => (
                   <SelectItem key={status} value={status}>
                     {articleStatusEnum.getLabel(status)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Kategori
-            </label>
-            <Select value={category} onValueChange={(v) => setCategory(v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Semua kategori" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -195,9 +195,25 @@ export function TableArticle({
               <TableRow>
                 <TableCell
                   colSpan={8}
-                  className="py-10 text-center text-sm text-muted-foreground"
+                  className="py-16 text-center"
                 >
-                  Tidak ada data yang cocok.
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+                      {type === "gerak" && <FileText className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "detak" && <PenTool className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "dampak" && <TrendingUp className="w-8 h-8 text-muted-foreground/60" />}
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        {type === "gerak" && "Tidak ada artikel gerak ditemukan"}
+                        {type === "detak" && "Tidak ada artikel detak ditemukan"}
+                        {type === "dampak" && "Tidak ada artikel dampak ditemukan"}
+                      </h3>
+                      <p className="text-xs text-muted-foreground max-w-sm">
+                        Coba ubah kata kunci pencarian atau filter untuk menemukan artikel yang Anda cari
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ArticleSectionProps } from "../type";
 import { Filter } from "../../filter/filter";
 import { ArticleGridMap } from "./article-grid-map";
-import { Pagination, usePagination } from "@/components/ui/pagination";
+import { usePagination } from "@/components/ui/pagination";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ARTICLE_CATEGORIES } from "@/data/article";
 import {
   Card,
@@ -62,12 +63,60 @@ export function ArticleGridSection({
           <ArticleGridMap data={visible} />
         </CardContent>
 
-        <Pagination
-          page={pager.page}
-          totalPages={pager.totalPages}
-          onPageChange={setPage}
-          className="mt-6"
-        />
+        {/* Pagination - match user management style */}
+        {pager.totalPages > 1 && (
+          <div className="mt-6 flex items-center justify-between">
+            <div className="text-sm text-muted-foreground">
+              Menampilkan {articles.length === 0 ? 0 : pager.start + 1}
+              –{Math.min(pager.end, articles.length)} dari {articles.length} artikel
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={pager.page === 1}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Sebelumnya
+              </Button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(pager.totalPages, 5) }, (_, i) => {
+                  let pageNum: number;
+                  if (pager.totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (pager.page <= 3) {
+                    pageNum = i + 1;
+                  } else if (pager.page >= pager.totalPages - 2) {
+                    pageNum = pager.totalPages - 4 + i;
+                  } else {
+                    pageNum = pager.page - 2 + i;
+                  }
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={pager.page === pageNum ? "default" : "outline"}
+                      size="sm"
+                      className="w-8 h-8 p-0"
+                      onClick={() => setPage(pageNum)}
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((prev) => Math.min(prev + 1, pager.totalPages))}
+                disabled={pager.page === pager.totalPages}
+              >
+                Selanjutnya
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
 
         {viewAllHref && (
           <CardFooter className="sm:hidden">

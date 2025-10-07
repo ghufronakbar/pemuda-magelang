@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye, ChevronLeft, ChevronRight, Users, UserCheck, Shield } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
@@ -61,6 +61,7 @@ interface TableUserTalentProps {
   onSetTalent: (id: string, formData: FormData) => Promise<void>; // hanya dipakai saat type === "talenta"
   onDelete: (id: string) => Promise<void>;
   type: DataType;
+  actionButton?: React.ReactNode; // Optional action button to display next to search
 }
 
 /* ================== Component ================== */
@@ -72,6 +73,7 @@ export function TableUserTalent({
   onSetTalent,
   onDelete,
   type,
+  actionButton,
 }: TableUserTalentProps) {
   const [query, setQuery] = React.useState("");
   const [pageSize, setPageSize] = React.useState(defaultPageSize);
@@ -152,8 +154,8 @@ export function TableUserTalent({
   return (
       <section className={cn("space-y-4", className)}>
         {/* Controls */}
-        <div className="flex gap-3">
-          <div>
+        <div className="flex gap-3 items-end">
+          <div className="flex-1">
             <label className="mb-1 block text-xs text-muted-foreground">
               Cari
             </label>
@@ -171,6 +173,12 @@ export function TableUserTalent({
               />
             </div>
           </div>
+
+          {actionButton && (
+            <div className="flex-shrink-0">
+              {actionButton}
+            </div>
+          )}
 
           {type === "talenta" && (
             <>
@@ -313,9 +321,25 @@ export function TableUserTalent({
               <TableRow>
                 <TableCell
                   colSpan={type === "talenta" ? 9 : type === "pengguna" ? 6 : 6}
-                  className="py-10 text-center text-sm text-muted-foreground"
+                  className="py-16 text-center"
                 >
-                  Tidak ada data yang cocok.
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+                      {type === "pengguna" && <Users className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "talenta" && <UserCheck className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "admin" && <Shield className="w-8 h-8 text-muted-foreground/60" />}
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        {type === "pengguna" && "Tidak ada pengguna ditemukan"}
+                        {type === "talenta" && "Tidak ada talenta ditemukan"}
+                        {type === "admin" && "Tidak ada admin ditemukan"}
+                      </h3>
+                      <p className="text-xs text-muted-foreground max-w-sm">
+                        Coba ubah kata kunci pencarian atau filter untuk menemukan data yang Anda cari
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

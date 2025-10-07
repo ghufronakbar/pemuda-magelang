@@ -68,33 +68,40 @@ export function DashboardHeader() {
   const hidden = shouldEllipsize ? crumbs.slice(1, -1) : [];
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-2 bg-background/80 px-4 backdrop-blur">
-      <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="mr-2 h-6" />
+    <header className="sticky top-0 z-50 flex h-16 md:h-14 items-center gap-3 md:gap-4 bg-background/95 backdrop-blur-md border-b px-4 md:px-6 shadow-sm">
+      <SidebarTrigger className="-ml-1 hover:bg-accent hover:text-accent-foreground transition-colors rounded-md" />
+      <Separator orientation="vertical" className="h-6 md:h-7 bg-border/60" />
 
-      <Breadcrumb>
-        <BreadcrumbList>
+      <Breadcrumb className="flex-1 overflow-hidden">
+        <BreadcrumbList className="flex-nowrap">
           {/* Home */}
-          <BreadcrumbItem>
+          <BreadcrumbItem className="hidden md:block">
             <BreadcrumbLink asChild>
-              <Link href="/">Home</Link>
+              <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Home
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
 
-          {crumbs.length > 0 && <BreadcrumbSeparator />}
+          {crumbs.length > 0 && <BreadcrumbSeparator className="hidden md:block" />}
 
           {/* Jika path pendek, render semua segmen */}
           {!shouldEllipsize &&
             crumbs.map((c, idx) => {
               const isLast = idx === crumbs.length - 1;
+              const isFirst = idx === 0;
               return (
                 <FragmentWithSep key={c.href} showSep={!isLast}>
-                  <BreadcrumbItem>
+                  <BreadcrumbItem className={isFirst ? "block" : "hidden sm:block"}>
                     {isLast ? (
-                      <BreadcrumbPage>{c.label}</BreadcrumbPage>
+                      <BreadcrumbPage className="text-sm font-semibold text-foreground line-clamp-1">
+                        {c.label}
+                      </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
-                        <Link href={c.href}>{c.label}</Link>
+                        <Link href={c.href} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1">
+                          {c.label}
+                        </Link>
                       </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>
@@ -106,36 +113,42 @@ export function DashboardHeader() {
           {shouldEllipsize && (
             <>
               {/* First */}
-              <BreadcrumbItem>
+              <BreadcrumbItem className="block">
                 <BreadcrumbLink asChild>
-                  <Link href={first.href}>{first.label}</Link>
+                  <Link href={first.href} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1">
+                    {first.label}
+                  </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="hidden sm:block" />
 
               {/* Ellipsis (dropdown untuk segmen tersembunyi) */}
-              <BreadcrumbItem>
+              <BreadcrumbItem className="hidden sm:block">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1">
+                  <DropdownMenuTrigger className="flex items-center gap-1 hover:bg-accent hover:text-accent-foreground transition-colors rounded-md p-1">
                     <BreadcrumbEllipsis className="h-4 w-4" />
                     <span className="sr-only">Toggle menu</span>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
+                  <DropdownMenuContent align="start" className="min-w-[200px]">
                     {hidden.map((h) => (
                       <DropdownMenuItem key={h.href} asChild>
-                        <Link href={h.href}>{h.label}</Link>
+                        <Link href={h.href} className="text-sm font-medium cursor-pointer">
+                          {h.label}
+                        </Link>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </BreadcrumbItem>
 
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="hidden sm:block" />
 
               {/* Last (current page) */}
               <BreadcrumbItem>
-                <BreadcrumbPage>{last.label}</BreadcrumbPage>
+                <BreadcrumbPage className="text-sm font-semibold text-foreground line-clamp-1">
+                  {last.label}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </>
           )}
@@ -156,7 +169,7 @@ function FragmentWithSep({
   return (
     <>
       {children}
-      {showSep && <BreadcrumbSeparator />}
+      {showSep && <BreadcrumbSeparator className="hidden sm:block" />}
     </>
   );
 }

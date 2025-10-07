@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { Loader2, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, Trash2, Search, ChevronLeft, ChevronRight, Package } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -109,8 +109,8 @@ export function TableProduct({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex gap-3">
-        <div>
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
           </label>
@@ -125,7 +125,7 @@ export function TableProduct({
           </div>
         </div>
 
-        <div>
+        <div className="flex-shrink-0">
           <label className="mb-1 block text-xs text-muted-foreground">
             Status
           </label>
@@ -147,7 +147,7 @@ export function TableProduct({
           </Select>
         </div>
 
-        <div>
+        <div className="flex-shrink-0">
           <label className="mb-1 block text-xs text-muted-foreground">
             Kategori
           </label>
@@ -195,9 +195,21 @@ export function TableProduct({
               <TableRow>
                 <TableCell
                   colSpan={8}
-                  className="py-10 text-center text-sm text-muted-foreground"
+                  className="py-16 text-center"
                 >
-                  Tidak ada data yang cocok.
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+                      <Package className="w-8 h-8 text-muted-foreground/60" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Tidak ada produk ditemukan
+                      </h3>
+                      <p className="text-xs text-muted-foreground max-w-sm">
+                        Coba ubah kata kunci pencarian atau filter untuk menemukan produk yang Anda cari
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
