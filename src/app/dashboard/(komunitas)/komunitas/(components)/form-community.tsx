@@ -33,16 +33,20 @@ export function FormCommunity({
   pending,
   onSubmit,
   disabled,
+  showSubmit = true,
+  formId,
 }: {
   pending: boolean;
   onSubmit?: (e?: React.BaseSyntheticEvent) => Promise<void>;
   disabled?: boolean;
+  showSubmit?: boolean;
+  formId?: string;
 }) {
   const { form, communityStatus } = useFormCommunity();
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-6">
+      <form id={formId} onSubmit={onSubmit} className="space-y-6">
         {/* ===== Basic ===== */}
         <FormField
           control={form.control}
@@ -52,7 +56,14 @@ export function FormCommunity({
               <FormLabel>Gambar Profil</FormLabel>
               <FormControl>
                 <div className="flex flex-col gap-2 items-center">
-                  <div className="relative w-24 h-24 rounded-full overflow-hidden">
+                  <div 
+                    className="relative w-24 h-24 rounded-full overflow-hidden group cursor-pointer"
+                    onClick={() => {
+                      if (communityStatus === "approved" || !communityStatus) {
+                        document.getElementById("profilePictureCommunityInput")?.click();
+                      }
+                    }}
+                  >
                     <Avatar className="w-full h-full">
                       <AvatarImage src={field.value ?? ""} />
                       <AvatarFallback>
@@ -61,44 +72,37 @@ export function FormCommunity({
                     </Avatar>
 
                     {(communityStatus === "approved" || !communityStatus) && (
-                      <input
-                        id="profilePictureCommunityInput"
-                        type="file"
-                        accept="image/*"
-                        className="absolute inset-0 w-full h-full opacity-0"
-                        onChange={async (e) => {
-                          try {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const formData = new FormData();
-                              formData.append("image", file);
-                              const res = await uploadImage(formData);
-                              if (res.success && res.result) {
-                                field.onChange(res.result);
+                      <>
+                        <input
+                          id="profilePictureCommunityInput"
+                          type="file"
+                          accept="image/*"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          onChange={async (e) => {
+                            try {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const formData = new FormData();
+                                formData.append("image", file);
+                                const res = await uploadImage(formData);
+                                if (res.success && res.result) {
+                                  field.onChange(res.result);
+                                }
                               }
+                            } catch (error) {
+                              toast.error("Gagal mengunggah gambar");
+                              console.error(error);
                             }
-                          } catch (error) {
-                            toast.error("Gagal mengunggah gambar");
-                            console.error(error);
-                          }
-                        }}
-                      />
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                          <div className="bg-white/90 rounded-full p-2 shadow-lg">
+                            <UploadIcon className="w-4 h-4 text-black" />
+                          </div>
+                        </div>
+                      </>
                     )}
                   </div>
-                  {(communityStatus === "approved" || !communityStatus) && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      onClick={() =>
-                        document
-                          .getElementById("profilePictureCommunityInput")
-                          ?.click()
-                      }
-                    >
-                      <UploadIcon className="w-4 h-4" /> Unggah Gambar
-                    </Button>
-                  )}
                 </div>
               </FormControl>
               <FormMessage />
@@ -238,7 +242,7 @@ export function FormCommunity({
           )}
         />
 
-        {onSubmit && (
+        {onSubmit && showSubmit && (
           <div>
             <Button type="submit" disabled={pending} className="min-w-28">
               {pending ? (

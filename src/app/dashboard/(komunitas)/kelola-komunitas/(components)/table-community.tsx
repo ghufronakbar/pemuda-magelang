@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
-import { Loader2, Trash2, ChevronLeft, ChevronRight, Search, Users } from "lucide-react";
+import { Loader2, Trash2, ChevronLeft, ChevronRight, Search, Users, CheckCircle, XCircle, Ban } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import Image from "next/image";
@@ -47,6 +47,35 @@ const communityStatusMap: Record<CommunityStatusEnum, { label: string; color: st
   rejected: { label: "Ditolak", color: "bg-red-500" },
   banned: { label: "Diblokir", color: "bg-gray-500" },
 };
+
+// Submit button component
+function SubmitBtn({ 
+  label, 
+  icon, 
+  variant = "default" 
+}: { 
+  label: string; 
+  icon: React.ReactNode; 
+  variant?: "default" | "outline" | "destructive" 
+}) {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      size="sm"
+      variant={variant}
+      disabled={pending}
+      className="min-w-[80px]"
+    >
+      {pending ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : (
+        icon
+      )}
+      <span className="ml-2">{label}</span>
+    </Button>
+  );
+}
 
 export function TableCommunity({
   communities,
@@ -85,13 +114,6 @@ export function TableCommunity({
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const currentCommunities = filteredCommunities.slice(startIndex, endIndex);
-
-  const handleStatusChange = async (id: string, status: CommunityStatusEnum) => {
-    const formData = new FormData();
-    formData.append("status", status);
-    await onSetStatus(id, formData);
-    toast.success("Status komunitas berhasil diubah");
-  };
 
   const handleDelete = async (id: string) => {
     await onDelete(id);
@@ -227,21 +249,47 @@ export function TableCommunity({
                 <TableCell>{formatIDDate(community.createdAt)}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Select
-                      value={community.status}
-                      onValueChange={(value) => handleStatusChange(community.id, value as CommunityStatusEnum)}
-                    >
-                      <SelectTrigger className="w-32">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.entries(communityStatusMap).map(([status, config]) => (
-                          <SelectItem key={status} value={status}>
-                            {config.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {community.status === "pending" && (
+                      <>
+                        <form action={async () => {
+                          const formData = new FormData();
+                          formData.append("status", "approved");
+                          await onSetStatus(community.id, formData);
+                          toast.success("Komunitas berhasil disetujui");
+                        }}>
+                          <SubmitBtn label="Setujui" icon={<CheckCircle className="h-4 w-4" />} />
+                        </form>
+
+                        <form action={async () => {
+                          const formData = new FormData();
+                          formData.append("status", "rejected");
+                          await onSetStatus(community.id, formData);
+                          toast.success("Komunitas berhasil ditolak");
+                        }}>
+                          <SubmitBtn label="Tolak" variant="outline" icon={<XCircle className="h-4 w-4" />} />
+                        </form>
+                      </>
+                    )}
+                    {community.status === "approved" && (
+                      <form action={async () => {
+                        const formData = new FormData();
+                        formData.append("status", "banned");
+                        await onSetStatus(community.id, formData);
+                        toast.success("Komunitas berhasil diblokir");
+                      }}>
+                        <SubmitBtn label="Blokir" variant="destructive" icon={<Ban className="h-4 w-4" />} />
+                      </form>
+                    )}
+                    {community.status === "banned" && (
+                      <form action={async () => {
+                        const formData = new FormData();
+                        formData.append("status", "approved");
+                        await onSetStatus(community.id, formData);
+                        toast.success("Komunitas berhasil diaktifkan kembali");
+                      }}>
+                        <SubmitBtn label="Aktifkan" icon={<CheckCircle className="h-4 w-4" />} />
+                      </form>
+                    )}
                     <AlertConfirmation
                       title="Hapus Komunitas"
                       description={`Apakah Anda yakin ingin menghapus komunitas "${community.name}"?`}

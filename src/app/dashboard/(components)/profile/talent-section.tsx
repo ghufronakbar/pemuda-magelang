@@ -120,7 +120,7 @@ export function TalentSection({
 
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
-        {((isRegistered && talentStatus !== "approved") || !showForm) && (
+        {((talentStatus && talentStatus !== "approved") || !showForm) && (
           <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <TalentStatusBadge status={talentStatus!} />
@@ -139,7 +139,7 @@ export function TalentSection({
                 </Link>
               </Button>
             )}
-            {!talentStatus && (
+            {(!talentStatus || talentStatus === "rejected") && (
               <Button
                 size="sm"
                 className="mt-2 self-end"
@@ -147,45 +147,45 @@ export function TalentSection({
               >
                 <div className="flex items-center gap-2">
                   <Sparkles />
-                  Daftar sebagai Talenta
+                  {talentStatus === "rejected" ? "Ajukan Ulang" : "Daftar sebagai Talenta"}
                 </div>
               </Button>
             )}
           </div>
         )}
 
-        {/* CTA daftar (belum terdaftar) */}
-        {!isRegistered && (
+        {/* CTA daftar (belum terdaftar atau ditolak) */}
+        {(!talentStatus || talentStatus === "rejected") && (
           <Dialog open={openTalentDialog} onOpenChange={setOpenTalentDialog}>
-            {showForm && (
-              <Button size="sm" onClick={() => setOpenTalentDialog(true)}>
-                Daftar sebagai Talenta
-              </Button>
-            )}
 
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl">
-              <DialogHeader>
+            <DialogContent className="max-w-3xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-3xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
+              <DialogHeader className="flex-shrink-0">
                 <DialogTitle>Daftar Talenta</DialogTitle>
                 <DialogDescription>
                   Isi data berikut untuk mengajukan pendaftaran sebagai Talenta.
                 </DialogDescription>
               </DialogHeader>
 
-              <FormTalent pending={pending} onSubmit={onSubmit} />
+              <div className="flex-1 overflow-y-auto px-1">
+                <FormTalent
+                  pending={pending}
+                  onSubmit={onSubmit}
+                  showSubmit={false}
+                  formId="talentRegisterForm"
+                />
+              </div>
 
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    Batal
-                  </Button>
-                </DialogClose>
+              <DialogFooter className="flex-shrink-0">
+                <Button form="talentRegisterForm" type="submit" disabled={pending} className="min-w-28">
+                  {pending ? "Memproses…" : "Ajukan permohonan"}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         )}
 
         {/* Form edit (sudah terdaftar) */}
-        {isRegistered && showForm && (
+        {talentStatus === "approved" && showForm && (
           <form onSubmit={onSubmit} className="space-y-6">
             <FormTalent pending={pending} disabled={!isEditable} />
             <div>

@@ -239,6 +239,7 @@ export const RegisterForm = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        disabled={!form.watch("subdistrict")}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Pilih Kelurahan" />

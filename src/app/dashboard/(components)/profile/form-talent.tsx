@@ -54,10 +54,14 @@ export function FormTalent({
   pending,
   onSubmit,
   disabled,
+  showSubmit = true,
+  formId,
 }: {
   pending: boolean;
   onSubmit?: (e?: React.BaseSyntheticEvent) => Promise<void>;
   disabled?: boolean;
+  showSubmit?: boolean;
+  formId?: string;
 }) {
   const { formTalent } = useFormUser();
 
@@ -81,7 +85,7 @@ export function FormTalent({
 
   return (
     <Form {...formTalent}>
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form id={formId} onSubmit={onSubmit} className="space-y-4">
         {/* ===== Banner (first) ===== */}
         <div>
           <FormLabel className="mb-2 block">Banner</FormLabel>
@@ -303,6 +307,7 @@ export function FormTalent({
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) => field.onChange(e.target.value)}
+                          placeholder="Jelaskan tanggung jawab dan pencapaian di posisi ini…"
                           disabled={disabled}
                         />
                       </FormControl>
@@ -438,6 +443,7 @@ export function FormTalent({
                               rows={3}
                               {...field}
                               value={field.value ?? ""}
+                              placeholder="Jelaskan penghargaan yang diterima…"
                               disabled={disabled}
                             />
                           </FormControl>
@@ -591,6 +597,7 @@ export function FormTalent({
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) => field.onChange(e.target.value)}
+                          placeholder="Jelaskan pencapaian atau kegiatan selama pendidikan…"
                           disabled={disabled}
                         />
                       </FormControl>
@@ -747,7 +754,7 @@ export function FormTalent({
         </Card>
 
         {/* ===== Submit (opsional, kalau parent kirim onSubmit) ===== */}
-        {onSubmit && (
+        {onSubmit && showSubmit && (
           <div>
             <Button type="submit" disabled={pending} className="min-w-28">
               {pending ? "Memproses…" : "Kirim"}

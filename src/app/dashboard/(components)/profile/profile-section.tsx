@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2, Upload, Save } from "lucide-react";
+import { Loader2, Upload, Save, X } from "lucide-react";
 import type { UserProfileInput } from "@/validator/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/helper";
@@ -158,14 +158,55 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                   </AvatarFallback>
                 </Avatar>
                 
-                {/* Hover overlay with upload text */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="flex flex-col items-center gap-1 text-white">
-                    <Upload className="w-5 h-5" />
-                    <span className="text-xs font-medium">Unggah Foto</span>
+                {/* Hover overlay actions (inside circle) */}
+                <div
+                  className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (uploading) return;
+                    document.getElementById("profilePicture")?.click();
+                  }}
+                >
+                  {formProfile.watch("profilePicture") && (
+                    <button
+                      type="button"
+                      aria-label="Hapus foto"
+                      title="Hapus foto"
+                      className="absolute top-1 right-1 z-10 rounded-full bg-rose-600 text-white shadow p-1 hover:bg-rose-700"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (uploading) return;
+                        formProfile.setValue("profilePicture", "");
+                      }}
+                      disabled={uploading}
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                  <div className="flex flex-col items-center gap-2">
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="secondary"
+                      className="bg-white/90 text-black hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (uploading) return;
+                        document.getElementById("profilePicture")?.click();
+                      }}
+                      disabled={uploading}
+                    >
+                      {uploading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Upload className="w-4 h-4" />
+                      )}
+                    </Button>
+                    <span className="text-xs font-medium text-white">Ubah Foto</span>
                   </div>
                 </div>
               </div>
+              
             </div>
 
             <FormField
@@ -236,9 +277,10 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        disabled={!formProfile.watch("subdistrict")}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Kelurahan" />
+                          <SelectValue placeholder={!formProfile.watch("subdistrict") ? "Pilih kecamatan terlebih dahulu" : "Kelurahan"} />
                         </SelectTrigger>
                         <SelectContent>
                           {villages.map((item) => (

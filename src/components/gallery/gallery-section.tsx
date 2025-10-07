@@ -169,7 +169,6 @@ export function GallerySection({
           )}
           {visible.length === 0 && (
             <div className="mt-2 flex flex-col items-center justify-center gap-3 rounded-2xl border py-12 text-center">
-              <div className="text-2xl">🔎</div>
               <p className="text-sm text-muted-foreground">Tidak ada produk yang cocok dengan pencarian</p>
             </div>
           )}

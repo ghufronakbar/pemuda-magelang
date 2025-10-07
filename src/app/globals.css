@@ -81,7 +81,7 @@
 
   /* Neutrals yang ditint ke primary agar padu */
   --muted: oklch(0.965 0.010 185.583);
-  --muted-foreground: oklch(0.500 0.020 185.583);
+  --muted-foreground: oklch(0.400 0.020 185.583);
   --border: oklch(0.915 0.015 185.583);
   --input: oklch(0.915 0.015 185.583);
   --ring: oklch(0.714 0.092 185.583); /* ring bernuansa primary */

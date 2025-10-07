@@ -21,6 +21,8 @@ import {
 } from "@/actions/product";
 import { auth } from "@/auth";
 import { Users, Star, Shield, Users2, Package } from "lucide-react";
+import { FormAdminProvider } from "@/context/form-admin-context";
+import { FormCreateAdmin } from "@/components/custom/form-create-admin";
 
 export async function ManajemenPenggunaContent() {
   const session = await auth();
@@ -278,34 +280,39 @@ export async function ManajemenPenggunaContent() {
         {/* Admin Tab */}
         {isSuperAdmin && (
           <TabsContent value="admin" className="mt-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-lg font-semibold flex items-center gap-2">
-                    <Shield className="h-5 w-5" />
-                    Daftar Admin
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Kelola administrator sistem
-                  </p>
+            <FormAdminProvider>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-lg font-semibold flex items-center gap-2">
+                      <Shield className="h-5 w-5" />
+                      Daftar Admin
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      Kelola administrator sistem
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-sm text-muted-foreground">
+                      Total: {mappedAdmin.length} admin
+                    </div>
+                    <FormCreateAdmin />
+                  </div>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  Total: {mappedAdmin.length} admin
-                </div>
+                <TableUserTalent
+                  users={mappedAdmin}
+                  onSetTalent={async (id, formData) => {
+                    "use server";
+                    await setStatusTalent(id, formData);
+                  }}
+                  onDelete={async (id) => {
+                    "use server";
+                    await deleteUser(id);
+                  }}
+                  type="admin"
+                />
               </div>
-              <TableUserTalent
-                users={mappedAdmin}
-                onSetTalent={async (id, formData) => {
-                  "use server";
-                  await setStatusTalent(id, formData);
-                }}
-                onDelete={async (id) => {
-                  "use server";
-                  await deleteUser(id);
-                }}
-                type="admin"
-              />
-            </div>
+            </FormAdminProvider>
           </TabsContent>
         )}
 

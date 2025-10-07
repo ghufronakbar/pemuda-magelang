@@ -88,7 +88,7 @@ export function CommunitySection({
 
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
-        {((isRegistered && communityStatus !== "approved") || !showForm) && (
+        {((communityStatus && communityStatus !== "approved") || !showForm) && (
           <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <CommunityStatusBadge status={communityStatus!} />
@@ -107,7 +107,7 @@ export function CommunitySection({
                 </Link>
               </Button>
             )}
-            {!communityStatus && (
+            {(!communityStatus || communityStatus === "rejected") && (
               <Button
                 size="sm"
                 className="mt-2 self-end"
@@ -115,27 +115,22 @@ export function CommunitySection({
               >
                 <div className="flex items-center gap-2">
                   <Sparkles />
-                  Daftar sebagai Komunitas
+                  {communityStatus === "rejected" ? "Ajukan Ulang" : "Daftar sebagai Komunitas"}
                 </div>
               </Button>
             )}
           </div>
         )}
 
-        {/* CTA daftar (belum terdaftar) */}
-        {!isRegistered && (
+        {/* CTA daftar (belum terdaftar atau ditolak) */}
+        {(!communityStatus || communityStatus === "rejected") && (
           <Dialog
             open={openCommunityDialog}
             onOpenChange={setOpenCommunityDialog}
           >
-            {showForm && (
-              <Button size="sm" onClick={() => setOpenCommunityDialog(true)}>
-                Daftarkan Komunitas
-              </Button>
-            )}
 
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl">
-              <DialogHeader>
+            <DialogContent className="max-w-4xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-4xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
+              <DialogHeader className="flex-shrink-0">
                 <DialogTitle>Daftar Komunitas</DialogTitle>
                 <DialogDescription>
                   Isi data berikut untuk mengajukan pendaftaran sebagai
@@ -143,21 +138,26 @@ export function CommunitySection({
                 </DialogDescription>
               </DialogHeader>
 
-              <FormCommunity pending={loading} onSubmit={onSubmit} />
+              <div className="flex-1 overflow-y-auto px-1">
+                <FormCommunity
+                  pending={loading}
+                  onSubmit={onSubmit}
+                  showSubmit={false}
+                  formId="communityRegisterForm"
+                />
+              </div>
 
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    Batal
-                  </Button>
-                </DialogClose>
+              <DialogFooter className="flex-shrink-0">
+                <Button form="communityRegisterForm" type="submit" disabled={loading} className="min-w-28">
+                  {loading ? "Memproses…" : "Ajukan permohonan"}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         )}
 
         {/* Form edit (sudah terdaftar) */}
-        {isRegistered && showForm && (
+        {communityStatus === "approved" && showForm && (
           <div className="space-y-6">
             <FormCommunity
               pending={loading}
