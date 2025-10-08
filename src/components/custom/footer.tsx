@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { LOGO } from "@/constants";
 import { AppSocialMedia } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
+import { CdnImage } from "./cdn-image";
 
 export interface FooterProps {
   className?: string;
@@ -74,8 +74,8 @@ export function Footer({
             <Link href="/" className="flex items-center gap-3">
               {/* Logo */}
               {brand.logo ? (
-                <Image
-                  src={brand.logo}
+                <CdnImage
+                  uniqueKey={brand.logo}
                   alt={brand.name}
                   width={40}
                   height={40}

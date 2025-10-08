@@ -7,7 +7,14 @@ import {
 } from "@/components/ui/card";
 import { ManajemenArtikelContent } from "./(components)/manajemen-artikel-content";
 
-const ManajemenArtikelPage = async () => {
+interface Params {
+  searchParams: Promise<{
+    tab: string;
+  }>;
+}
+
+const ManajemenArtikelPage = async ({ searchParams }: Params) => {
+  const { tab } = await searchParams;
   return (
     <div className="space-y-6">
       {/* Header Card */}
@@ -36,7 +43,7 @@ const ManajemenArtikelPage = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ManajemenArtikelContent />
+          <ManajemenArtikelContent tab={tab} />
         </CardContent>
       </Card>
     </div>

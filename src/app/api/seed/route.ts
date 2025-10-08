@@ -1,16 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import {
-  ArticleStatusEnum,
-  ArticleTypeEnum,
-  HubStatusEnum,
-  IconEnum,
-  PartnerTypeEnum,
-  ProductStatusEnum,
-  Role,
-  SocialMediaPlatformEnum,
-} from "@prisma/client";
+import { HubStatusEnum, IconEnum, PartnerTypeEnum, Role } from "@prisma/client";
 
 export const runtime = "nodejs";
 

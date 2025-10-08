@@ -27,10 +27,10 @@ import { Loader2, Trash2, Search, Building, ChevronLeft, ChevronRight } from "lu
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { formatIDDate } from "@/lib/helper";
-import Image from "next/image";
 import { PLACEHOLDER_IMAGE } from "@/constants";
 import { hubStatusEnum } from "@/enum/hub-status-enum";
 import { useFormHub } from "@/context/form-hub-context";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 /* ================== Types ================== */
 
@@ -194,8 +194,8 @@ export function TableZHub({
             {pageItems.map((item) => (
               <TableRow key={item.id}>
                 <TableCell className="">
-                  <Image
-                    src={item.image || PLACEHOLDER_IMAGE}
+                  <CdnImage
+                    uniqueKey={item.image || PLACEHOLDER_IMAGE}
                     alt={item.name}
                     width={100}
                     height={100}

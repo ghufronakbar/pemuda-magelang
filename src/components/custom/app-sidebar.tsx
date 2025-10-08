@@ -35,6 +35,7 @@ import { getInitials } from "@/lib/helper";
 import { roleEnum } from "@/enum/role-enum";
 import { Badge } from "../ui/badge";
 import { Role } from "@prisma/client";
+import { cdnUrl } from "./cdn-image";
 
 interface NavTree {
   section: string;
@@ -148,8 +149,8 @@ export function AppSidebar({ session }: { session: Session | null }) {
           <div className="flex items-center gap-2 p-2">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={session.user.image ?? ""}
-                alt={session.user.name ?? ""}
+                src={cdnUrl(session.user.image ?? "")}
+                className="object-cover"
               />
               <AvatarFallback>
                 {getInitials(session.user.name ?? session.user.email ?? "U")}
@@ -193,9 +194,7 @@ export function AppSidebar({ session }: { session: Session | null }) {
                   />
                 ))}
                 {/* Add Logout to Lainnya section */}
-                {section.section === "Lainnya" && (
-                  <LogoutItem />
-                )}
+                {section.section === "Lainnya" && <LogoutItem />}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

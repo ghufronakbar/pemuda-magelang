@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HERO_IMAGE } from "@/constants";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 export interface HeroSectionProps {
   title?: string;
@@ -27,15 +27,10 @@ export function HeroSection({
   countZhub,
 }: HeroSectionProps) {
   return (
-    <section
-      className={cn(
-        "relative overflow-hidden",
-        className
-      )}
-    >
+    <section className={cn("relative overflow-hidden", className)}>
       <div className="absolute inset-0 z-10 w-full h-full">
-        <Image
-          src={HERO_IMAGE}
+        <CdnImage
+          uniqueKey={HERO_IMAGE}
           alt="Ilustrasi Pemuda Magelang"
           width={1920}
           height={1080}
@@ -43,7 +38,6 @@ export function HeroSection({
           priority
         />
       </div>
-
 
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:py-28 lg:px-8 z-10">
         {/* Left: copy & CTAs */}
@@ -107,8 +101,8 @@ export function HeroSection({
         <div className="order-1 lg:order-2 lg:col-span-6">
           <div className="relative mx-auto aspect-[5/4] w-full max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-sm backdrop-blur">
             {heroImage ? (
-              <Image
-                src={heroImage}
+              <CdnImage
+                uniqueKey={heroImage}
                 alt="Ilustrasi Pemuda Magelang"
                 fill
                 sizes="(max-width:1024px) 100vw, 50vw"
@@ -120,8 +114,6 @@ export function HeroSection({
                 Tambahkan heroImage…
               </div>
             )}
-
-            
           </div>
         </div>
       </div>

@@ -1,9 +1,6 @@
-import { checkPermission } from "@/actions/user";
-import { Role } from "@prisma/client";
 import { FormArticle } from "../../../(components)/form-article";
 
 const BuatArtikelGerakPage = async () => {
-  await checkPermission([Role.admin, Role.superadmin]);
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 justify-between">

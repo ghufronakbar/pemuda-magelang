@@ -67,7 +67,7 @@ const _getAppData = async (): Promise<AppDataReturnData> => {
 const makeGetAppData = () =>
   unstable_cache(async () => _getAppData(), [`app-data`, "v1"], {
     tags: [`app-data`],
-    revalidate: 300,
+    revalidate: 60 * 10, // 10 minutes
   });
 
 export const getAppData = makeGetAppData();

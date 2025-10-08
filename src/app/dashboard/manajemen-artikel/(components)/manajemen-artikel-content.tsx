@@ -20,7 +20,7 @@ import {
 } from "../../(zhub)/(components)/(hub-item)/table-zhub";
 import { FormHub } from "../../(zhub)/(components)/(hub-item)/form-zhub";
 
-export async function ManajemenArtikelContent() {
+export async function ManajemenArtikelContent({ tab }: { tab: string }) {
   const [articles, user, hubs] = await Promise.all([
     getArticles(),
     auth(),
@@ -80,7 +80,7 @@ export async function ManajemenArtikelContent() {
   const showZhub = isAdmin; // Only admin
 
   return (
-    <Tabs defaultValue="gerak" className="w-full">
+    <Tabs defaultValue={tab} className="w-full">
       <TabsList
         className={`grid w-full ${isAdmin ? "grid-cols-4" : "grid-cols-2"}`}
       >
@@ -203,7 +203,7 @@ export async function ManajemenArtikelContent() {
                   />
                 </>
               ) : (
-                <CommunitySection showForm={false} />
+                <CommunitySection />
               )}
             </div>
           </div>

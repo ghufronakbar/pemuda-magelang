@@ -1,33 +1,4 @@
-"use server";
-
-import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
-import cloudinary from "@/config/cloudinary";
-
-type UploadResponse =
-  | { success: true; result?: UploadApiResponse }
-  | { success: false; error: UploadApiErrorResponse };
-
-const uploadToCloudinary = (
-  fileUri: string,
-  fileName: string
-): Promise<UploadResponse> => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload(fileUri, {
-        invalidate: true,
-        resource_type: "auto",
-        filename_override: fileName,
-        folder: "sanzet",
-        use_filename: true,
-      })
-      .then((result) => {
-        resolve({ success: true, result });
-      })
-      .catch((error) => {
-        reject({ success: false, error });
-      });
-  });
-};
+// src/actions/image.ts (client side karena sudah ada action upload di server side)
 
 export async function uploadImage(formData: FormData) {
   try {
@@ -37,20 +8,24 @@ export async function uploadImage(formData: FormData) {
       return { success: false, error: "Gambar tidak ditemukan" };
     }
 
-    const fileBuffer = await image.arrayBuffer();
-
-    const mimeType = image.type;
-    const encoding = "base64";
-    const base64Data = Buffer.from(fileBuffer).toString("base64");
-
-    const fileUri = "data:" + mimeType + ";" + encoding + "," + base64Data;
-
-    const res = await uploadToCloudinary(fileUri, image.name);
-    if (res.success && res.result) {
-      return { success: true, result: res.result.secure_url };
+    const res = await fetch(`/api/upload`, {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Error upload gambar", errorData);
+      return { success: false, error: "Gagal upload gambar" };
     }
-
-    return { success: false, error: "Gagal upload gambar" };
+    const data = (await res.json()) as {
+      key?: string;
+      url?: string;
+      error?: string;
+    };
+    if (data.key) {
+      return { success: true, result: data.key };
+    }
+    return { success: false, error: data.error };
   } catch (error) {
     console.error(error);
     return { success: false, error: "Gagal upload gambar" };

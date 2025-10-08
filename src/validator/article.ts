@@ -4,10 +4,7 @@ import { z } from "zod";
 export const ArticleInputSchema = z.object({
   id: z.string().optional().nullable(),
   title: z.string().min(1, "Judul harus diisi"),
-  thumbnailImage: z
-    .string()
-    .min(1, "Harap unggah gambar")
-    .url("Harap unggah gambar"),
+  thumbnailImage: z.string().min(1, "Harap unggah gambar"),
   content: z.string().min(1, "Konten harus diisi"),
   category: z.string().min(1, "Kategori harus diisi"),
   communityId: z.string().optional().nullable(),

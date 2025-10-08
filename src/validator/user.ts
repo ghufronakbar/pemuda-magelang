@@ -26,7 +26,7 @@ export const initialUserProfileInput: UserProfileInput = {
 export const UserTalentSchema = z.object({
   profession: z.string().min(1, "Profesi tidak boleh kosong"),
   industry: z.string().min(1, "Industri tidak boleh kosong"),
-  bannerPicture: z.string().url("URL Gambar tidak valid").optional().nullable(),
+  bannerPicture: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   socialMedias: z.array(
     z.object({
@@ -39,7 +39,6 @@ export const UserTalentSchema = z.object({
     z.object({
       image: z
         .string()
-        .url("Harap unggah gambar yang valid")
         .optional()
         .nullable(),
       name: z.string().min(1, "Nama tidak boleh kosong"),

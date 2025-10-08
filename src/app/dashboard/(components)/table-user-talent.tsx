@@ -24,11 +24,25 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2, Search, Trash2, CheckCircle, XCircle, Ban, Eye, ChevronLeft, ChevronRight, Users, UserCheck, Shield } from "lucide-react";
+import {
+  Loader2,
+  Search,
+  Trash2,
+  CheckCircle,
+  XCircle,
+  Ban,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  Users,
+  UserCheck,
+  Shield,
+} from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
 import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 /* ================== Types ================== */
 
@@ -152,133 +166,126 @@ export function TableUserTalent({
   }, [subdistrict]);
 
   return (
-      <section className={cn("space-y-4", className)}>
-        {/* Controls */}
-        <div className="flex gap-3 items-end">
-          <div className="flex-1">
-            <label className="mb-1 block text-xs text-muted-foreground">
-              Cari
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={
-                  type === "talenta"
-                    ? "Cari nama, email, profesi, industri…"
-                    : "Cari nama, email…"
-                }
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full pl-9"
-              />
-            </div>
+    <section className={cn("space-y-4", className)}>
+      {/* Controls */}
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <label className="mb-1 block text-xs text-muted-foreground">
+            Cari
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder={
+                type === "talenta"
+                  ? "Cari nama, email, profesi, industri…"
+                  : "Cari nama, email…"
+              }
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full pl-9"
+            />
           </div>
-
-          {actionButton && (
-            <div className="flex-shrink-0">
-              {actionButton}
-            </div>
-          )}
-
-          {type === "talenta" && (
-            <>
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">
-                  Status Talenta
-                </label>
-                <Select
-                  value={talentStatus}
-                  onValueChange={(v) => setTalentStatus(v as TalentStatusEnum)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Semua status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua</SelectItem>
-                    {Object.values(TalentStatusEnum).map((st) => (
-                      <SelectItem key={st} value={st}>
-                        {statusLabel(st)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">
-                  Industri
-                </label>
-                <Select value={industry} onValueChange={(v) => setIndustry(v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Semua industri" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua</SelectItem>
-                    {industryOptions.map((c) => (
-                      <SelectItem key={c} value={c}>
-                        {c}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </>
-          )}
-          {type === "pengguna" && (
-            <>
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">
-                  Kecamatan
-                </label>
-                <Select
-                  value={subdistrict}
-                  onValueChange={(v) => {
-                    setSubdistrict(v);
-                    setVillage("all");
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Semua kecamatan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua</SelectItem>
-                    {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
-                      <SelectItem
-                        key={item.subdistrict}
-                        value={item.subdistrict}
-                      >
-                        {item.subdistrict}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">
-                  Kelurahan/Desa
-                </label>
-                <Select
-                  value={village}
-                  onValueChange={(v) => {
-                    setVillage(v);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Semua kelurahan/desa" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua</SelectItem>
-                    {villageOptions.map((item) => (
-                      <SelectItem key={item} value={item}>
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </>
-          )}
         </div>
+
+        {actionButton && <div className="flex-shrink-0">{actionButton}</div>}
+
+        {type === "talenta" && (
+          <>
+            <div>
+              <label className="mb-1 block text-xs text-muted-foreground">
+                Status Talenta
+              </label>
+              <Select
+                value={talentStatus}
+                onValueChange={(v) => setTalentStatus(v as TalentStatusEnum)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Semua status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua</SelectItem>
+                  {Object.values(TalentStatusEnum).map((st) => (
+                    <SelectItem key={st} value={st}>
+                      {statusLabel(st)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs text-muted-foreground">
+                Industri
+              </label>
+              <Select value={industry} onValueChange={(v) => setIndustry(v)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Semua industri" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua</SelectItem>
+                  {industryOptions.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
+        {type === "pengguna" && (
+          <>
+            <div>
+              <label className="mb-1 block text-xs text-muted-foreground">
+                Kecamatan
+              </label>
+              <Select
+                value={subdistrict}
+                onValueChange={(v) => {
+                  setSubdistrict(v);
+                  setVillage("all");
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Semua kecamatan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua</SelectItem>
+                  {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
+                    <SelectItem key={item.subdistrict} value={item.subdistrict}>
+                      {item.subdistrict}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-muted-foreground">
+                Kelurahan/Desa
+              </label>
+              <Select
+                value={village}
+                onValueChange={(v) => {
+                  setVillage(v);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Semua kelurahan/desa" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua</SelectItem>
+                  {villageOptions.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">
@@ -325,9 +332,15 @@ export function TableUserTalent({
                 >
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
-                      {type === "pengguna" && <Users className="w-8 h-8 text-muted-foreground/60" />}
-                      {type === "talenta" && <UserCheck className="w-8 h-8 text-muted-foreground/60" />}
-                      {type === "admin" && <Shield className="w-8 h-8 text-muted-foreground/60" />}
+                      {type === "pengguna" && (
+                        <Users className="w-8 h-8 text-muted-foreground/60" />
+                      )}
+                      {type === "talenta" && (
+                        <UserCheck className="w-8 h-8 text-muted-foreground/60" />
+                      )}
+                      {type === "admin" && (
+                        <Shield className="w-8 h-8 text-muted-foreground/60" />
+                      )}
                     </div>
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-foreground">
@@ -336,7 +349,8 @@ export function TableUserTalent({
                         {type === "admin" && "Tidak ada admin ditemukan"}
                       </h3>
                       <p className="text-xs text-muted-foreground max-w-sm">
-                        Coba ubah kata kunci pencarian atau filter untuk menemukan data yang Anda cari
+                        Coba ubah kata kunci pencarian atau filter untuk
+                        menemukan data yang Anda cari
                       </p>
                     </div>
                   </div>
@@ -349,7 +363,7 @@ export function TableUserTalent({
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src={u.image ?? ""} alt={u.name} />
+                      <AvatarImage src={cdnUrl(u.image ?? "")} alt={u.name} />
                       <AvatarFallback>
                         {getInitials(u.name || u.email)}
                       </AvatarFallback>
@@ -427,7 +441,8 @@ export function TableUserTalent({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari {total} data
+            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari{" "}
+            {total} data
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -441,7 +456,7 @@ export function TableUserTalent({
             </Button>
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum;
+                let pageNum: number;
                 if (totalPages <= 5) {
                   pageNum = i + 1;
                 } else if (currentPage <= 3) {
@@ -649,25 +664,39 @@ function ActionButtons({
             <>
               <form action={handleSet}>
                 <input type="hidden" name="status" value="approved" />
-                <SubmitBtn label="Setujui" icon={<CheckCircle className="h-4 w-4" />} />
+                <SubmitBtn
+                  label="Setujui"
+                  icon={<CheckCircle className="h-4 w-4" />}
+                />
               </form>
 
               <form action={handleSet}>
                 <input type="hidden" name="status" value="rejected" />
-                <SubmitBtn label="Tolak" variant="outline" icon={<XCircle className="h-4 w-4" />} />
+                <SubmitBtn
+                  label="Tolak"
+                  variant="outline"
+                  icon={<XCircle className="h-4 w-4" />}
+                />
               </form>
             </>
           )}
           {item.status === "approved" && (
             <form action={handleSet}>
               <input type="hidden" name="status" value="banned" />
-              <SubmitBtn label="Blokir" variant="destructive" icon={<Ban className="h-4 w-4" />} />
+              <SubmitBtn
+                label="Blokir"
+                variant="destructive"
+                icon={<Ban className="h-4 w-4" />}
+              />
             </form>
           )}
           {item.status === "banned" && (
             <form action={handleSet}>
               <input type="hidden" name="status" value="approved" />
-              <SubmitBtn label="Aktifkan" icon={<CheckCircle className="h-4 w-4" />} />
+              <SubmitBtn
+                label="Aktifkan"
+                icon={<CheckCircle className="h-4 w-4" />}
+              />
             </form>
           )}
         </div>

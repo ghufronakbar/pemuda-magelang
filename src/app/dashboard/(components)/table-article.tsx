@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
-import Image from "next/image";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 interface ArticleWithUser extends Article {
   user: User;
@@ -237,8 +237,8 @@ export function TableArticle({
             {pageItems.map((a) => (
               <TableRow key={a.id}>
                 <TableCell>
-                  <Image
-                    src={a.thumbnailImage}
+                  <CdnImage
+                    uniqueKey={a.thumbnailImage}
                     alt={a.title}
                     width={100}
                     height={100}

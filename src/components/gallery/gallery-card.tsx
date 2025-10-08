@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cdnUrl } from "../custom/cdn-image";
 
 export interface GalleryCardProps {
   title: string;
@@ -77,16 +78,17 @@ export function GalleryCard({
           </p>
         </CardHeader>
 
-
         {/* Footer: Author */}
         <CardFooter className="flex items-center justify-between pt-0 mt-auto">
           <div className="flex min-w-0 items-center gap-3">
             <Avatar className="h-9 w-9 ring-1 ring-border">
-              <AvatarImage src={author.image ?? ""} alt={author.name} />
+              <AvatarImage src={cdnUrl(author.image ?? "")} alt={author.name} />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <div className="truncate text-sm font-medium tracking-tight">{author.name}</div>
+              <div className="truncate text-sm font-medium tracking-tight">
+                {author.name}
+              </div>
               <div className="truncate text-xs text-muted-foreground">
                 {author.profession}
               </div>

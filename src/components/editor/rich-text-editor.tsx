@@ -70,6 +70,7 @@ import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 // --- Styles (punyamu) ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 import { cn } from "@/lib/utils";
+import { cdnUrl } from "../custom/cdn-image";
 
 // ==== Props ====
 export interface RichTextEditorProps {
@@ -241,7 +242,8 @@ export function RichTextEditor({
         upload: async (file: File) => {
           if (!onUploadImage) throw new Error("onUploadImage tidak disediakan");
           const url = await onUploadImage(file);
-          return url; // harus URL publik
+          return cdnUrl(url);
+          // return url; // harus URL publik
         },
         onSuccess: (url: string) => {
           // opsional: analytics / toast

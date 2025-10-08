@@ -36,7 +36,7 @@ export const TotalArticleCard = ({
         <CardTitle className="flex flex-row justify-between">
           <span>{isAdmin ? "Artikel" : "Artikel Saya"}</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href={`/dashboard/${isAdmin ? "gerak" : "detak"}`}>
+            <Link href={`/dashboard/manajemen-artikel?tab=${isAdmin ? "detak" : "gerak"}`}>
               <FiExternalLink />
             </Link>
           </Button>

@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { uploadImage } from "@/actions/image";
 import { cn } from "@/lib/utils";
-import { Loader2, Upload, ImageIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { Loader2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { CdnImage } from "./cdn-image";
 
 interface ImageUploaderProps {
   image: string | null;
@@ -61,7 +60,7 @@ export const ImageUploader = ({
   };
 
   return (
-    <div className={cn("flex flex-col gap-3")}> 
+    <div className={cn("flex flex-col gap-3")}>
       <div
         className={cn(
           "relative border-2 border-dashed rounded-xl overflow-hidden transition-all duration-200 hover:border-primary/50 hover:bg-muted/30",
@@ -91,7 +90,9 @@ export const ImageUploader = ({
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-2">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />
-              <span className="text-sm text-muted-foreground">Mengunggah...</span>
+              <span className="text-sm text-muted-foreground">
+                Mengunggah...
+              </span>
             </div>
           </div>
         )}
@@ -106,8 +107,8 @@ export const ImageUploader = ({
 
         {image ? (
           <>
-            <Image
-              src={image}
+            <CdnImage
+              uniqueKey={image}
               alt="Uploaded image"
               fill
               className="object-cover"

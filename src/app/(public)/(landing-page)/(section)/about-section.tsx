@@ -1,15 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
 import { AboutItem } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
 import { useSession } from "next-auth/react";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 export interface AboutSectionProps {
   title?: string;
@@ -43,8 +41,8 @@ export function AboutSection({
       <div className="mb-6 sm:mb-8">
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border bg-muted/50 shadow-sm backdrop-blur block lg:hidden mb-4">
           {image ? (
-            <Image
-              src={image}
+            <CdnImage
+              uniqueKey={image}
               alt="Pemuda Magelang"
               fill
               sizes="(max-width:1024px) 100vw, 40vw"
@@ -70,7 +68,6 @@ export function AboutSection({
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:gap-10 lg:grid-cols-12">
         {/* Highlights / copy */}
         <div className="lg:col-span-7">
-
           <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2">
             {highlights.map((h, index) => (
               <Card key={index} className="border-muted/60">
@@ -102,8 +99,8 @@ export function AboutSection({
         <div className="lg:col-span-5">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border bg-muted/50 shadow-sm backdrop-blur hidden lg:block">
             {image ? (
-              <Image
-                src={image}
+              <CdnImage
+                uniqueKey={image}
                 alt="Pemuda Magelang"
                 fill
                 sizes="(max-width:1024px) 100vw, 40vw"

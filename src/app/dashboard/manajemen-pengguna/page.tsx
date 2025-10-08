@@ -3,7 +3,14 @@ import { checkPermission } from "@/actions/user";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ManajemenPenggunaContent } from "./(components)/manajemen-pengguna-content";
 
-const ManajemenPenggunaPage = async () => {
+interface Params {
+  searchParams: Promise<{
+    tab: string;
+  }>;
+}
+
+const ManajemenPenggunaPage = async ({ searchParams }: Params) => {
+  const { tab } = await searchParams;
   await checkPermission([Role.superadmin, Role.admin]);
   
   return (
@@ -26,7 +33,7 @@ const ManajemenPenggunaPage = async () => {
       <Card>
         
         <CardContent>
-          <ManajemenPenggunaContent />
+          <ManajemenPenggunaContent tab={tab} />
         </CardContent>
       </Card>
     </div>

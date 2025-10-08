@@ -5,7 +5,7 @@ export const ProductInputSchema = z.object({
   id: z.string().optional().nullable(),
   title: z.string().min(1, "Judul harus diisi"),
   images: z
-    .array(z.string().min(1, "Gambar harus diisi").url("Gambar harus valid"))
+    .array(z.string().min(1, "Gambar harus diisi"))
     .min(1, "Gambar harus diisi"),
   description: z.string().min(1, "Deskripsi harus diisi"),
   // price: z.coerce.number().optional(),

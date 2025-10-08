@@ -1,17 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCheck, Download } from "lucide-react";
-import {
-  SocialMedia,
-  SocialMediaPlatformEnum,
-  Talent,
-  TalentStatusEnum,
-} from "@prisma/client";
-import Image from "next/image";
+import { Download } from "lucide-react";
+import { SocialMedia, SocialMediaPlatformEnum, Talent } from "@prisma/client";
 import { getInitials, normalizeSocialUrl } from "@/lib/helper";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import Link from "next/link";
+import { CdnImage, cdnUrl } from "@/components/custom/cdn-image";
 
 interface TalentHeaderProps {
   talent: Talent & {
@@ -26,7 +20,6 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
     profilePicture,
     profession,
     industry,
-    status,
     socialMedias,
     id,
     description,
@@ -49,8 +42,8 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
       {/* Banner */}
       <div className="relative h-48 w-full sm:h-56 md:h-64 lg:h-72">
         {bannerPicture ? (
-          <Image
-            src={bannerPicture}
+          <CdnImage
+            uniqueKey={bannerPicture}
             alt={`${name} banner`}
             fill
             sizes="(max-width:1024px) 100vw, 1024px"
@@ -74,7 +67,7 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
             <div>
               <div className="-mt-10 sm:-mt-12">
                 <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
-                  <AvatarImage src={profilePicture ?? ""} alt={name} />
+                  <AvatarImage src={cdnUrl(profilePicture ?? "")} alt={name} />
                   <AvatarFallback>{getInitials(name)}</AvatarFallback>
                 </Avatar>
               </div>

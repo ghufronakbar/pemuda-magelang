@@ -1,7 +1,7 @@
 // components/landing/partners/partner-section.tsx
 "use client";
 
-import Image from "next/image";
+import { CdnImage } from "@/components/custom/cdn-image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +58,7 @@ export function PartnerSection({
           {supportedPartners.length > 0 && (
             <Row
               label="Didukung oleh"
-              items={supportedPartners}
+              items={[...supportedPartners, ...supportedPartners]}
               durationSec={speedSeconds?.supported ?? 26}
               direction="left"
             />
@@ -67,7 +67,7 @@ export function PartnerSection({
           {collaborators.length > 0 && (
             <Row
               label="Kolaborator"
-              items={collaborators}
+              items={[...collaborators, ...collaborators]}
               durationSec={speedSeconds?.collaborators ?? 30}
               direction="right"
             />
@@ -76,7 +76,7 @@ export function PartnerSection({
           {mediaPartners.length > 0 && (
             <Row
               label="Media Partner"
-              items={mediaPartners}
+              items={[...mediaPartners, ...mediaPartners]}
               durationSec={speedSeconds?.media ?? 28}
               direction="left"
             />
@@ -180,8 +180,8 @@ function Logo({ item }: { item: PartnerItem }) {
       title={item.name}
     >
       <div className="relative h-10 w-24 sm:h-12 sm:w-28">
-        <Image
-          src={item.image}
+        <CdnImage
+          uniqueKey={item.image}
           alt={item.name}
           fill
           sizes="(max-width:768px) 96px, 112px"

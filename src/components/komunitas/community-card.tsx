@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cdnUrl } from "../custom/cdn-image";
 
 export interface CommunityCardProps {
   name: string;
@@ -54,7 +55,7 @@ export function CommunityCard({
         <div className="absolute -top-8 left-4">
           <Avatar className="h-16 w-16 ring-2 ring-background shadow-sm">
             <AvatarImage
-              src={profileImage ?? ""}
+              src={cdnUrl(profileImage ?? "")}
               alt={name}
               className="object-cover"
             />

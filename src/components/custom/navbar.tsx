@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -47,6 +46,7 @@ import {
 
 import { Menu, LayoutDashboard, LogOut } from "lucide-react";
 import { Session } from "next-auth";
+import { CdnImage, cdnUrl } from "./cdn-image";
 
 interface LinkItem {
   title: string;
@@ -137,8 +137,8 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Logo */}
         <Link href="/" aria-label="Beranda" className="flex items-center gap-2">
-          <Image
-            src={LOGO}
+          <CdnImage
+            uniqueKey={LOGO}
             alt="Logo"
             width={36}
             height={36}
@@ -267,7 +267,7 @@ function UserMenuDesktop({
       >
         <p className="hidden text-sm font-medium sm:block">{name || email}</p>
         <Avatar className="h-9 w-9 ring-1 ring-border transition group-hover:ring-primary/40">
-          <AvatarImage src={image} alt={name} />
+          <AvatarImage src={cdnUrl(image)} alt={name} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -280,7 +280,7 @@ function UserMenuDesktop({
       >
         <DropdownMenuLabel className="flex items-center gap-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={image} alt={name} />
+            <AvatarImage src={cdnUrl(image)} alt={name} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
@@ -351,8 +351,8 @@ function MobileMenu({
       <SheetContent side="left" className="w-[85%] p-0">
         <SheetHeader className="items-start border-b px-4 pb-3 pt-4">
           <SheetTitle className="flex items-center gap-2">
-            <Image
-              src={LOGO}
+            <CdnImage
+              uniqueKey={LOGO}
               alt="Logo"
               width={28}
               height={28}
@@ -438,7 +438,10 @@ function MobileMenu({
               {session?.user ? (
                 <div className="flex items-center gap-3 pb-3">
                   <Avatar className="h-9 w-9">
-                    <AvatarImage src={session.user.image ?? ""} alt="User" />
+                    <AvatarImage
+                      src={cdnUrl(session.user.image ?? "")}
+                      alt="User"
+                    />
                     <AvatarFallback>
                       {(session.user.name ?? "U").slice(0, 1).toUpperCase()}
                     </AvatarFallback>

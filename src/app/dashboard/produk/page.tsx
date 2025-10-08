@@ -10,7 +10,7 @@ import {
 } from "@/actions/product";
 import { TableProduct } from "../(components)/table-product";
 import { getDetailUser } from "@/actions/user";
-import { TalentCard } from "../ringkasan/(components)/talent-card";
+import { TalentCard } from "@/app/dashboard/ringkasan/(components)/talent-card";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const ProdukPage = async () => {

@@ -36,7 +36,7 @@ export const TotalTalentCard = ({ data, className }: TotalTalentCardProps) => {
         <CardTitle className="flex flex-row justify-between">
           <span>Talenta</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href="/dashboard/talenta">
+            <Link href="/dashboard/manajemen-pengguna?tab=talenta">
               <FiExternalLink />
             </Link>
           </Button>

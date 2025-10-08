@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,6 +8,7 @@ import { formatIDDate } from "@/lib/helper";
 import { ArticleCardProps } from "../type";
 import { FiHeart } from "react-icons/fi";
 import { FaComment } from "react-icons/fa";
+import { CdnImage, cdnUrl } from "@/components/custom/cdn-image";
 
 export function ArticleListCard({
   title,
@@ -44,7 +44,10 @@ export function ArticleListCard({
             {/* Penulis */}
             <div className="mb-2 flex items-center gap-2 text-sm">
               <Avatar className="h-6 w-6">
-                <AvatarImage src={author.image ?? ""} alt={author.name} />
+                <AvatarImage
+                  src={cdnUrl(author.image ?? "")}
+                  alt={author.name}
+                />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <span className="truncate font-medium">{author.name}</span>
@@ -102,8 +105,8 @@ export function ArticleListCard({
           </div>
         </div>
         <div className="w-full md:w-1/2 lg:w-1/3 h-full !aspect-video object-cover bg-gray-100 overflow-hidden rounded-lg">
-          <Image
-            src={thumbnail || PLACEHOLDER_IMAGE}
+          <CdnImage
+            uniqueKey={thumbnail || PLACEHOLDER_IMAGE}
             alt={title}
             width={600}
             height={400}

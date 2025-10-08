@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -38,6 +37,7 @@ import {
 import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
 import { useMemo, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 const registerFormSchema = z
   .object({
@@ -87,7 +87,7 @@ export const RegisterForm = ({
         (item) => item.subdistrict === form.getValues("subdistrict")
       )?.villages ?? []
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("subdistrict")]);
 
   const onSubmit = async (data: RegisterFormSchema) => {
@@ -114,8 +114,8 @@ export const RegisterForm = ({
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-2">
             <div className="flex items-center gap-3">
-              <Image
-                src={LOGO}
+              <CdnImage
+                uniqueKey={LOGO}
                 alt="Pemuda Magelang"
                 width={32}
                 height={32}

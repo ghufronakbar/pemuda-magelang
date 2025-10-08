@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/select";
 import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
 import { Textarea } from "@/components/ui/textarea";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 interface ProfileSectionProps {
   className?: string;
@@ -116,7 +117,7 @@ export function ProfileSection({ className }: ProfileSectionProps) {
         (item) => item.subdistrict === formProfile.watch("subdistrict")
       )?.villages ?? []
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formProfile.watch("subdistrict")]);
 
   return (
@@ -150,14 +151,14 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                   }}
                 >
                   <AvatarImage
-                    src={formProfile.watch("profilePicture") || ""}
+                    src={cdnUrl(formProfile.watch("profilePicture") || "")}
                     className="object-cover"
                   />
                   <AvatarFallback>
                     {getInitials(formProfile.watch("name"))}
                   </AvatarFallback>
                 </Avatar>
-                
+
                 {/* Hover overlay actions (inside circle) */}
                 <div
                   className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100"
@@ -202,11 +203,12 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                         <Upload className="w-4 h-4" />
                       )}
                     </Button>
-                    <span className="text-xs font-medium text-white">Ubah Foto</span>
+                    <span className="text-xs font-medium text-white">
+                      Ubah Foto
+                    </span>
                   </div>
                 </div>
               </div>
-              
             </div>
 
             <FormField
@@ -280,7 +282,13 @@ export function ProfileSection({ className }: ProfileSectionProps) {
                         disabled={!formProfile.watch("subdistrict")}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder={!formProfile.watch("subdistrict") ? "Pilih kecamatan terlebih dahulu" : "Kelurahan"} />
+                          <SelectValue
+                            placeholder={
+                              !formProfile.watch("subdistrict")
+                                ? "Pilih kecamatan terlebih dahulu"
+                                : "Kelurahan"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {villages.map((item) => (

@@ -22,9 +22,6 @@ export const HubInputSchema = z.object({
   status: z.enum(HubStatusEnum, "Status tidak valid"),
   image: z
     .string()
-    .url({
-      message: "Gambar tidak valid",
-    })
     .optional()
     .nullable(),
   ctaLink: z

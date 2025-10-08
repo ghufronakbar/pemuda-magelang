@@ -2,12 +2,18 @@
 
 import * as React from "react";
 import { Product, Talent, ProductStatusEnum, Role, User } from "@prisma/client";
-import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { Loader2, Trash2, Search, ChevronLeft, ChevronRight, Package } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Package,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -31,6 +37,7 @@ import {
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { productStatusEnum } from "@/enum/product-status-enum";
 import { formatIDDate, formatIDR } from "@/lib/helper";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 // ===== Types =====
 type ProductWithTalent = Product & { talent: Talent & { user: User } };
@@ -193,10 +200,7 @@ export function TableProduct({
           <TableBody>
             {pageItems.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="py-16 text-center"
-                >
+                <TableCell colSpan={8} className="py-16 text-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
                       <Package className="w-8 h-8 text-muted-foreground/60" />
@@ -206,7 +210,8 @@ export function TableProduct({
                         Tidak ada produk ditemukan
                       </h3>
                       <p className="text-xs text-muted-foreground max-w-sm">
-                        Coba ubah kata kunci pencarian atau filter untuk menemukan produk yang Anda cari
+                        Coba ubah kata kunci pencarian atau filter untuk
+                        menemukan produk yang Anda cari
                       </p>
                     </div>
                   </div>
@@ -222,8 +227,8 @@ export function TableProduct({
                     <div className="flex gap-3">
                       <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded border bg-muted">
                         {thumb ? (
-                          <Image
-                            src={thumb}
+                          <CdnImage
+                            uniqueKey={thumb}
                             alt={p.title}
                             fill
                             sizes="64px"
@@ -315,7 +320,8 @@ export function TableProduct({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari {total} produk
+            Menampilkan {start + 1}-{Math.min(start + pageSize, total)} dari{" "}
+            {total} produk
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -329,7 +335,7 @@ export function TableProduct({
             </Button>
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum;
+                let pageNum: number;
                 if (totalPages <= 5) {
                   pageNum = i + 1;
                 } else if (currentPage <= 3) {
@@ -465,7 +471,6 @@ function ActionButtons({
 
   return (
     <div className="flex flex-row items-center gap-2">
-
       {!isAdmin && (
         <Button variant="outline" asChild>
           <Link href={`/dashboard/produk/edit-produk/${product.id}`}>Edit</Link>

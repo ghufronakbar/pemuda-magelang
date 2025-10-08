@@ -30,14 +30,12 @@ import { useFormCommunity } from "@/context/form-community-context";
 
 interface CommunitySectionProps {
   className?: string;
-  showForm?: boolean;
   title?: string;
   description?: string;
 }
 
 export function CommunitySection({
   className,
-  showForm = true,
   title,
   description,
 }: CommunitySectionProps) {
@@ -88,7 +86,7 @@ export function CommunitySection({
 
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
-        {((communityStatus && communityStatus !== "approved") || !showForm) && (
+        {communityStatus !== "approved" && (
           <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <CommunityStatusBadge status={communityStatus!} />
@@ -97,16 +95,7 @@ export function CommunitySection({
             <p className="text-muted-foreground">
               {statusDescription(communityStatus)}
             </p>
-            {communityStatus === "approved" && (
-              <Button asChild size="sm" className="mt-2 self-end">
-                <Link href={`/dashboard/akun`}>
-                  <div className="flex items-center gap-2">
-                    <FiExternalLink />
-                    Lihat profil
-                  </div>
-                </Link>
-              </Button>
-            )}
+
             {(!communityStatus || communityStatus === "rejected") && (
               <Button
                 size="sm"
@@ -115,7 +104,9 @@ export function CommunitySection({
               >
                 <div className="flex items-center gap-2">
                   <Sparkles />
-                  {communityStatus === "rejected" ? "Ajukan Ulang" : "Daftar sebagai Komunitas"}
+                  {communityStatus === "rejected"
+                    ? "Ajukan Ulang"
+                    : "Daftar sebagai Komunitas"}
                 </div>
               </Button>
             )}
@@ -123,12 +114,11 @@ export function CommunitySection({
         )}
 
         {/* CTA daftar (belum terdaftar atau ditolak) */}
-        {(!communityStatus || communityStatus === "rejected") && (
+        {!communityStatus && (
           <Dialog
             open={openCommunityDialog}
             onOpenChange={setOpenCommunityDialog}
           >
-
             <DialogContent className="max-w-4xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-4xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
               <DialogHeader className="flex-shrink-0">
                 <DialogTitle>Daftar Komunitas</DialogTitle>
@@ -148,7 +138,12 @@ export function CommunitySection({
               </div>
 
               <DialogFooter className="flex-shrink-0">
-                <Button form="communityRegisterForm" type="submit" disabled={loading} className="min-w-28">
+                <Button
+                  form="communityRegisterForm"
+                  type="submit"
+                  disabled={loading}
+                  className="min-w-28"
+                >
                   {loading ? "Memproses…" : "Ajukan permohonan"}
                 </Button>
               </DialogFooter>
@@ -157,7 +152,7 @@ export function CommunitySection({
         )}
 
         {/* Form edit (sudah terdaftar) */}
-        {communityStatus === "approved" && showForm && (
+        {communityStatus === "approved" && (
           <div className="space-y-6">
             <FormCommunity
               pending={loading}

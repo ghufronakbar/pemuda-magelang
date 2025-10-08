@@ -17,7 +17,6 @@ export const TalentCard = ({
   if (session?.user.role !== Role.user) return null;
   return (
     <TalentSection
-      showForm={false}
       className={className}
       title={title ?? "Talenta"}
       description={description ?? "Status talenta kamu"}

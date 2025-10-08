@@ -32,7 +32,7 @@ export const TotalZhubProgramsCard = ({
   const isAdmin = session?.user?.role !== Role.user;
 
   if (!isAdmin) {
-    return null; // Don't show for regular users
+    return null;
   }
 
   return (
@@ -41,14 +41,12 @@ export const TotalZhubProgramsCard = ({
         <CardTitle className="flex flex-row justify-between">
           <span>Program Zhub</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href="/dashboard/program-zhub">
+            <Link href="/dashboard/manajemen-artikel?tab=zhub">
               <FiExternalLink />
             </Link>
           </Button>
         </CardTitle>
-        <CardDescription>
-          Jumlah program Zhub yang tersedia
-        </CardDescription>
+        <CardDescription>Jumlah program Zhub yang tersedia</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="text-4xl font-bold flex flex-row gap-2 items-center">

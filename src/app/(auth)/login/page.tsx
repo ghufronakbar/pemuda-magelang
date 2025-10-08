@@ -19,6 +19,7 @@ import {
   SubmitButton,
 } from "@/app/(auth)/(components)/auth-components";
 import Image from "next/image";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 interface LoginPageProps {
   searchParams?: Promise<{
@@ -40,8 +41,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <div className="flex items-center gap-3">
             {/* Optional branding */}
 
-            <Image
-              src={LOGO}
+            <CdnImage
+              uniqueKey={LOGO}
               alt="Pemuda Magelang"
               className="h-8 w-8 rounded"
               width={32}

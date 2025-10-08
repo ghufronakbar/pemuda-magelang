@@ -13,15 +13,15 @@ export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
   const talent = await getDetailTalent(slug)();
   return {
-    title: "Artikel " + talent?.name,
+    title: talent?.name ? `Artikel ${talent?.name}` : "Tidak Ditemukan",
     description: talent?.description,
     openGraph: {
-      title: "Artikel " + talent?.name,
+      title: talent?.name ? `Artikel ${talent?.name}` : "Tidak Ditemukan",
       description: talent?.description,
       images: talent?.profilePicture || talent?.bannerPicture,
     },
     twitter: {
-      title: talent?.name,
+      title: talent?.name ? `Artikel ${talent?.name}` : "Tidak Ditemukan",
       description: talent?.description,
       images: [talent?.profilePicture, talent?.bannerPicture],
     },

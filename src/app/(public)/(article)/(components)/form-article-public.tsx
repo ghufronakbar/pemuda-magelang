@@ -47,8 +47,8 @@ import {
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
-import { useFormUser } from "@/context/form-user-context";
 import { useFormCommunity } from "@/context/form-community-context";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 interface FormArticleProps {
   type: "gerak" | "detak" | "dampak";
@@ -142,7 +142,7 @@ export function FormArticlePublic({ type }: FormArticleProps) {
       <div className="w-full flex flex-row gap-2 items-start justify-between relative">
         <Avatar className="w-10 h-10">
           <AvatarImage
-            src={session?.user?.image || undefined}
+            src={cdnUrl(session?.user?.image || "")}
             className="w-full h-full object-cover"
           />
           <AvatarFallback>{session?.user?.name?.charAt(0)}</AvatarFallback>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +10,7 @@ import { Hub, HubCategory, HubStatusEnum } from "@prisma/client";
 import { PLACEHOLDER_IMAGE } from "@/constants";
 import { formatIDDate } from "@/lib/helper";
 import { Reveal } from "@/components/ui/reveal";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 interface ZHubDetailProps {
   hub: Hub & {
@@ -45,8 +45,8 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
         {/* Banner */}
         <Reveal>
           <div className="relative h-48 w-full sm:h-56 md:h-64 lg:h-72">
-            <Image
-              src={image || PLACEHOLDER_IMAGE}
+            <CdnImage
+              uniqueKey={image || PLACEHOLDER_IMAGE}
               alt={name}
               fill
               sizes="(max-width:1024px) 100vw, 1024px"
@@ -105,7 +105,6 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
         </div>
       </div>
 
-
       {/* ===== Program lain dalam kategori ini ===== */}
       {related.length > 0 && (
         <section>
@@ -115,7 +114,11 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
                 <CardTitle className="text-lg sm:text-xl">
                   Program lain di kategori {hubCategory?.name}
                 </CardTitle>
-                <Button asChild variant="ghost" className="hidden sm:inline-flex">
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="hidden sm:inline-flex"
+                >
                   <Link
                     href={`/zhub?kategori=${encodeURIComponent(
                       hubCategory?.name ?? ""
@@ -133,8 +136,8 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
                     <Link href={`/zhub/${r.slug}`} className="group">
                       <Card className="overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg">
                         <div className="relative aspect-[16/9] w-full bg-muted">
-                          <Image
-                            src={r.image ?? "/placeholder.svg"}
+                          <CdnImage
+                            uniqueKey={r.image ?? "/placeholder.svg"}
                             alt={r.name}
                             fill
                             sizes="(max-width:1024px) 100vw, 33vw"

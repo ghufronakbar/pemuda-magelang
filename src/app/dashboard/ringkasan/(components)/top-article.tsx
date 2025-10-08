@@ -8,17 +8,24 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { Table, TableCell, TableHead, TableRow, TableHeader, TableBody } from "@/components/ui/table";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableBody,
+} from "@/components/ui/table";
 import { articleStatusEnum } from "@/enum/article-status-enum";
 import { cn } from "@/lib/utils";
 import { ArticleStatusEnum, Role } from "@prisma/client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { FiExternalLink } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { Pencil, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useState } from "react";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 export interface TopArticleCardProps {
   data: {
@@ -42,7 +49,7 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
   const isAdmin = session?.user?.role !== Role.user;
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -84,15 +91,17 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
             {currentData.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  <Image
-                    src={item.thumbnail}
+                  <CdnImage
+                    uniqueKey={item.thumbnail}
                     alt={item.title}
                     width={50}
                     height={50}
                     className="w-10 h-10 object-cover rounded-md"
                   />
                 </TableCell>
-                <TableCell className="max-w-40 truncate">{item.title}</TableCell>
+                <TableCell className="max-w-40 truncate">
+                  {item.title}
+                </TableCell>
                 <TableCell>{item.category}</TableCell>
                 <TableCell>{item.views}</TableCell>
                 <TableCell>{item.comments}</TableCell>
@@ -120,13 +129,13 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
             ))}
           </TableBody>
         </Table>
-        
+
         {data.length === 0 && (
           <div className="flex flex-col gap-4 items-center justify-center min-h-40">
             <p className="text-sm text-muted-foreground">Belum ada artikel.</p>
             <Button asChild variant="outline">
               <Link
-                href={`/dashboard/${isAdmin ? "gerak" : "detak"}/buat-artikel`}
+                href={`/dashboard/${isAdmin ? "detak" : "gerak"}/buat-artikel`}
               >
                 <div className="flex items-center gap-2">
                   <Plus className="w-4 h-4" />
@@ -150,17 +159,19 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
                 Sebelumnya
               </Button>
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button
-                    key={page}
-                    variant={currentPage === page ? "default" : "outline"}
-                    size="sm"
-                    className="w-8 h-8 p-0"
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </Button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      className="w-8 h-8 p-0"
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </Button>
+                  )
+                )}
               </div>
               <Button
                 variant="outline"

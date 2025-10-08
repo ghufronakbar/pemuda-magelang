@@ -28,6 +28,7 @@ import { UploadIcon, Loader2, Save } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { uploadImage } from "@/actions/image";
 import { toast } from "sonner";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 export function FormCommunity({
   pending,
@@ -56,16 +57,18 @@ export function FormCommunity({
               <FormLabel>Gambar Profil</FormLabel>
               <FormControl>
                 <div className="flex flex-col gap-2 items-center">
-                  <div 
+                  <div
                     className="relative w-24 h-24 rounded-full overflow-hidden group cursor-pointer"
                     onClick={() => {
                       if (communityStatus === "approved" || !communityStatus) {
-                        document.getElementById("profilePictureCommunityInput")?.click();
+                        document
+                          .getElementById("profilePictureCommunityInput")
+                          ?.click();
                       }
                     }}
                   >
                     <Avatar className="w-full h-full">
-                      <AvatarImage src={field.value ?? ""} />
+                      <AvatarImage src={cdnUrl(field.value ?? "")} className="object-cover"/>
                       <AvatarFallback>
                         {field.value?.[0] ? field.value?.[0] : "C"}
                       </AvatarFallback>
@@ -127,7 +130,8 @@ export function FormCommunity({
                   />
                 </FormControl>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Saran ukuran: 1600×400px (rasio 4:1) • Maks 1MB • Format JPG/PNG
+                  Saran ukuran: 1600×400px (rasio 4:1) • Maks 1MB • Format
+                  JPG/PNG
                 </p>
               </FormItem>
             )}

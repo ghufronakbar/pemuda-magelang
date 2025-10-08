@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { CheckCircle2, Clock, PowerOff } from "lucide-react";
 import { $Enums, HubStatusEnum } from "@prisma/client";
+import { CdnImage } from "@/components/custom/cdn-image";
 
 export interface HubSectionProps {
   title?: string;
@@ -117,8 +117,8 @@ export function HubCard({
       {/* media */}
       <div className="relative aspect-[16/9] w-full">
         {image ? (
-          <Image
-            src={image}
+          <CdnImage
+            uniqueKey={image}
             alt={`Program ${title}`}
             fill
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -16,11 +15,10 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardFooter,
   CardAction,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
+import { CdnImage, cdnUrl } from "@/components/custom/cdn-image";
 
 export interface CommentWithUser extends Comment {
   user: User;
@@ -118,13 +116,14 @@ export async function ArticleDetail({
               }/${encodeURIComponent(author.slug ?? "")}`}
             >
               <Avatar className="h-10 w-10">
-                <AvatarImage src={authorAvatar} alt={authorName} />
+                <AvatarImage src={cdnUrl(authorAvatar)} alt={authorName} />
                 <AvatarFallback>{authorInitials}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
                 <div className="truncate text-sm font-medium">{authorName}</div>
                 <div className="truncate text-xs text-muted-foreground">
-                  {authorRoleOrProfession} • {publishedDate} • {reading} • {_count.trackViews}x dibaca
+                  {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
+                  {_count.trackViews}x dibaca
                 </div>
               </div>
             </LinkOrNot>
@@ -144,8 +143,8 @@ export async function ArticleDetail({
           {thumbnailImage ? (
             <div className="mb-6 overflow-hidden rounded-2xl border bg-muted">
               <div className="relative aspect-[16/9] w-full">
-                <Image
-                  src={thumbnailImage}
+                <CdnImage
+                  uniqueKey={thumbnailImage}
                   alt={title}
                   fill
                   sizes="(max-width:768px) 100vw, 768px"
@@ -178,7 +177,11 @@ export async function ArticleDetail({
             </>
           ) : null}
 
-          <CommentSection article={article} className="mt-6" session={session} />
+          <CommentSection
+            article={article}
+            className="mt-6"
+            session={session}
+          />
         </CardContent>
       </Card>
     </section>

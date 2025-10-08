@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { ArticleDetailProps, CommentWithUser } from "./article-detail";
 import { formatIDDate, getInitials } from "@/lib/helper";
 import { Session } from "next-auth";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 export default function CommentSection({
   article,
@@ -161,7 +162,7 @@ function CommentItem({
   return (
     <div className="flex items-start gap-3">
       <Avatar className="h-9 w-9">
-        <AvatarImage src={avatar ?? ""} alt={name} />
+        <AvatarImage src={cdnUrl(avatar)} alt={name} />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
 

@@ -21,6 +21,7 @@ import type {
 } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import { id as idLocale } from "date-fns/locale";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -197,7 +198,7 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
         {/* ===== HEADER ===== */}
         <View style={styles.header}>
           {talent.profilePicture ? (
-            <Image src={talent.profilePicture} style={styles.avatar} />
+            <Image src={cdnUrl(talent.profilePicture)} style={styles.avatar} />
           ) : (
             <View
               style={[
@@ -359,7 +360,7 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
                       </Text>
                     ) : null}
                     {a.image ? (
-                      <Image src={a.image} style={styles.thumb} />
+                      <Image src={cdnUrl(a.image)} style={styles.thumb} />
                     ) : null}
                   </View>
                 </View>

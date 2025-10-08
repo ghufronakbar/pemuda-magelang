@@ -19,21 +19,35 @@ import { TotalTalentCard } from "./(components)/total-talent-card";
 import { TotalUsersCard } from "./(components)/total-users-card";
 import { TotalCommunitiesCard } from "./(components)/total-communities-card";
 import { TotalZhubProgramsCard } from "./(components)/total-zhub-programs-card";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const RingkasanPage = async () => {
   const session = await auth();
-  const [totalArticle, totalProduct, topArticle, totalTalent, totalUsers, totalCommunities, totalZhubPrograms, tags] =
-    await Promise.all([
-      getTotalArticle(session)(),
-      getTotalProduct(session)(),
-      getTopArticle(session)(),
-      getTotalTalent(session)(),
-      getTotalUsers(session)(),
-      getTotalCommunities(session)(),
-      getTotalZhubPrograms(session)(),
-      getTags(session),
-    ]);
+  const [
+    totalArticle,
+    totalProduct,
+    topArticle,
+    totalTalent,
+    totalUsers,
+    totalCommunities,
+    totalZhubPrograms,
+    tags,
+  ] = await Promise.all([
+    getTotalArticle(session)(),
+    getTotalProduct(session)(),
+    getTopArticle(session)(),
+    getTotalTalent(session)(),
+    getTotalUsers(session)(),
+    getTotalCommunities(session)(),
+    getTotalZhubPrograms(session)(),
+    getTags(session),
+  ]);
   return (
     <div className="space-y-6">
       {/* Header Card */}
@@ -66,17 +80,21 @@ const RingkasanPage = async () => {
       <Card>
         <CardHeader>
           <CardTitle>Statistik Platform</CardTitle>
-          <CardDescription>
-            Ringkasan data keseluruhan platform
-          </CardDescription>
+          <CardDescription>Ringkasan data keseluruhan platform</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <TotalZhubProgramsCard className="col-span-1" data={totalZhubPrograms} />
+            <TotalZhubProgramsCard
+              className="col-span-1"
+              data={totalZhubPrograms}
+            />
             <TotalUsersCard className="col-span-1" data={totalUsers} />
-            {session?.user?.role !== "user" && <TalentCard className="col-span-1" />}
+            <TalentCard className="col-span-1" />
             <TotalTalentCard className="col-span-1" data={totalTalent} />
-            <TotalCommunitiesCard className="col-span-1" data={totalCommunities} />
+            <TotalCommunitiesCard
+              className="col-span-1"
+              data={totalCommunities}
+            />
             <TotalProductCard className="col-span-1" data={totalProduct} />
             <TotalArticleCard className="col-span-1" data={totalArticle} />
           </div>

@@ -9,7 +9,7 @@ import {
 export const AppDataHeroSchema = z.object({
   heroTitle: z.string().min(1, "Wajib diisi"),
   heroDescription: z.string().min(1, "Wajib diisi"),
-  heroImage: z.string().url("Gambar tidak valid"),
+  heroImage: z.string().min(1, "Gambar tidak valid"),
 });
 
 export type AppDataHero = z.infer<typeof AppDataHeroSchema>;
@@ -17,7 +17,7 @@ export type AppDataHero = z.infer<typeof AppDataHeroSchema>;
 export const AppDataAboutSchema = z.object({
   aboutTitle: z.string().min(1, "Wajib diisi"),
   aboutDescription: z.string().min(1, "Wajib diisi"),
-  aboutImage: z.string().url("Gambar tidak valid"),
+  aboutImage: z.string().min(1, "Gambar tidak valid"),
 });
 
 export type AppDataAbout = z.infer<typeof AppDataAboutSchema>;
@@ -51,7 +51,7 @@ export const AppDataPartnerItemsSchema = z.object({
   partners: z.array(
     z.object({
       name: z.string().min(1, "Wajib diisi"),
-      image: z.string().url("Gambar tidak valid"),
+      image: z.string().min(1, "Gambar tidak valid"),
       href: z
         .string()
         .url("URL tidak valid")

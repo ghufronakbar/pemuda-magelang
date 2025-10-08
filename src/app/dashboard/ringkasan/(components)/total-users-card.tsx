@@ -32,7 +32,7 @@ export const TotalUsersCard = ({
   const isAdmin = session?.user?.role !== Role.user;
 
   if (!isAdmin) {
-    return null; // Don't show for regular users
+    return null; 
   }
 
   return (
@@ -41,7 +41,7 @@ export const TotalUsersCard = ({
         <CardTitle className="flex flex-row justify-between">
           <span>Pengguna</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href="/dashboard/pengguna">
+            <Link href="/dashboard/manajemen-pengguna?tab=pengguna">
               <FiExternalLink />
             </Link>
           </Button>

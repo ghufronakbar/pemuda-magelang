@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -10,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArticleCardProps } from "../type";
+import { CdnImage, cdnUrl } from "@/components/custom/cdn-image";
 
 export function ArticleGridCard({
   title,
@@ -42,8 +42,8 @@ export function ArticleGridCard({
         {/* Media */}
         <div className="relative aspect-[16/9] w-full bg-muted">
           {thumbnail && (
-            <Image
-              src={thumbnail}
+            <CdnImage
+              uniqueKey={thumbnail}
               alt={title}
               fill
               sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
@@ -92,7 +92,7 @@ export function ArticleGridCard({
           <div className="flex min-w-0 items-center gap-3">
             <Avatar className="h-9 w-9">
               <AvatarImage
-                src={author.image ?? ""}
+                src={cdnUrl(author.image ?? "")}
                 alt={author.name}
                 className="object-cover"
               />

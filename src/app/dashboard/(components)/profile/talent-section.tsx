@@ -26,23 +26,19 @@ import {
   DialogDescription,
   DialogContent,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
-import Link from "next/link";
-import { Loader2, Sparkles, Save, Plus } from "lucide-react";
+import { Loader2, Sparkles, Save } from "lucide-react";
 import type { UserTalentInput } from "@/validator/user";
-import { FiExternalLink } from "react-icons/fi";
 
 interface TalentSectionProps {
   className?: string;
-  showForm?: boolean;
   title?: string;
   description?: string;
 }
 
 export function TalentSection({
   className,
-  showForm = true,
+  // showForm = true,
   title,
   description,
 }: TalentSectionProps) {
@@ -120,7 +116,7 @@ export function TalentSection({
 
       <CardContent className="space-y-6">
         {/* Info status bila belum approved */}
-        {((talentStatus && talentStatus !== "approved") || !showForm) && (
+        {talentStatus !== "approved" && (
           <div className="rounded-lg border border-muted/40 bg-muted/30 p-4 text-sm flex flex-col gap-2">
             <div className="mb-1 flex items-center gap-2">
               <TalentStatusBadge status={talentStatus!} />
@@ -129,16 +125,6 @@ export function TalentSection({
             <p className="text-muted-foreground">
               {statusDescription(talentStatus)}
             </p>
-            {talentStatus === "approved" && (
-              <Button asChild size="sm" className="mt-2 self-end">
-                <Link href={`/dashboard/akun`}>
-                  <div className="flex items-center gap-2">
-                    <FiExternalLink />
-                    Lihat profil
-                  </div>
-                </Link>
-              </Button>
-            )}
             {(!talentStatus || talentStatus === "rejected") && (
               <Button
                 size="sm"
@@ -147,7 +133,9 @@ export function TalentSection({
               >
                 <div className="flex items-center gap-2">
                   <Sparkles />
-                  {talentStatus === "rejected" ? "Ajukan Ulang" : "Daftar sebagai Talenta"}
+                  {talentStatus === "rejected"
+                    ? "Ajukan Ulang"
+                    : "Daftar sebagai Talenta"}
                 </div>
               </Button>
             )}
@@ -157,7 +145,6 @@ export function TalentSection({
         {/* CTA daftar (belum terdaftar atau ditolak) */}
         {(!talentStatus || talentStatus === "rejected") && (
           <Dialog open={openTalentDialog} onOpenChange={setOpenTalentDialog}>
-
             <DialogContent className="max-w-3xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-3xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
               <DialogHeader className="flex-shrink-0">
                 <DialogTitle>Daftar Talenta</DialogTitle>
@@ -176,7 +163,12 @@ export function TalentSection({
               </div>
 
               <DialogFooter className="flex-shrink-0">
-                <Button form="talentRegisterForm" type="submit" disabled={pending} className="min-w-28">
+                <Button
+                  form="talentRegisterForm"
+                  type="submit"
+                  disabled={pending}
+                  className="min-w-28"
+                >
                   {pending ? "Memproses…" : "Ajukan permohonan"}
                 </Button>
               </DialogFooter>
@@ -185,7 +177,7 @@ export function TalentSection({
         )}
 
         {/* Form edit (sudah terdaftar) */}
-        {talentStatus === "approved" && showForm && (
+        {talentStatus === "approved" && (
           <form onSubmit={onSubmit} className="space-y-6">
             <FormTalent pending={pending} disabled={!isEditable} />
             <div>

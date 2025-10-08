@@ -36,7 +36,7 @@ export const TotalCommunitiesCard = ({
         <CardTitle className="flex flex-row justify-between">
           <span>Komunitas</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href={isAdmin ? "/dashboard/kelola-komunitas" : "/dashboard/komunitas"}>
+            <Link href={isAdmin ? "/dashboard/manajemen-pengguna?tab=komunitas" : "/dashboard/komunitas"}>
               <FiExternalLink />
             </Link>
           </Button>
