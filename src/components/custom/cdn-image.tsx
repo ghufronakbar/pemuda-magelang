@@ -17,7 +17,7 @@ type Props = Omit<ImageProps, "src"> & { uniqueKey: string };
 export const CdnImage = forwardRef<HTMLImageElement, Props>(
   ({ uniqueKey, alt, ...rest }, ref) => {
     const src = cdnUrl(uniqueKey);
-    return <Image ref={ref} src={src} alt={alt ?? ""} {...rest} />;
+    return <Image ref={ref} src={src} alt={alt ?? ""} {...rest} unoptimized />;
   }
 );
 CdnImage.displayName = "CdnImage";
