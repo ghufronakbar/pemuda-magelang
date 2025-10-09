@@ -30,13 +30,21 @@ export const TotalCommunitiesCard = ({
   const { data: session } = useSession();
   const isAdmin = session?.user?.role !== Role.user;
 
+  if (!isAdmin) return null;
+
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex flex-row justify-between">
           <span>Komunitas</span>
           <Button variant="outline" size="icon" asChild>
-            <Link href={isAdmin ? "/dashboard/manajemen-pengguna?tab=komunitas" : "/dashboard/komunitas"}>
+            <Link
+              href={
+                isAdmin
+                  ? "/dashboard/manajemen-pengguna?tab=komunitas"
+                  : "/dashboard/komunitas"
+              }
+            >
               <FiExternalLink />
             </Link>
           </Button>
