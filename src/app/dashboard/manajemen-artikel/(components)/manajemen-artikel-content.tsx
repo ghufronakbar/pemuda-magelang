@@ -80,7 +80,7 @@ export async function ManajemenArtikelContent({ tab }: { tab: string }) {
   const showZhub = isAdmin; // Only admin
 
   return (
-    <Tabs defaultValue={tab} className="w-full">
+    <Tabs defaultValue={tab || "gerak"} className="w-full">
       <TabsList
         className={`grid w-full ${isAdmin ? "grid-cols-4" : "grid-cols-2"}`}
       >

@@ -122,7 +122,7 @@ export async function ManajemenPenggunaContent({ tab }: { tab: string }) {
       </div>
 
       {/* Enhanced Tabs */}
-      <Tabs defaultValue={tab} className="w-full">
+      <Tabs defaultValue={tab || "pengguna"} className="w-full">
         <div className="space-y-4">
           {/* Desktop Tabs */}
           <div className="hidden sm:block">
