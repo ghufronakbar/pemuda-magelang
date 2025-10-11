@@ -1,12 +1,10 @@
-// components/talent-card.tsx
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { cdnUrl } from "../custom/cdn-image";
+import { CdnImage, cdnUrl } from "../custom/cdn-image";
 
 export interface CommunityCardProps {
   name: string;
@@ -39,8 +37,8 @@ export function CommunityCard({
       {/* Banner */}
       <div className="relative h-24 w-full sm:h-28 bg-muted">
         {bannerImage ? (
-          <Image
-            src={bannerImage}
+          <CdnImage
+            uniqueKey={bannerImage}
             alt={`Banner ${name}`}
             fill
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"

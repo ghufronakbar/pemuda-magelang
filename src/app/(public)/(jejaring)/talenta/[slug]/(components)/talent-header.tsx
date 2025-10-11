@@ -63,8 +63,8 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
       <div className="px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           {/* kiri: avatar + teks */}
-          <div className="flex flex-col min-w-0 items-start gap-4">
-            <div>
+          <div className="flex flex-col min-w-0 items-start gap-4 w-full">
+            <div className="w-full">
               <div className="-mt-10 sm:-mt-12">
                 <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
                   <AvatarImage src={cdnUrl(profilePicture ?? "")} alt={name} />
@@ -72,15 +72,52 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
                 </Avatar>
               </div>
 
-              <div className="min-w-0 pb-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* truncate untuk nama panjang */}
-                  <h1 className="truncate text-xl font-semibold sm:text-2xl">
-                    {name}
-                  </h1>
+              <div className="flex flex-row flex-wrap justify-between w-full">
+                <div className="min-w-0 pb-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* truncate untuk nama panjang */}
+                    <h1 className="truncate text-xl font-semibold sm:text-2xl">
+                      {name}
+                    </h1>
+                  </div>
+                  <div className="mt-1 truncate text-sm text-muted-foreground">
+                    {profession} • {industry}
+                  </div>
                 </div>
-                <div className="mt-1 truncate text-sm text-muted-foreground">
-                  {profession} • {industry}
+                <div className="flex flex-col gap-2">
+                  {ctaHref && (
+                    <Button
+                      asChild
+                      size="lg"
+                      className="shrink-0 sm:mt-0 md:mb-1"
+                    >
+                      <Link
+                        href={ctaHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {socialMediaPlatformEnum.getIcon(
+                          cta.platform,
+                          "mr-2 text-white"
+                        )}
+                        {ctaLabel}
+                      </Link>
+                    </Button>
+                  )}
+                  <Button
+                    asChild
+                    size="lg"
+                    className="shrink-0 sm:mt-0 md:mb-1"
+                    variant="outline"
+                  >
+                    <Link
+                      href={`/api/cv/${id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Download className="mr-2 h-4 w-4" /> Download CV
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -114,35 +151,6 @@ export const TalentHeader = ({ talent }: TalentHeaderProps) => {
             {description && (
               <p className="text-sm text-muted-foreground">{description}</p>
             )}
-          </div>
-
-          {/* kanan: CTA, beri ruang & tidak mepet */}
-          <div className="flex flex-col gap-2">
-            {ctaHref && (
-              <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1">
-                <Link href={ctaHref} target="_blank" rel="noopener noreferrer">
-                  {socialMediaPlatformEnum.getIcon(
-                    cta.platform,
-                    "mr-2 text-white"
-                  )}
-                  {ctaLabel}
-                </Link>
-              </Button>
-            )}
-            <Button
-              asChild
-              size="lg"
-              className="shrink-0 sm:mt-0 md:mb-1"
-              variant="outline"
-            >
-              <Link
-                href={`/api/cv/${id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Download className="mr-2 h-4 w-4" /> Download CV
-              </Link>
-            </Button>
           </div>
         </div>
       </div>

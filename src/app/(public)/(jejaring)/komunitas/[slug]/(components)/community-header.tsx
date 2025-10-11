@@ -51,40 +51,52 @@ export const CommunityHeader = ({ community }: CommunityHeaderProps) => {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           {/* kiri: avatar + teks */}
           <div className="flex flex-col min-w-0 items-start gap-4">
-            <div>
-              <div className="-mt-10 sm:-mt-12">
-                <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
-                  <AvatarImage src={cdnUrl(profilePicture ?? "")} alt={name} />
-                  <AvatarFallback>{getInitials(name)}</AvatarFallback>
-                </Avatar>
+            <div className="flex flex-row flex-wrap justify-between w-full">
+              <div>
+                <div className="-mt-10 sm:-mt-12">
+                  <Avatar className="h-20 w-20 ring-4 ring-background sm:h-24 sm:w-24">
+                    <AvatarImage
+                      src={cdnUrl(profilePicture ?? "")}
+                      alt={name}
+                    />
+                    <AvatarFallback>{getInitials(name)}</AvatarFallback>
+                  </Avatar>
+                </div>
+
+                <div className="min-w-0 pb-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* truncate untuk nama panjang */}
+                    <h1 className="truncate text-xl font-semibold sm:text-2xl">
+                      {name}
+                    </h1>
+                  </div>
+                  <div className="mt-1 truncate text-sm text-muted-foreground">
+                    {category}
+                  </div>
+                </div>
               </div>
 
-              <div className="min-w-0 pb-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* truncate untuk nama panjang */}
-                  <h1 className="truncate text-xl font-semibold sm:text-2xl">
-                    {name}
-                  </h1>
-                </div>
-                <div className="mt-1 truncate text-sm text-muted-foreground">
-                  {category}
-                </div>
+              <div className="flex flex-col gap-2">
+                {ctaLink && (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="shrink-0 sm:mt-0 md:mb-1"
+                  >
+                    <Link
+                      href={ctaLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ExternalLinkIcon className="h-4 w-4" />
+                      {ctaText}
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
             {description && (
               <p className="text-sm text-muted-foreground">{description}</p>
-            )}
-          </div>
-
-          {/* kanan: CTA, beri ruang & tidak mepet */}
-          <div className="flex flex-col gap-2">
-            {ctaLink && (
-              <Button asChild size="lg" className="shrink-0 sm:mt-0 md:mb-1">
-                <Link href={ctaLink} target="_blank" rel="noopener noreferrer">
-                  <ExternalLinkIcon className="h-4 w-4" />
-                  {ctaText}
-                </Link>
-              </Button>
             )}
           </div>
         </div>

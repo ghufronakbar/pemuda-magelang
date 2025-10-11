@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Params) {
   };
 }
 
-const TalentDetailPage = async ({ params }: Params) => {
+const CommunityDetailPage = async ({ params }: Params) => {
   const { slug } = await params;
   const community = await getDetailCommunityBySlug(slug)();
 
@@ -66,4 +66,4 @@ const TalentDetailPage = async ({ params }: Params) => {
   return <CommunityDetail data={mappedData.data} className="py-26" />;
 };
 
-export default TalentDetailPage;
+export default CommunityDetailPage;

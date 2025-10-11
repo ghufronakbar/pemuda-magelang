@@ -1,6 +1,4 @@
-// components/hub-card.tsx
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -13,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Clock, PowerOff } from "lucide-react";
 import { PLACEHOLDER_IMAGE } from "@/constants";
+import { CdnImage } from "../custom/cdn-image";
 
 export interface HubCardProps {
   title: string;
@@ -43,8 +42,8 @@ export function HubCard({
     >
       {/* Media */}
       <div className="relative aspect-[16/9] w-full bg-muted">
-        <Image
-          src={image || PLACEHOLDER_IMAGE}
+        <CdnImage
+          uniqueKey={image || PLACEHOLDER_IMAGE}
           alt={`Program ${title}`}
           fill
           sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"

@@ -4,7 +4,6 @@ import * as React from "react";
 import { Community, User } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { CommunityHeader } from "./community-header";
-import { CommunityBio } from "./community-bio";
 
 import { CommunityArticle } from "./community-article";
 import { ArticleCardProps } from "@/components/article/type";
@@ -18,7 +17,7 @@ export interface CommunityDetailProps {
 }
 
 export function CommunityDetail({ data, className }: CommunityDetailProps) {
-  const { description, user, articles } = data;
+  const { user, articles } = data;
 
   return (
     <section

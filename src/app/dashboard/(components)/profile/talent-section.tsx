@@ -167,38 +167,37 @@ export function TalentSection({
         )}
 
         {/* CTA daftar (belum terdaftar atau ditolak) */}
-        {(!talentStatus || talentStatus === "rejected") && (
-          <Dialog open={openTalentDialog} onOpenChange={setOpenTalentDialog}>
-            <DialogContent className="max-w-3xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-3xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
-              <DialogHeader className="flex-shrink-0">
-                <DialogTitle>Daftar Talenta</DialogTitle>
-                <DialogDescription>
-                  Isi data berikut untuk mengajukan pendaftaran sebagai Talenta.
-                </DialogDescription>
-              </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto px-1">
-                <FormTalent
-                  pending={pending}
-                  onSubmit={onSubmit}
-                  showSubmit={false}
-                  formId="talentRegisterForm"
-                />
-              </div>
+        <Dialog open={openTalentDialog} onOpenChange={setOpenTalentDialog}>
+          <DialogContent className="rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-3xl md:max-h-[90vh] md:h-auto md:rounded-xl">
+            <DialogHeader className="flex-shrink-0">
+              <DialogTitle>Daftar Talenta</DialogTitle>
+              <DialogDescription>
+                Isi data berikut untuk mengajukan pendaftaran sebagai Talenta.
+              </DialogDescription>
+            </DialogHeader>
 
-              <DialogFooter className="flex-shrink-0">
-                <Button
-                  form="talentRegisterForm"
-                  type="submit"
-                  disabled={pending}
-                  className="min-w-28"
-                >
-                  {pending ? "Memproses…" : "Ajukan permohonan"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
+            <div className="flex-1 overflow-y-auto px-1">
+              <FormTalent
+                pending={pending}
+                onSubmit={onSubmit}
+                showSubmit={false}
+                formId="talentRegisterForm"
+              />
+            </div>
+
+            <DialogFooter className="flex-shrink-0">
+              <Button
+                form="talentRegisterForm"
+                type="submit"
+                disabled={pending}
+                className="min-w-28"
+              >
+                {pending ? "Memproses…" : "Ajukan permohonan"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Form edit (sudah terdaftar) */}
         {talentStatus === "approved" && (

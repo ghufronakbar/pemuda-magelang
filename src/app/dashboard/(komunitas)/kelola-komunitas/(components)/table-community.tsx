@@ -139,12 +139,12 @@ export function TableCommunity({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex gap-3 items-end">
+      <div className="flex flex-row flex-wrap gap-3 items-end">
         <div className="flex-1">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
           </label>
-          <div className="relative">
+          <div className="relative min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Cari nama komunitas, pemilik, kategori…"
@@ -155,42 +155,44 @@ export function TableCommunity({
           </div>
         </div>
 
-        <div className="flex-shrink-0">
-          <label className="mb-1 block text-xs text-muted-foreground">
-            Status
-          </label>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Semua Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Status</SelectItem>
-              {Object.entries(communityStatusMap).map(([status, config]) => (
-                <SelectItem key={status} value={status}>
-                  {config.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="flex flex-row flex-wrap gap-3 items-end">
+          <div className="flex-shrink-0">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Status
+            </label>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Semua Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Status</SelectItem>
+                {Object.entries(communityStatusMap).map(([status, config]) => (
+                  <SelectItem key={status} value={status}>
+                    {config.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="flex-shrink-0">
-          <label className="mb-1 block text-xs text-muted-foreground">
-            Kategori
-          </label>
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Semua Kategori" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Kategori</SelectItem>
-              {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex-shrink-0">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Kategori
+            </label>
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Semua Kategori" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Kategori</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

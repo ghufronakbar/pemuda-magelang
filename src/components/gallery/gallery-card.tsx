@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cdnUrl } from "../custom/cdn-image";
+import { CdnImage, cdnUrl } from "../custom/cdn-image";
 
 export interface GalleryCardProps {
   title: string;
@@ -48,8 +47,8 @@ export function GalleryCard({
       >
         {/* Media */}
         <div className="relative aspect-[16/9] w-full bg-muted">
-          <Image
-            src={image}
+          <CdnImage
+            uniqueKey={image}
             alt={title}
             fill
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"

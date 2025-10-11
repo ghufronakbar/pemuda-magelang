@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HERO_IMAGE } from "@/constants";
 import { CdnImage } from "@/components/custom/cdn-image";
+import { useSession } from "next-auth/react";
 
 export interface HeroSectionProps {
   title?: string;
@@ -26,6 +27,7 @@ export function HeroSection({
   countCommunity,
   countZhub,
 }: HeroSectionProps) {
+  const { status } = useSession();
   return (
     <section className={cn("relative overflow-hidden", className)}>
       <div className="absolute inset-0 z-10 w-full h-full">
@@ -57,8 +59,13 @@ export function HeroSection({
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild size="lg" className="w-full sm:w-auto shadow-sm">
-              <Link href={"/register"}>Gabung Komunitas</Link>
+              <Link
+                href={status === "unauthenticated" ? "/register" : "/komunitas"}
+              >
+                Gabung Komunitas
+              </Link>
             </Button>
+
             <Button
               asChild
               size="lg"
