@@ -65,7 +65,7 @@ export function ArticleListCard({
             {/* Judul */}
             <h3
               className={cn(
-                "text-2xl font-extrabold leading-tight tracking-tight",
+                "text-2xl font-extrabold leading-tight tracking-tight line-clamp-1",
                 "sm:text-3xl"
               )}
             >

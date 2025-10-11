@@ -58,7 +58,7 @@ export const FormHub = ({ categories }: FormHubProps) => {
         }}
       >
         <Plus className="mr-2 h-4 w-4" />
-        Tambah Program Zhub
+        Tambah Program
       </Button>
       <DialogContent className="h-[90vh] md:h-auto md:max-h-[90vh] flex flex-col p-0 md:p-6">
         {/* Header - Fixed */}

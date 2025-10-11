@@ -100,7 +100,7 @@ export function FormArticlePublic({ type }: FormArticleProps) {
       formData.append("status", data.status);
       formData.append("type", type);
 
-      if (communityId) {
+      if (communityId && type === "dampak") {
         formData.append("communityId", communityId);
       }
 
@@ -116,6 +116,16 @@ export function FormArticlePublic({ type }: FormArticleProps) {
             toast.success("Artikel berhasil dipublikasikan");
             break;
         }
+        form.reset({
+          title: "",
+          category: "",
+          tags: [],
+          thumbnailImage: "",
+          content: "",
+          status: "draft",
+          id: undefined,
+          communityId: undefined,
+        });
         router.refresh();
       }
       setIsOpen(false);

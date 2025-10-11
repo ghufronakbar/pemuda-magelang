@@ -224,6 +224,17 @@ const _updateUserPassword = async (formData: FormData) => {
     return { ok: false, error: "Password lama salah" };
   }
 
+  const isSamePassword = await bcrypt.compare(
+    parsedData.data.newPassword,
+    checkUser.password
+  );
+  if (isSamePassword) {
+    return {
+      ok: false,
+      error: "Password baru tidak boleh sama dengan password lama",
+    };
+  }
+
   const hashedPassword = await bcrypt.hash(parsedData.data.newPassword, 10);
 
   const updatedUser = await db.user.update({
