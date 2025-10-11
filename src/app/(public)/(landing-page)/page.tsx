@@ -68,7 +68,6 @@ const LandingPage = async () => {
         supportedPartners={supported}
         collaborators={collabs}
         mediaPartners={medias}
-        speedSeconds={{ supported: 28, collaborators: 34, media: 30 }}
         className="py-26"
       />
     </main>

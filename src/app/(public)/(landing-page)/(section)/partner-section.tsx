@@ -19,8 +19,6 @@ export interface PartnerSectionProps {
   title?: string;
   description?: string;
   className?: string;
-  /** durasi animasi per baris (detik) */
-  speedSeconds?: { supported?: number; collaborators?: number; media?: number };
 }
 
 export function PartnerSection({
@@ -30,11 +28,16 @@ export function PartnerSection({
   title = "Mitra & Pendukung",
   description = "Honorable mention untuk pihak yang mendukung Pemuda Magelang.",
   className,
-  speedSeconds,
 }: PartnerSectionProps) {
   const hasAny =
     supportedPartners.length || collaborators.length || mediaPartners.length;
   if (!hasAny) return null;
+
+  const speedSeconds = {
+    supported: supportedPartners.length * 22,
+    collaborators: collaborators.length * 20,
+    media: mediaPartners.length * 19,
+  };
 
   return (
     <section className={cn("relative overflow-hidden", className)}>
@@ -58,8 +61,8 @@ export function PartnerSection({
           {supportedPartners.length > 0 && (
             <Row
               label="Didukung oleh"
-              items={[...supportedPartners, ...supportedPartners]}
-              durationSec={speedSeconds?.supported ?? 26}
+              items={[...supportedPartners, ...supportedPartners, ...supportedPartners, ...supportedPartners, ...supportedPartners, ...supportedPartners, ...supportedPartners, ...supportedPartners]}
+              durationSec={speedSeconds?.supported}
               direction="left"
             />
           )}
@@ -67,8 +70,8 @@ export function PartnerSection({
           {collaborators.length > 0 && (
             <Row
               label="Kolaborator"
-              items={[...collaborators, ...collaborators]}
-              durationSec={speedSeconds?.collaborators ?? 30}
+              items={[...collaborators, ...collaborators, ...collaborators, ...collaborators, ...collaborators, ...collaborators, ...collaborators, ...collaborators]}
+              durationSec={speedSeconds?.collaborators}
               direction="right"
             />
           )}
@@ -76,8 +79,8 @@ export function PartnerSection({
           {mediaPartners.length > 0 && (
             <Row
               label="Media Partner"
-              items={[...mediaPartners, ...mediaPartners]}
-              durationSec={speedSeconds?.media ?? 28}
+              items={[...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners]}
+              durationSec={speedSeconds?.media}
               direction="left"
             />
           )}
