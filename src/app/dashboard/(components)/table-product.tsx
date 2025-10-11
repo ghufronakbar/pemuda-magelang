@@ -240,11 +240,11 @@ export function TableProduct({
                           </div>
                         )}
                       </div>
-                      <div className="min-w-0">
-                        <div className="line-clamp-1 font-medium">
+                      <div className="min-w-0 max-w-[200px]">
+                        <div className="line-clamp-1 font-medium truncate">
                           {p.title}
                         </div>
-                        <div className="mt-1 line-clamp-1 text-[11px] text-muted-foreground">
+                        <div className="mt-1 line-clamp-1 text-[11px] text-muted-foreground truncate">
                           {stripHtml(p.description)}
                         </div>
                       </div>

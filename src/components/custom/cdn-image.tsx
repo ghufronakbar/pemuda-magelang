@@ -2,7 +2,7 @@
 // src/components/custom/cdn-image.tsx
 import Image, { ImageProps } from "next/image";
 import { forwardRef } from "react";
-import { CDN_URL } from "@/constants";
+import { BASE_URL, CDN_URL } from "@/constants";
 
 export function cdnUrl(key: string) {
   if (key.startsWith("http")) return key;
@@ -10,6 +10,10 @@ export function cdnUrl(key: string) {
   const base = (CDN_URL || "").replace(/\/+$/, "");
   const rel = key.replace(/^\/+/, "");
   return `${base}/${rel}`;
+}
+
+export function cdnUrlWithBaseUrl(key: string) {
+  return `${BASE_URL}/${cdnUrl(key)}`;
 }
 
 type Props = Omit<ImageProps, "src"> & { uniqueKey: string };

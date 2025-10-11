@@ -21,7 +21,7 @@ import type {
 } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import { id as idLocale } from "date-fns/locale";
-import { cdnUrl } from "@/components/custom/cdn-image";
+import { cdnUrlWithBaseUrl } from "@/components/custom/cdn-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -51,13 +51,17 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 14,
     alignItems: "center",
+    flexShrink: 0,
   },
   avatar: {
-    width: 92,
+    // width: 92,
     height: 92,
-    borderRadius: 9999, // FULL ROUNDED
+    width: "auto",
+    aspectRatio: 1,
+    borderRadius: 999999, // FULL ROUNDED
     objectFit: "cover",
     backgroundColor: "#eee",
+    flexShrink: 0,
   },
   titleWrap: { flexGrow: 1, justifyContent: "center" },
   name: { fontSize: 22, fontFamily: "Times-Bold" },
@@ -198,7 +202,10 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
         {/* ===== HEADER ===== */}
         <View style={styles.header}>
           {talent.profilePicture ? (
-            <Image src={cdnUrl(talent.profilePicture)} style={styles.avatar} />
+            <Image
+              src={cdnUrlWithBaseUrl(talent.profilePicture)}
+              style={styles.avatar}
+            />
           ) : (
             <View
               style={[
@@ -360,7 +367,10 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
                       </Text>
                     ) : null}
                     {a.image ? (
-                      <Image src={cdnUrl(a.image)} style={styles.thumb} />
+                      <Image
+                        src={cdnUrlWithBaseUrl(a.image ?? "")}
+                        style={styles.thumb}
+                      />
                     ) : null}
                   </View>
                 </View>

@@ -382,12 +382,12 @@ export function TableUserTalent({
                 </TableCell>
                 {type === "pengguna" && (
                   <TableCell>
-                    <div className="flex flex-col gap-2">
-                      <div className="text-sm font-medium">
+                    <div className="flex flex-col gap-2 max-w-[200px]">
+                      <div className="text-sm font-medium truncate">
                         {u.subdistrict}
                         {u.village ? "," : ""} {u.village}
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs text-muted-foreground truncate">
                         {u.street}
                       </div>
                     </div>

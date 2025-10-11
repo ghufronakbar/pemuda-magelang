@@ -146,6 +146,8 @@ const _createUpdateHub = async (formData: FormData) => {
     revalidateTag(`detail-hub:${hub.slug}`);
     revalidateTag("hubs");
     revalidateTag("hubs-by-category");
+    revalidateTag("detail-hub");
+    revalidateTag("hub");
     return { ok: true, result: hub };
   } else {
     const hub = await db.hub.create({
@@ -163,6 +165,8 @@ const _createUpdateHub = async (formData: FormData) => {
     revalidateTag(`detail-hub:${hub.slug}`);
     revalidateTag("hubs");
     revalidateTag("hubs-by-category");
+    revalidateTag("detail-hub");
+    revalidateTag("hub");
     return { ok: true, result: hub };
   }
 };

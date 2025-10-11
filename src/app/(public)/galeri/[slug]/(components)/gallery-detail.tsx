@@ -58,7 +58,7 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
     talent.socialMedias[0] ??
     null;
   const ctaHref = ctaSM ? normalizeSocialUrl(ctaSM.platform, ctaSM.url) : null;
-  const ctaLabel = socialMediaPlatformEnum.getLabel(ctaSM.platform)
+  const ctaLabel = ctaSM
     ? `Hubungi di ${socialMediaPlatformEnum.getLabel(ctaSM.platform)}`
     : "Hubungi";
 
@@ -78,6 +78,14 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
     if (!el) return;
     el.scrollBy({ left: 320, behavior: "smooth" });
   }, []);
+
+  const maxLenDescription = 100;
+  const lenDescription = description?.length ?? 0;
+  const [isShowAllDescription, setIsShowAllDescription] = React.useState(false);
+  const descriptionEllipsis = isShowAllDescription
+    ? description
+    : description?.slice(0, maxLenDescription) + "...";
+  const isLongDescription = lenDescription > maxLenDescription;
 
   return (
     <section
@@ -268,9 +276,23 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
               </div>
 
               {/* Description */}
-              <div className="prose prose-neutral max-w-none text-sm">
-                <p className="whitespace-pre-wrap">{description}</p>
+              <div
+                className={cn(
+                  "prose prose-neutral max-w-none text-sm",
+                  isShowAllDescription && "line-clamp-none"
+                )}
+              >
+                <p className="whitespace-pre-wrap">{descriptionEllipsis}</p>
               </div>
+              <span
+                className="text-xs text-muted-foreground"
+                onClick={() => setIsShowAllDescription(!isShowAllDescription)}
+              >
+                {isLongDescription &&
+                  (isShowAllDescription
+                    ? "Lihat lebih sedikit"
+                    : "Lihat selengkapnya")}
+              </span>
 
               {/* Tags moved below description */}
               {tags?.length ? (
