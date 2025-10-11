@@ -28,24 +28,25 @@ export const UserTalentSchema = z.object({
   industry: z.string().min(1, "Industri tidak boleh kosong"),
   bannerPicture: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+
   socialMedias: z.array(
     z.object({
       platform: z.enum(SocialMediaPlatformEnum),
       url: z.string().url("URL tidak valid").min(1, "URL tidak boleh kosong"),
     })
   ),
+
   skills: z.array(z.string()).min(1, "Setidaknya isi satu skill"),
+
   awards: z.array(
     z.object({
-      image: z
-        .string()
-        .optional()
-        .nullable(),
+      image: z.string().optional().nullable(),
       name: z.string().min(1, "Nama tidak boleh kosong"),
       description: z.string().optional().nullable(),
       date: z.coerce.date("Tanggal tidak boleh kosong"),
     })
   ),
+
   educations: z.array(
     z
       .object({
@@ -55,11 +56,12 @@ export const UserTalentSchema = z.object({
         startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
         endDate: z.coerce.date().optional().nullable(),
       })
-      // .refine((data) => data.endDate && data.startDate < data.endDate, {
-      //   path: ["endDate"],
-      //   message: "Tanggal selesai harus lebih dari tanggal mulai",
-      // })
+      .refine((v) => v.endDate == null || v.endDate > v.startDate, {
+        message: "Tanggal selesai harus lebih besar daripada tanggal mulai",
+        path: ["endDate"],
+      })
   ),
+
   workExperiences: z.array(
     z
       .object({
@@ -69,10 +71,10 @@ export const UserTalentSchema = z.object({
         startDate: z.coerce.date("Tanggal mulai tidak boleh kosong"),
         endDate: z.coerce.date().optional().nullable(),
       })
-      // .refine((data) => data.endDate && data.startDate < data.endDate, {
-      //   path: ["endDate"],
-      //   message: "Tanggal selesai harus lebih dari tanggal mulai",
-      // })
+      .refine((v) => v.endDate == null || v.endDate > v.startDate, {
+        message: "Tanggal selesai harus lebih besar daripada tanggal mulai",
+        path: ["endDate"],
+      })
   ),
 });
 
