@@ -77,13 +77,18 @@ export function DashboardHeader() {
           {/* Home */}
           <BreadcrumbItem className="hidden md:block">
             <BreadcrumbLink asChild>
-              <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link
+                href="/"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
                 Home
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
 
-          {crumbs.length > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+          {crumbs.length > 0 && (
+            <BreadcrumbSeparator className="hidden md:block" />
+          )}
 
           {/* Jika path pendek, render semua segmen */}
           {!shouldEllipsize &&
@@ -92,14 +97,19 @@ export function DashboardHeader() {
               const isFirst = idx === 0;
               return (
                 <FragmentWithSep key={c.href} showSep={!isLast}>
-                  <BreadcrumbItem className={isFirst ? "block" : "hidden sm:block"}>
+                  <BreadcrumbItem
+                    className={isFirst ? "block" : "hidden sm:block"}
+                  >
                     {isLast ? (
                       <BreadcrumbPage className="text-sm font-semibold text-foreground line-clamp-1">
                         {c.label}
                       </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
-                        <Link href={c.href} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1">
+                        <Link
+                          href={c.href}
+                          className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1"
+                        >
                           {c.label}
                         </Link>
                       </BreadcrumbLink>
@@ -115,7 +125,10 @@ export function DashboardHeader() {
               {/* First */}
               <BreadcrumbItem className="block">
                 <BreadcrumbLink asChild>
-                  <Link href={first.href} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1">
+                  <Link
+                    href={first.href}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors line-clamp-1"
+                  >
                     {first.label}
                   </Link>
                 </BreadcrumbLink>
@@ -133,7 +146,10 @@ export function DashboardHeader() {
                   <DropdownMenuContent align="start" className="min-w-[200px]">
                     {hidden.map((h) => (
                       <DropdownMenuItem key={h.href} asChild>
-                        <Link href={h.href} className="text-sm font-medium cursor-pointer">
+                        <Link
+                          href={h.href}
+                          className="text-sm font-medium cursor-pointer"
+                        >
                           {h.label}
                         </Link>
                       </DropdownMenuItem>

@@ -41,6 +41,7 @@ interface FormUserContext {
   talentStatus: TalentStatusEnum | null;
   openTalentDialog: boolean;
   setOpenTalentDialog: (open: boolean) => void;
+  refetch: () => void;
 }
 
 const FormUserContext = createContext<FormUserContext | null>(null);
@@ -67,70 +68,70 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
     defaultValues: initialUserPasswordInput,
   });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("/api/profile");
-        if (!res.ok) {
-          throw new Error("Failed to fetch user");
-        }
-        const user = (await res.json()).data as User & {
-          talent: DetailTalent | null;
-        };
-        formProfile.reset({
-          name: user.name,
-          email: user.email,
-          profilePicture: user.profilePicture,
-          subdistrict: user.subdistrict ?? "",
-          village: user.village ?? "",
-          street: user.street ?? "",
-        });
-        if (user.talent && user.role === "user") {
-          formTalent.reset({
-            profession: user.talent.profession,
-            industry: user.talent.industry,
-            bannerPicture: user.talent.bannerPicture,
-            description: user.talent.description,
-            socialMedias: user.talent.socialMedias.map((socialMedia) => ({
-              platform: socialMedia.platform,
-              url: socialMedia.url,
-            })),
-            skills: user.talent.skills,
-            awards: user.talent.awards.map((award) => ({
-              image: award.image,
-              name: award.name,
-              description: award.description,
-              date: award.date,
-            })),
-            educations: user.talent.educations.map((education) => ({
-              degree: education.degree,
-              schoolName: education.schoolName,
-              description: education.description,
-              startDate: education.startDate,
-              endDate: education.endDate,
-            })),
-            workExperiences: user.talent.workExperiences.map(
-              (workExperience) => ({
-                companyName: workExperience.companyName,
-                position: workExperience.position,
-                description: workExperience.description,
-                startDate: workExperience.startDate,
-                endDate: workExperience.endDate,
-              })
-            ),
-          });
-          setTalentStatus(user.talent.status);
-        }
-      } catch (error) {
-        console.error(error);
-        if (isDashboard) {
-          toast.error("Gagal mengambil data user");
-        }
-      } finally {
-        setLoading(false);
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/profile");
+      if (!res.ok) {
+        throw new Error("Failed to fetch user");
       }
-    };
+      const user = (await res.json()).data as User & {
+        talent: DetailTalent | null;
+      };
+      formProfile.reset({
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        subdistrict: user.subdistrict ?? "",
+        village: user.village ?? "",
+        street: user.street ?? "",
+      });
+      if (user.talent && user.role === "user") {
+        formTalent.reset({
+          profession: user.talent.profession,
+          industry: user.talent.industry,
+          bannerPicture: user.talent.bannerPicture,
+          description: user.talent.description,
+          socialMedias: user.talent.socialMedias.map((socialMedia) => ({
+            platform: socialMedia.platform,
+            url: socialMedia.url,
+          })),
+          skills: user.talent.skills,
+          awards: user.talent.awards.map((award) => ({
+            image: award.image,
+            name: award.name,
+            description: award.description,
+            date: award.date,
+          })),
+          educations: user.talent.educations.map((education) => ({
+            degree: education.degree,
+            schoolName: education.schoolName,
+            description: education.description,
+            startDate: education.startDate,
+            endDate: education.endDate,
+          })),
+          workExperiences: user.talent.workExperiences.map(
+            (workExperience) => ({
+              companyName: workExperience.companyName,
+              position: workExperience.position,
+              description: workExperience.description,
+              startDate: workExperience.startDate,
+              endDate: workExperience.endDate,
+            })
+          ),
+        });
+        setTalentStatus(user.talent.status);
+      }
+    } catch (error) {
+      console.error(error);
+      if (isDashboard) {
+        toast.error("Gagal mengambil data user");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -145,6 +146,7 @@ const FormUserProvider = ({ children }: { children: React.ReactNode }) => {
         talentStatus,
         openTalentDialog,
         setOpenTalentDialog,
+        refetch: fetchUser,
       }}
     >
       {children}

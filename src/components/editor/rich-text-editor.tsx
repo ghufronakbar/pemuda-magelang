@@ -41,13 +41,7 @@ import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
 import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button";
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
-import {
-  ColorHighlightPopover,
-  ColorHighlightPopoverContent,
-  ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover";
+import { ColorHighlightPopoverContent } from "@/components/tiptap-ui/color-highlight-popover";
 import {
   LinkPopover,
   LinkContent,
@@ -238,11 +232,11 @@ export function RichTextEditor({
       ImageUploadNode.configure({
         accept: "image/*",
         maxSize: 5 * 1024 * 1024, // 5MB
-        limit: 20,
+        limit: 5,
         upload: async (file: File) => {
           if (!onUploadImage) throw new Error("onUploadImage tidak disediakan");
           const url = await onUploadImage(file);
-          return cdnUrl(url);
+          return url;
           // return url; // harus URL publik
         },
         onSuccess: (url: string) => {

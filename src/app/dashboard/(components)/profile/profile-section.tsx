@@ -88,8 +88,17 @@ export function ProfileSection({ className }: ProfileSectionProps) {
           toast.error("Gambar tidak boleh lebih dari 5MB");
           return;
         }
-        if (file.type !== "image/jpeg" && file.type !== "image/png") {
-          toast.error("Gambar harus berupa JPEG atau PNG");
+        if (
+          file.type !== "image/jpeg" &&
+          file.type !== "image/png" &&
+          file.type !== "image/jpg" &&
+          file.type !== "image/webp" &&
+          file.type !== "image/avif" &&
+          // for iphone
+          file.type !== "image/heic" &&
+          file.type !== "image/heif"
+        ) {
+          toast.error("Format file tidak diizinkan");
           return;
         }
         setUploading(true);

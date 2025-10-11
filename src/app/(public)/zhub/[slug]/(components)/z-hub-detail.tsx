@@ -137,7 +137,7 @@ export function ZHubDetail({ hub, className }: ZHubDetailProps) {
                       <Card className="overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg">
                         <div className="relative aspect-[16/9] w-full bg-muted">
                           <CdnImage
-                            uniqueKey={r.image ?? "/placeholder.svg"}
+                            uniqueKey={r.image ?? PLACEHOLDER_IMAGE}
                             alt={r.name}
                             fill
                             sizes="(max-width:1024px) 100vw, 33vw"

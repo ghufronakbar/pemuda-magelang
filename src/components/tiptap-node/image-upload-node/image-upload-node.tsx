@@ -428,11 +428,11 @@ const DropZoneContent: React.FC<{ maxSize: number; limit: number }> = ({
 
     <div className="tiptap-image-upload-content">
       <span className="tiptap-image-upload-text">
-        <em>Click to upload</em> or drag and drop
+        <em>Klik untuk mengupload</em> atau drag and drop
       </span>
       <span className="tiptap-image-upload-subtext">
-        Maximum {limit} file{limit === 1 ? "" : "s"}, {maxSize / 1024 / 1024}MB
-        each.
+        Maksimum {limit} file{limit === 1 ? "" : "s"}, {maxSize / 1024 / 1024}MB
+        masing-masing.
       </span>
     </div>
   </>
@@ -445,7 +445,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 
   const uploadOptions: UploadOptions = {
     maxSize,
-    limit,
+    limit: 5,
     accept,
     upload: extension.options.upload,
     onSuccess: extension.options.onSuccess,

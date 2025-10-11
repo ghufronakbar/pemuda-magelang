@@ -48,6 +48,7 @@ interface NavTree {
 }
 
 export function AppSidebar({ session }: { session: Session | null }) {
+  const { open } = useSidebar();
   const pathname = usePathname();
   const role = session?.user?.role;
 
@@ -144,42 +145,33 @@ export function AppSidebar({ session }: { session: Session | null }) {
 
   return (
     <Sidebar className="z-50" collapsible="icon">
-      <SidebarHeader>
-        {session?.user ? (
-          <div className="flex items-center gap-2 p-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={cdnUrl(session.user.image ?? "")}
-                className="object-cover"
-              />
-              <AvatarFallback>
-                {getInitials(session.user.name ?? session.user.email ?? "U")}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <div className="truncate text-sm font-medium">
-                {session.user.name ?? "Pengguna"}
-              </div>
-              <div className="truncate text-xs text-muted-foreground">
-                {session.user.email}
-              </div>
-              <Badge className="text-2xs px-1 py-[0.5px]">
-                {roleEnum.getLabel(session.user.role)}
-              </Badge>
-            </div>
-          </div>
-        ) : (
-          <Link
-            href="/"
-            className="flex items-center gap-2 p-2 text-sm hover:underline"
-            title="Kembali"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Kembali
-          </Link>
-        )}
-      </SidebarHeader>
       <SidebarContent>
+        <SidebarHeader>
+          {session?.user && (
+            <div className={cn("flex items-center gap-2", open && "p-2")}>
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  src={cdnUrl(session.user.image ?? "")}
+                  className="object-cover"
+                />
+                <AvatarFallback>
+                  {getInitials(session.user.name ?? session.user.email ?? "U")}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <div className="truncate text-sm font-medium">
+                  {session.user.name ?? "Pengguna"}
+                </div>
+                <div className="truncate text-xs text-muted-foreground">
+                  {session.user.email}
+                </div>
+                <Badge className="text-2xs px-1 py-[0.5px]">
+                  {roleEnum.getLabel(session.user.role)}
+                </Badge>
+              </div>
+            </div>
+          )}
+        </SidebarHeader>
         {/* ===== Primary ===== */}
         {navTree.map((section) => (
           <SidebarGroup key={section.section}>

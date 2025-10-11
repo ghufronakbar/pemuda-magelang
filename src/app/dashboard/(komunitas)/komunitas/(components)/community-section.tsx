@@ -21,11 +21,8 @@ import {
   DialogDescription,
   DialogContent,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
-import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import { FiExternalLink } from "react-icons/fi";
 import { useFormCommunity } from "@/context/form-community-context";
 
 interface CommunitySectionProps {
@@ -114,42 +111,40 @@ export function CommunitySection({
         )}
 
         {/* CTA daftar (belum terdaftar atau ditolak) */}
-        {!communityStatus && (
-          <Dialog
-            open={openCommunityDialog}
-            onOpenChange={setOpenCommunityDialog}
-          >
-            <DialogContent className="max-w-4xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-4xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
-              <DialogHeader className="flex-shrink-0">
-                <DialogTitle>Daftar Komunitas</DialogTitle>
-                <DialogDescription>
-                  Isi data berikut untuk mengajukan pendaftaran sebagai
-                  Komunitas.
-                </DialogDescription>
-              </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto px-1">
-                <FormCommunity
-                  pending={loading}
-                  onSubmit={onSubmit}
-                  showSubmit={false}
-                  formId="communityRegisterForm"
-                />
-              </div>
+        <Dialog
+          open={openCommunityDialog}
+          onOpenChange={setOpenCommunityDialog}
+        >
+          <DialogContent className="max-w-4xl max-h-[90vh] rounded-xl flex flex-col h-full w-full max-h-full max-w-full md:max-w-4xl md:max-h-[90vh] md:h-auto md:w-auto md:rounded-xl">
+            <DialogHeader className="flex-shrink-0">
+              <DialogTitle>Daftar Komunitas</DialogTitle>
+              <DialogDescription>
+                Isi data berikut untuk mengajukan pendaftaran sebagai Komunitas.
+              </DialogDescription>
+            </DialogHeader>
 
-              <DialogFooter className="flex-shrink-0">
-                <Button
-                  form="communityRegisterForm"
-                  type="submit"
-                  disabled={loading}
-                  className="min-w-28"
-                >
-                  {loading ? "Memproses…" : "Ajukan permohonan"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
+            <div className="flex-1 overflow-y-auto px-1">
+              <FormCommunity
+                pending={loading}
+                onSubmit={onSubmit}
+                showSubmit={false}
+                formId="communityRegisterForm"
+              />
+            </div>
+
+            <DialogFooter className="flex-shrink-0">
+              <Button
+                form="communityRegisterForm"
+                type="submit"
+                disabled={loading}
+                className="min-w-28"
+              >
+                {loading ? "Memproses…" : "Ajukan permohonan"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Form edit (sudah terdaftar) */}
         {communityStatus === "approved" && (

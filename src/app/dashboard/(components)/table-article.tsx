@@ -117,8 +117,8 @@ export function TableArticle({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex gap-3 items-end">
-        <div className="flex-1">
+      <div className="flex flex-row gap-3 items-end flex-wrap">
+        <div className="flex-1 min-w-[200px]">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
           </label>
@@ -133,45 +133,47 @@ export function TableArticle({
           </div>
         </div>
 
-        <div className="flex-shrink-0">
-          <label className="mb-1 block text-xs text-muted-foreground">
-            Kategori
-          </label>
-          <Select value={category} onValueChange={(v) => setCategory(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Semua kategori" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua</SelectItem>
-              {categories.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="flex flex-row gap-3 items-end flex-wrap">
+          <div className="flex-shrink-0">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Kategori
+            </label>
+            <Select value={category} onValueChange={(v) => setCategory(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Semua kategori" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="flex-shrink-0">
-          <label className="mb-1 block text-xs text-muted-foreground">
-            Status
-          </label>
-          <Select
-            value={status}
-            onValueChange={(v) => setStatus(v as ArticleStatusEnum)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Semua status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua</SelectItem>
-              {Object.values(ArticleStatusEnum).map((status) => (
-                <SelectItem key={status} value={status}>
-                  {articleStatusEnum.getLabel(status)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex-shrink-0">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Status
+            </label>
+            <Select
+              value={status}
+              onValueChange={(v) => setStatus(v as ArticleStatusEnum)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Semua status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua</SelectItem>
+                {Object.values(ArticleStatusEnum).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {articleStatusEnum.getLabel(status)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

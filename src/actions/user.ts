@@ -347,9 +347,6 @@ const _updateUserTalent = async (formData: FormData) => {
     if (checkUser.talent.status === TalentStatusEnum.pending) {
       return { ok: false, error: "Talent masih dalam proses verifikasi" };
     }
-    if (checkUser.talent.status === TalentStatusEnum.rejected) {
-      return { ok: false, error: "Permintaan talent ditolak" };
-    }
     if (checkUser.talent.status === TalentStatusEnum.banned) {
       return { ok: false, error: "Talent telah diblokir" };
     }
@@ -375,6 +372,10 @@ const _updateUserTalent = async (formData: FormData) => {
             bannerPicture: parsedData.data.bannerPicture,
             description: parsedData.data.description,
             skills: parsedData.data.skills,
+            status:
+              checkUser.talent.status === "rejected"
+                ? TalentStatusEnum.pending
+                : checkUser.talent.status,
             socialMedias:
               parsedData.data.socialMedias.length > 0
                 ? {

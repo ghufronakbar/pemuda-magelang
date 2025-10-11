@@ -487,8 +487,7 @@ function MobileMenu({
                     variant="destructive"
                     onClick={() =>
                       signOut({
-                        callbackUrl:
-                          encodeURIComponent(pathname ?? "") ?? "/login",
+                        callbackUrl: pathname ?? "" ?? "/login",
                       })
                     }
                   >

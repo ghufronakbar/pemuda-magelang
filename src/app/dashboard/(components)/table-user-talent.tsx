@@ -168,8 +168,8 @@ export function TableUserTalent({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex gap-3 items-end">
-        <div className="flex-1">
+      <div className="flex flex-row gap-3 items-end flex-wrap">
+        <div className="flex-1 min-w-[200px]">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
           </label>
@@ -188,104 +188,108 @@ export function TableUserTalent({
           </div>
         </div>
 
-        {actionButton && <div className="flex-shrink-0">{actionButton}</div>}
+        <div className="flex flex-row gap-3 items-end flex-wrap">
+          {type === "talenta" && (
+            <>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Status Talenta
+                </label>
+                <Select
+                  value={talentStatus}
+                  onValueChange={(v) => setTalentStatus(v as TalentStatusEnum)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {Object.values(TalentStatusEnum).map((st) => (
+                      <SelectItem key={st} value={st}>
+                        {statusLabel(st)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-        {type === "talenta" && (
-          <>
-            <div>
-              <label className="mb-1 block text-xs text-muted-foreground">
-                Status Talenta
-              </label>
-              <Select
-                value={talentStatus}
-                onValueChange={(v) => setTalentStatus(v as TalentStatusEnum)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Semua status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua</SelectItem>
-                  {Object.values(TalentStatusEnum).map((st) => (
-                    <SelectItem key={st} value={st}>
-                      {statusLabel(st)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-xs text-muted-foreground">
-                Industri
-              </label>
-              <Select value={industry} onValueChange={(v) => setIndustry(v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Semua industri" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua</SelectItem>
-                  {industryOptions.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {c}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        )}
-        {type === "pengguna" && (
-          <>
-            <div>
-              <label className="mb-1 block text-xs text-muted-foreground">
-                Kecamatan
-              </label>
-              <Select
-                value={subdistrict}
-                onValueChange={(v) => {
-                  setSubdistrict(v);
-                  setVillage("all");
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Semua kecamatan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua</SelectItem>
-                  {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
-                    <SelectItem key={item.subdistrict} value={item.subdistrict}>
-                      {item.subdistrict}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs text-muted-foreground">
-                Kelurahan/Desa
-              </label>
-              <Select
-                value={village}
-                onValueChange={(v) => {
-                  setVillage(v);
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Semua kelurahan/desa" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua</SelectItem>
-                  {villageOptions.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        )}
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Industri
+                </label>
+                <Select value={industry} onValueChange={(v) => setIndustry(v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua industri" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {industryOptions.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {c}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          )}
+          {type === "pengguna" && (
+            <>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Kecamatan
+                </label>
+                <Select
+                  value={subdistrict}
+                  onValueChange={(v) => {
+                    setSubdistrict(v);
+                    setVillage("all");
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua kecamatan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {KOTA_MAGELANG_ADDRESS_DATA.map((item) => (
+                      <SelectItem
+                        key={item.subdistrict}
+                        value={item.subdistrict}
+                      >
+                        {item.subdistrict}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">
+                  Kelurahan/Desa
+                </label>
+                <Select
+                  value={village}
+                  onValueChange={(v) => {
+                    setVillage(v);
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Semua kelurahan/desa" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua</SelectItem>
+                    {villageOptions.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+      {actionButton && <div className="flex-shrink-0">{actionButton}</div>}
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">

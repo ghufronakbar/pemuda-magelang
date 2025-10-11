@@ -44,8 +44,14 @@ export function TalentSection({
 }: TalentSectionProps) {
   const { data: session } = useSession();
 
-  const { talentStatus, formTalent, openTalentDialog, setOpenTalentDialog } =
-    useFormUser();
+  const {
+    talentStatus,
+    formTalent,
+    openTalentDialog,
+    setOpenTalentDialog,
+    refetch,
+    loading,
+  } = useFormUser();
   const isRegistered = !!talentStatus;
   const isEditable = talentStatus === "approved";
 
@@ -75,7 +81,6 @@ export function TalentSection({
             : null,
         })),
       };
-      console.log("data", mappedData);
       const fd = new FormData();
       fd.append("payload", JSON.stringify(mappedData));
 
@@ -90,6 +95,7 @@ export function TalentSection({
             : "Profil talenta berhasil diperbarui"
         );
         setOpenTalentDialog(false);
+        refetch();
         router.refresh();
       }
     } catch (e) {
@@ -100,6 +106,24 @@ export function TalentSection({
     }
   });
 
+  if (loading)
+    return (
+      <Card
+        className={cn(
+          "rounded-xl border-muted/40 shadow-sm animate-pulse",
+          className
+        )}
+      >
+        <CardHeader>
+          <CardTitle>Memuat Data</CardTitle>
+          <CardDescription>Harap tunggu</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="w-full h-10 rounded-md bg-muted" />
+          <div className="w-full h-10 rounded-md bg-muted" />
+        </CardContent>
+      </Card>
+    );
   if (session?.user?.role !== "user") return null;
   return (
     <Card className={cn("rounded-xl border-muted/40 shadow-sm", className)}>

@@ -82,7 +82,7 @@ export async function ManajemenArtikelContent({ tab }: { tab: string }) {
   return (
     <Tabs defaultValue={tab || "gerak"} className="w-full">
       <TabsList
-        className={`grid w-full ${isAdmin ? "grid-cols-4" : "grid-cols-2"}`}
+        className="flex flex-row gap-2 overflow-x-auto scrollbar-hide w-full justify-start"
       >
         {showGerak && <TabsTrigger value="gerak">Gerak</TabsTrigger>}
         {showDetak && <TabsTrigger value="detak">Detak</TabsTrigger>}

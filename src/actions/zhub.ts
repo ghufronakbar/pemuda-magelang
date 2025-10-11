@@ -107,7 +107,7 @@ const _createUpdateCategoryHub = async (formData: FormData) => {
     });
     revalidateTag(`hubs-by-category:${categoryHub.id}`);
     revalidateTag("hubs");
-    revalidatePath("dashboard/manajemen")
+    revalidatePath("dashboard/manajemen");
     return { ok: true, result: categoryHub };
   }
 };
@@ -145,6 +145,7 @@ const _createUpdateHub = async (formData: FormData) => {
     revalidateTag(`hubs-by-category:${hub.hubCategoryId}`);
     revalidateTag(`detail-hub:${hub.slug}`);
     revalidateTag("hubs");
+    revalidateTag("hubs-by-category");
     return { ok: true, result: hub };
   } else {
     const hub = await db.hub.create({
@@ -161,6 +162,7 @@ const _createUpdateHub = async (formData: FormData) => {
     revalidateTag(`hubs-by-category:${hub.hubCategoryId}`);
     revalidateTag(`detail-hub:${hub.slug}`);
     revalidateTag("hubs");
+    revalidateTag("hubs-by-category");
     return { ok: true, result: hub };
   }
 };
@@ -203,6 +205,7 @@ const _deleteHub = async (id: string) => {
   revalidateTag(`hubs-by-category:${hub.hubCategoryId}`);
   revalidateTag(`detail-hub:${hub.slug}`);
   revalidateTag("hubs");
+  revalidateTag("hubs-by-category");
   return { ok: true, result: hub };
 };
 
@@ -229,6 +232,7 @@ const _deleteCategoryHub = async (id: string) => {
     revalidateTag(`detail-hub:${hub.id}`);
     revalidateTag(`detail-hub:${hub.slug}`);
   });
+  revalidateTag("hubs-by-category");
   return { ok: true, result: categoryHub };
 };
 

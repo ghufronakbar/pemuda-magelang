@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 // src/components/custom/cdn-image.tsx
 import Image, { ImageProps } from "next/image";
 import { forwardRef } from "react";

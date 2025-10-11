@@ -33,7 +33,7 @@ import { Label } from "@/components/ui/label";
 import { IconEnum } from "@prisma/client";
 import { iconEnum } from "@/enum/icon-enum";
 export const FormAboutHighlights = () => {
-  const { form, onSubmit, loading } = useFormAppData();
+  const { form, onSubmit } = useFormAppData();
   const aboutArray = useFieldArray({
     control: form.aboutItems.control,
     name: "aboutItems",
@@ -76,7 +76,7 @@ export const FormAboutHighlights = () => {
                     <Label>Highlight {i + 1}</Label>
                   </CardHeader>
                   <CardContent className="flex flex-col gap-2">
-                    <div className="flex flex-row gap-2 w-full">
+                    <div className="flex flex-row flex-wrap gap-2 w-full">
                       <div className="flex flex-col lg:flex-row gap-2 w-full">
                         <FormField
                           control={form.aboutItems.control}
@@ -127,20 +127,6 @@ export const FormAboutHighlights = () => {
                           )}
                         />
                       </div>
-                      <AlertConfirmation
-                        title="Hapus Item Highlight"
-                        description="Apakah Anda yakin ingin menghapus item highlight ini? Tindakan ini tidak dapat dibatalkan."
-                        onConfirm={() => aboutArray.remove(i)}
-                      >
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          className="sm:justify-self-end ml-auto flex-shrink-0"
-                        >
-                          Hapus
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertConfirmation>
                     </div>
                     <FormField
                       control={form.aboutItems.control}
@@ -160,6 +146,20 @@ export const FormAboutHighlights = () => {
                         </FormItem>
                       )}
                     />
+                    <AlertConfirmation
+                      title="Hapus Item Highlight"
+                      description="Apakah Anda yakin ingin menghapus item highlight ini? Tindakan ini tidak dapat dibatalkan."
+                      onConfirm={() => aboutArray.remove(i)}
+                    >
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className="sm:justify-self-end ml-auto flex-shrink-0"
+                      >
+                        Hapus
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertConfirmation>
                   </CardContent>
                 </Card>
               ))}

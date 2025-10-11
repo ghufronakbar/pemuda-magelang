@@ -30,9 +30,20 @@ export async function POST(req: NextRequest) {
     if (file.size > MAX_BYTES)
       return NextResponse.json({ error: "image too large" }, { status: 413 });
 
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+    const allowed = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+      "image/heic",
+      "image/heif",
+    ];
     if (!allowed.includes(file.type)) {
-      return NextResponse.json({ error: "unsupported image mime" }, { status: 400 });
+      return NextResponse.json(
+        { error: "unsupported image mime type" },
+        { status: 400 }
+      );
     }
 
     // Pastikan root ada (dev bisa belum dibuat)
