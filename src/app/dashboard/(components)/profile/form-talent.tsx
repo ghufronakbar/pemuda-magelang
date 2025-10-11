@@ -17,7 +17,15 @@ import { Input } from "@/components/ui/input";
 import { ImageUploader } from "@/components/custom/image-uploader";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Briefcase, Award as AwardIcon, GraduationCap, Sparkles, Share2 } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Briefcase,
+  Award as AwardIcon,
+  GraduationCap,
+  Sparkles,
+  Share2,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -108,7 +116,8 @@ export function FormTalent({
                   />
                 </FormControl>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Saran ukuran: 1600×400px (rasio 4:1) • Maks 1MB • Format JPG/PNG
+                  Saran ukuran: 1600×400px (rasio 4:1) • Maks 1MB • Format
+                  JPG/PNG
                 </p>
                 <FormMessage />
               </FormItem>
@@ -214,7 +223,10 @@ export function FormTalent({
           </CardHeader>
           <CardContent className="space-y-4">
             {workExperiencesArray.fields.map((f, i) => (
-              <div key={f.id} className="rounded-lg border p-4 space-y-3 bg-muted/30">
+              <div
+                key={f.id}
+                className="rounded-lg border p-4 space-y-3 bg-muted/30"
+              >
                 <div className="grid gap-3 md:grid-cols-2 items-start">
                   <FormField
                     control={formTalent.control}
@@ -365,7 +377,10 @@ export function FormTalent({
           </CardHeader>
           <CardContent className="space-y-4">
             {awardsArray.fields.map((f, i) => (
-              <div key={f.id} className="rounded-lg border p-4 space-y-3 bg-muted/30">
+              <div
+                key={f.id}
+                className="rounded-lg border p-4 space-y-3 bg-muted/30"
+              >
                 <div className="grid gap-3 md:grid-cols-[220px_1fr] items-start">
                   <FormField
                     control={formTalent.control}
@@ -504,7 +519,10 @@ export function FormTalent({
           </CardHeader>
           <CardContent className="space-y-4">
             {educationsArray.fields.map((f, i) => (
-              <div key={f.id} className="rounded-lg border p-4 space-y-3 bg-muted/30">
+              <div
+                key={f.id}
+                className="rounded-lg border p-4 space-y-3 bg-muted/30"
+              >
                 <div className="grid gap-3 md:grid-cols-2 items-start">
                   <FormField
                     control={formTalent.control}
@@ -670,7 +688,9 @@ export function FormTalent({
               <Button
                 type="button"
                 size="sm"
-                onClick={() => smArray.append({ platform: "instagram", url: "" })}
+                onClick={() =>
+                  smArray.append({ platform: "instagram", url: "" })
+                }
               >
                 <Plus className="mr-2 h-4 w-4" /> Tambah
               </Button>
@@ -678,66 +698,74 @@ export function FormTalent({
           </CardHeader>
           <CardContent className="space-y-3">
             {smArray.fields.map((f, i) => (
-              <div key={f.id} className="flex flex-row gap-3 items-start">
-                <FormField
-                  control={formTalent.control}
-                  name={`socialMedias.${i}.platform`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Platform</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={disabled}
-                          onValueChange={(v) =>
-                            field.onChange(v as SocialMediaPlatformEnum)
-                          }
-                          value={String(field.value ?? "")}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Pilih platform" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.values(SocialMediaPlatformEnum).map((p) => (
-                              <SelectItem key={p} value={p}>
-                                {socialMediaPlatformEnum.getIcon(p)}
-                                {socialMediaPlatformEnum.getLabel(p)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div
+                key={f.id}
+                className="flex flex-col gap-3 items-start w-full"
+              >
+                <div className="flex flex-col md:flex-row gap-3 items-start w-full">
+                  <FormField
+                    control={formTalent.control}
+                    name={`socialMedias.${i}.platform`}
+                    render={({ field }) => (
+                      <FormItem className="w-full md:w-1/2">
+                        <FormLabel className="sr-only">Platform</FormLabel>
+                        <FormControl>
+                          <Select
+                            disabled={disabled}
+                            onValueChange={(v) =>
+                              field.onChange(v as SocialMediaPlatformEnum)
+                            }
+                            value={String(field.value ?? "")}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Pilih platform" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.values(SocialMediaPlatformEnum).map(
+                                (p) => (
+                                  <SelectItem key={p} value={p}>
+                                    {socialMediaPlatformEnum.getIcon(p)}
+                                    {socialMediaPlatformEnum.getLabel(p)}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={formTalent.control}
-                  name={`socialMedias.${i}.url`}
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel className="sr-only">URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://…"
-                          {...field}
-                          disabled={disabled}
-                          className="w-full"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={formTalent.control}
+                    name={`socialMedias.${i}.url`}
+                    render={({ field }) => (
+                      <FormItem className="w-full md:w-1/2">
+                        <FormLabel className="sr-only">URL</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://…"
+                            {...field}
+                            disabled={disabled}
+                            className="w-full"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 {!disabled ? (
                   <Button
                     type="button"
                     variant="destructive"
                     onClick={() => smArray.remove(i)}
-                    className="justify-self-end"
+                    className="self-end"
                   >
                     <Trash2 className="h-4 w-4" />
+                    Hapus
                   </Button>
                 ) : (
                   <div />

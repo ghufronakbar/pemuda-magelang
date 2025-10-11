@@ -19,7 +19,7 @@ export function HubCategorySection({ title, items }: HubCategorySectionProps) {
   const visible = React.useMemo(() => data.slice(pager.start, pager.end), [data, pager.start, pager.end]);
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="">
       <div className="mb-6">
         <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
       </div>

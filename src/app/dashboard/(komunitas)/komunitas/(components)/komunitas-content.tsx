@@ -6,7 +6,7 @@ import { TalentSection } from "@/app/dashboard/(components)/profile/talent-secti
 export function KomunitasContent() {
   return (
     <Tabs defaultValue="komunitas" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="w-full flex flex-row gap-2 justify-start overflow-x-auto scrollbar-hide">
         <TabsTrigger value="komunitas">Komunitas</TabsTrigger>
         <TabsTrigger value="talenta">Data Talenta</TabsTrigger>
       </TabsList>
