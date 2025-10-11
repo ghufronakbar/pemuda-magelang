@@ -117,7 +117,7 @@ export function TableArticle({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-      <div className="flex flex-row gap-3 items-end flex-wrap">
+      <div className="flex flex-row flex-wrap gap-3 items-end">
         <div className="flex-1 min-w-[200px]">
           <label className="mb-1 block text-xs text-muted-foreground">
             Cari
@@ -133,7 +133,7 @@ export function TableArticle({
           </div>
         </div>
 
-        <div className="flex flex-row gap-3 items-end flex-wrap">
+        <div className="flex flex-row flex-wrap gap-3 items-end">
           <div className="flex-shrink-0">
             <label className="mb-1 block text-xs text-muted-foreground">
               Kategori

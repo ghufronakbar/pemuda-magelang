@@ -37,6 +37,7 @@ import {
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
 import { formatIDDate } from "@/lib/helper";
 import { CdnImage } from "@/components/custom/cdn-image";
+import { COMMUNITY_CATEGORIES } from "@/data/community";
 
 interface CommunityWithUser extends Community {
   user: User;
@@ -185,7 +186,7 @@ export function TableCommunity({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Kategori</SelectItem>
-                {categories.map((category) => (
+                {COMMUNITY_CATEGORIES.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>

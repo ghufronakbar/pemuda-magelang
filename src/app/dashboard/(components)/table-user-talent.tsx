@@ -43,6 +43,7 @@ import { toast } from "sonner";
 import { roleEnum } from "@/enum/role-enum";
 import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
 import { cdnUrl } from "@/components/custom/cdn-image";
+import { INDUSTRY_LIST } from "@/data/industry";
 
 /* ================== Types ================== */
 
@@ -101,17 +102,6 @@ export function TableUserTalent({
     "all" | TalentStatusEnum
   >("all");
   const [industry, setIndustry] = React.useState<"all" | string>("all");
-
-  // derive options (industries)
-  const industryOptions = React.useMemo(() => {
-    if (type !== "talenta") return [];
-    const set = new Set(
-      users
-        .filter((u) => u.type === "talenta" && u.industry)
-        .map((u) => u.industry as string)
-    );
-    return Array.from(set).sort();
-  }, [users, type]);
 
   // filtering
   const filtered = React.useMemo(() => {
@@ -178,7 +168,7 @@ export function TableUserTalent({
             <Input
               placeholder={
                 type === "talenta"
-                  ? "Cari nama, email, profesi, industri…"
+                  ? "Cari nama, email, profesi..."
                   : "Cari nama, email…"
               }
               value={query}
@@ -223,7 +213,7 @@ export function TableUserTalent({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Semua</SelectItem>
-                    {industryOptions.map((c) => (
+                    {INDUSTRY_LIST.map((c) => (
                       <SelectItem key={c} value={c}>
                         {c}
                       </SelectItem>
@@ -290,12 +280,6 @@ export function TableUserTalent({
         </div>
       </div>
       {actionButton && <div className="flex-shrink-0">{actionButton}</div>}
-
-      {/* Info bar */}
-      <div className="text-xs text-muted-foreground">
-        Menampilkan {total === 0 ? 0 : start + 1}–
-        {Math.min(start + pageSize, total)} dari {total} data
-      </div>
 
       {/* Table */}
       <div className="overflow-x-auto rounded-md border">
