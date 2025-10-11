@@ -43,10 +43,10 @@ type ShowForm =
 
 interface FormAppDataProps {
   shows: ShowForm[];
-  categories: DataCategoryHub[];
+  zhubCategories: DataCategoryHub[];
 }
 
-export function FormAppData({ shows, categories }: FormAppDataProps) {
+export function FormAppData({ shows, zhubCategories }: FormAppDataProps) {
   const { loading } = useFormAppData();
 
   if (loading) {
@@ -255,7 +255,7 @@ export function FormAppData({ shows, categories }: FormAppDataProps) {
 
       {shows.includes("kategori-zhub") && (
         <TabsContent value="kategori-zhub" className="mt-6">
-          <FormKategoriZhub categories={categories} />
+          <FormKategoriZhub categories={zhubCategories} />
         </TabsContent>
       )}
     </Tabs>

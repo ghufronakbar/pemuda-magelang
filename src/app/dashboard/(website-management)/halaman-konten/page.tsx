@@ -1,7 +1,13 @@
 import { FormAppData } from "../form-app-data";
 import { checkPermission } from "@/actions/user";
 import { Role } from "@prisma/client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const ManajemenLayananPage = async () => {
   await checkPermission([Role.superadmin]);
@@ -12,7 +18,9 @@ const ManajemenLayananPage = async () => {
         <CardHeader>
           <div className="flex items-center gap-2 justify-between">
             <div className="flex flex-col">
-              <CardTitle className="text-2xl font-bold">Manajemen Layanan</CardTitle>
+              <CardTitle className="text-2xl font-bold">
+                Manajemen Layanan
+              </CardTitle>
               <CardDescription className="text-sm">
                 Kelola halaman privasi, ketentuan, dan FAQ website
               </CardDescription>
@@ -26,11 +34,15 @@ const ManajemenLayananPage = async () => {
         <CardHeader>
           <CardTitle>Halaman Layanan</CardTitle>
           <CardDescription>
-            Kelola konten halaman penting website seperti kebijakan privasi, syarat dan ketentuan, serta FAQ untuk pengguna
+            Kelola konten halaman penting website seperti kebijakan privasi,
+            syarat dan ketentuan, serta FAQ untuk pengguna
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <FormAppData shows={["privacy", "terms", "faq"]} />
+          <FormAppData
+            shows={["privacy", "terms", "faq"]}
+            zhubCategories={[]}
+          />
         </CardContent>
       </Card>
     </div>

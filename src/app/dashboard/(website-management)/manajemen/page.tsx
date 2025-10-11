@@ -60,7 +60,7 @@ const ManajemenPage = async () => {
               "socials",
               "kategori-zhub",
             ]}
-            categories={mappedCategories}
+            zhubCategories={mappedCategories}
           />
         </CardContent>
       </Card>

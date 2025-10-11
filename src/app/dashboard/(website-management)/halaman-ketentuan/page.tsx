@@ -14,7 +14,7 @@ const HalamanKetentuanPage = async () => {
           </p>
         </div>
       </div>
-      <FormAppData shows={["terms"]} />
+      <FormAppData shows={["terms"]} zhubCategories={[]} />
     </div>
   );
 };

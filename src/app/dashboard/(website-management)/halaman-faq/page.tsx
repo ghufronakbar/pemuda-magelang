@@ -15,7 +15,7 @@ const HalamanFaqPage = async () => {
           </p>
         </div>
       </div>
-      <FormAppData shows={["faq"]} />
+      <FormAppData shows={["faq"]} zhubCategories={[]} />
     </div>
   );
 };

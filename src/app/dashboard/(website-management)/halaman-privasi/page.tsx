@@ -14,7 +14,7 @@ const HalamanPrivasiPage = async () => {
           </p>
         </div>
       </div>
-      <FormAppData shows={["privacy"]} />
+      <FormAppData shows={["privacy"]} zhubCategories={[]} />
     </div>
   );
 };
