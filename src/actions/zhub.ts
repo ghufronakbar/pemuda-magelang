@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { HubCategorySchema, HubInputSchema } from "@/validator/zhub";
 import { generateSlug } from "@/lib/helper";
 
@@ -107,6 +107,7 @@ const _createUpdateCategoryHub = async (formData: FormData) => {
     });
     revalidateTag(`hubs-by-category:${categoryHub.id}`);
     revalidateTag("hubs");
+    revalidatePath("dashboard/manajemen")
     return { ok: true, result: categoryHub };
   }
 };
@@ -189,6 +190,7 @@ export const getHubById = makeGetHubById;
 // DELETE HUB
 
 const _deleteHub = async (id: string) => {
+  console.log("deleteHub", id);
   const hub = await db.hub.delete({
     where: { id },
     select: {

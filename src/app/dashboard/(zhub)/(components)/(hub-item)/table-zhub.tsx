@@ -23,7 +23,14 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { AlertConfirmation } from "@/components/custom/alert-confirmation";
-import { Loader2, Trash2, Search, Building, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Search,
+  Building,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { formatIDDate } from "@/lib/helper";
@@ -170,10 +177,7 @@ export function TableZHub({
           <TableBody>
             {pageItems.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={6}
-                  className="py-16 text-center"
-                >
+                <TableCell colSpan={6} className="py-16 text-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
                       <Building className="w-8 h-8 text-muted-foreground/60" />
@@ -183,7 +187,8 @@ export function TableZHub({
                         Tidak ada program zhub ditemukan
                       </h3>
                       <p className="text-xs text-muted-foreground max-w-sm">
-                        Coba ubah kata kunci pencarian atau filter untuk menemukan program yang Anda cari
+                        Coba ubah kata kunci pencarian atau filter untuk
+                        menemukan program yang Anda cari
                       </p>
                     </div>
                   </div>
@@ -333,6 +338,7 @@ function ActionButtons({
   const { onOpenEdit } = useFormHub();
   const handleDelete = async () => {
     try {
+      console.log("handleDelete", item.id);
       await onDelete(item.id);
       toast.success("Data berhasil dihapus");
     } catch (e) {
@@ -355,7 +361,10 @@ function ActionButtons({
         onConfirm={handleDelete}
         description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data program ini dan semua data yang terkait dengan program ini."
       >
-        <SubmitBtn label="Hapus" variant="destructive" icon={<Trash2 className="h-4 w-4" />} />
+        <Button variant="destructive" size="sm">
+          <Trash2 className="h-4 w-4" />
+          Hapus
+        </Button>
       </AlertConfirmation>
     </div>
   );

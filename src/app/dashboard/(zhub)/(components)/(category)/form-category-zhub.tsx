@@ -21,7 +21,7 @@ import { useFormCategoryHub } from "@/context/form-category-hub-context";
 
 export const FormCategoryHubButton = () => {
   const { form, setOpen } = useFormCategoryHub();
-  
+
   return (
     <Button
       onClick={() => {
@@ -39,8 +39,7 @@ export const FormCategoryHubButton = () => {
 };
 
 export const FormCategoryHub = () => {
-  const { form, onSubmit, open, onClose, loading } =
-    useFormCategoryHub();
+  const { form, onSubmit, open, onClose, loading } = useFormCategoryHub();
   return (
     <Dialog
       open={open}
@@ -55,7 +54,12 @@ export const FormCategoryHub = () => {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(async (data) => {
+              await onSubmit();
+            })}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="name"

@@ -78,27 +78,27 @@ export function TableZHubCategory({
   return (
     <section className={cn("space-y-4", className)}>
       {/* Controls */}
-       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-         <div className="w-full flex flex-row gap-4 flex-wrap items-end">
-           <div className="flex-1">
-             <label className="mb-1 block text-xs text-muted-foreground">
-               Cari
-             </label>
-             <div className="relative">
-               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-               <Input
-                 placeholder="Cari nama kategori…"
-                 value={query}
-                 onChange={(e) => setQuery(e.target.value)}
-                 className="w-full pl-9"
-               />
-             </div>
-           </div>
-           <div className="flex items-end">
-             <FormCategoryHubButton />
-           </div>
-         </div>
-       </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="w-full flex flex-row gap-4 flex-wrap items-end">
+          <div className="flex-1">
+            <label className="mb-1 block text-xs text-muted-foreground">
+              Cari
+            </label>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Cari nama kategori…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-9"
+              />
+            </div>
+          </div>
+          <div className="flex items-end">
+            <FormCategoryHubButton />
+          </div>
+        </div>
+      </div>
 
       {/* Info bar */}
       <div className="text-xs text-muted-foreground">
@@ -159,7 +159,7 @@ export function TableZHubCategory({
         totalPages={totalPages}
         setPage={setPage}
       />
-      
+
       {/* Dialog */}
       <FormCategoryHub />
     </section>
@@ -237,7 +237,10 @@ function ActionButtons({
         onConfirm={handleDelete}
         description="Apakah anda yakin ingin menghapus data ini? Data yang akan dihapus tidak dapat dibatalkan. Data yang akan dihapus adalah data kategori ini dan semua data yang terkait dengan kategori ini."
       >
-        <SubmitBtn label="Hapus" variant="destructive" icon={<Trash2 className="h-4 w-4" />} />
+        <Button variant="destructive" size="sm">
+          <Trash2 className="w-4 h-4" />
+          Hapus
+        </Button>
       </AlertConfirmation>
     </div>
   );

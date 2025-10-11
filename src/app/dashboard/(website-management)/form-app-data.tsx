@@ -28,6 +28,7 @@ import { FormPrivacy } from "./form-privacy";
 import { FormTerms } from "./form-terms";
 import { FormFaq } from "./form-faq";
 import { FormKategoriZhub } from "./form-kategori-zhub";
+import { DataCategoryHub } from "../(zhub)/(components)/(category)/table-zhub-category";
 
 type ShowForm =
   | "hero"
@@ -42,9 +43,10 @@ type ShowForm =
 
 interface FormAppDataProps {
   shows: ShowForm[];
+  categories: DataCategoryHub[];
 }
 
-export function FormAppData({ shows }: FormAppDataProps) {
+export function FormAppData({ shows, categories }: FormAppDataProps) {
   const { loading } = useFormAppData();
 
   if (loading) {
@@ -253,7 +255,7 @@ export function FormAppData({ shows }: FormAppDataProps) {
 
       {shows.includes("kategori-zhub") && (
         <TabsContent value="kategori-zhub" className="mt-6">
-          <FormKategoriZhub />
+          <FormKategoriZhub categories={categories} />
         </TabsContent>
       )}
     </Tabs>

@@ -63,7 +63,11 @@ const FormCategoryHubProvider = ({
       if (res.error) {
         toast.error(res.error);
       } else {
-        toast.success("Kategori zhub berhasil ditambahkan");
+        if (data.id) {
+          toast.success("Kategori zhub berhasil diedit");
+        } else {
+          toast.success("Kategori zhub berhasil ditambahkan");
+        }
         setOpen(false);
       }
     } catch (error) {
