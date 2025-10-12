@@ -41,15 +41,28 @@ import { CdnImage } from "@/components/custom/cdn-image";
 
 const registerFormSchema = z
   .object({
-    name: z.string().min(2, "Nama minimal 2 karakter"),
-    email: z.string().email("Email tidak valid"),
-    password: z.string().min(6, "Password minimal 6 karakter"),
-    confirmPassword: z.string().min(6, "Password minimal 6 karakter"),
+    name: z
+      .string()
+      .min(2, "Nama minimal 2 karakter")
+      .max(40, "Nama terlalu panjang"),
+    email: z
+      .string()
+      .email("Email tidak valid")
+      .min(1, "Email tidak boleh kosong"),
+    password: z
+      .string()
+      .min(8, "Minimal 8 karakter")
+      .max(72, "Terlalu panjang")
+      .regex(/[a-z]/, "Harus mengandung huruf kecil")
+      .regex(/[A-Z]/, "Harus mengandung huruf besar")
+      .regex(/[0-9]/, "Harus mengandung angka")
+      .regex(/[^A-Za-z0-9]/, "Harus mengandung simbol"),
+    confirmPassword: z.string().min(1, "Wajib diisi"),
     subdistrict: z.string().min(1, "Kecamatan tidak boleh kosong"),
     village: z.string().min(1, "Kelurahan tidak boleh kosong"),
     street: z.string().min(1, "Alamat tidak boleh kosong"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((v) => v.password === v.confirmPassword, {
     path: ["confirmPassword"],
     message: "Konfirmasi password tidak sesuai",
   });
