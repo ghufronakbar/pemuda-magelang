@@ -13,7 +13,7 @@ export function cdnUrl(key: string) {
 }
 
 export function cdnUrlWithBaseUrl(key: string) {
-  return `${BASE_URL}/${cdnUrl(key)}`;
+  return `${BASE_URL}${cdnUrl(key)}`;
 }
 
 type Props = Omit<ImageProps, "src"> & { uniqueKey: string };

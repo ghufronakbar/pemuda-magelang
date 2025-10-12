@@ -31,7 +31,6 @@ interface LoginPageProps {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const sp = await searchParams;
-  // const redirectTo = decodeURIComponent(sp?.callbackUrl ?? sp?.redirect ?? "/");
   const redirectTo = sp?.redirect ?? "/";
 
   return (
@@ -87,7 +86,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 throw err;
               }
             }}
-            className="space-y-5"
+            className="flex flex-col gap-4"
           >
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -101,6 +100,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </div>
 
             <PasswordField />
+
+            <Link
+              className="text-xs from-accent-foreground mb-2 self-end"
+              href="/forgot-password"
+            >
+              Lupa Password?
+            </Link>
 
             <input type="hidden" name="redirectTo" value={redirectTo} />
 
