@@ -1,3 +1,4 @@
+// src/app/(auth)/register/register-form.tsx
 "use client";
 
 import Link from "next/link";
@@ -38,6 +39,8 @@ import { KOTA_MAGELANG_ADDRESS_DATA } from "@/data/address";
 import { useMemo, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { CdnImage } from "@/components/custom/cdn-image";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { TURNSTILE_SITE_KEY } from "@/constants/cloudflare";
 
 const registerFormSchema = z
   .object({
@@ -61,6 +64,7 @@ const registerFormSchema = z
     subdistrict: z.string().min(1, "Kecamatan tidak boleh kosong"),
     village: z.string().min(1, "Kelurahan tidak boleh kosong"),
     street: z.string().min(1, "Alamat tidak boleh kosong"),
+    turnstile: z.string().min(1, "Captcha tidak boleh kosong"),
   })
   .refine((v) => v.password === v.confirmPassword, {
     path: ["confirmPassword"],
@@ -70,17 +74,27 @@ const registerFormSchema = z
 type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 interface RegisterFormProps {
-  handleRegister: (formData: FormData) => Promise<void>;
+  handleRegister: (formData: FormData) => Promise<{
+    ok: boolean;
+    errors?: {
+      email?: string;
+      password?: string;
+      turnstile?: string;
+    };
+  }>;
   redirectTo: string;
-  defaultError?: string;
 }
 
 export const RegisterForm = ({
   handleRegister,
   redirectTo,
-  defaultError,
 }: RegisterFormProps) => {
   const [loading, setLoading] = useState(false);
+  const [captchaKey, setCaptchaKey] = useState(0);
+  const resetCaptcha = () => {
+    form.setValue("turnstile", "");
+    setCaptchaKey((k) => k + 1);
+  };
   const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -91,6 +105,7 @@ export const RegisterForm = ({
       subdistrict: "",
       village: "",
       street: "",
+      turnstile: "",
     },
   });
 
@@ -115,7 +130,29 @@ export const RegisterForm = ({
       fd.append("subdistrict", data.subdistrict);
       fd.append("village", data.village);
       fd.append("street", data.street);
-      await handleRegister(fd);
+      fd.append("turnstile", data.turnstile);
+      const res = await handleRegister(fd);
+      if (res.errors) {
+        for (const [key, value] of Object.entries(res.errors)) {
+          form.setError(
+            key as
+              | "name"
+              | "email"
+              | "password"
+              | "confirmPassword"
+              | "subdistrict"
+              | "village"
+              | "street"
+              | "turnstile",
+            {
+              type: "manual",
+              message: value,
+            }
+          );
+        }
+        resetCaptcha();
+        return;
+      }
     } finally {
       setLoading(false);
     }
@@ -144,11 +181,6 @@ export const RegisterForm = ({
           </CardHeader>
 
           <CardContent className="space-y-4">
-            {defaultError && (
-              <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {defaultError}
-              </div>
-            )}
             <FormField
               control={form.control}
               name="name"
@@ -286,7 +318,29 @@ export const RegisterForm = ({
             />
             {/* kalau action-mu butuh ini: */}
             <input type="hidden" name="redirectTo" value={redirectTo} />
-
+            <FormField
+              control={form.control}
+              name="turnstile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Turnstile
+                      className="mx-auto"
+                      key={captchaKey}
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onSuccess={(token) => field.onChange(token)}
+                      onExpire={() => resetCaptcha()}
+                      onError={() => resetCaptcha()}
+                      options={{
+                        action: "auth",
+                        theme: "light",
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <SubmitButton loading={loading}>Daftar</SubmitButton>
 
             <div className="my-6">
