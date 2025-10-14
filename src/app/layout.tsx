@@ -5,6 +5,7 @@ import { AuthProvider } from "../providers/auth-provider";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { getAppData } from "@/actions/app-data";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
     description:
       "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
     icons: {
-      icon: appData.baseLogo || "/favicon.ico",
+      icon: cdnUrl(appData.baseLogo) || "/favicon.ico",
     },
   };
 };
