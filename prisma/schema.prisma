@@ -297,6 +297,9 @@ enum HubStatusEnum {
 model AppData {
   id String @id @default(uuid())
 
+  baseLogo   String
+  footerText String
+
   heroTitle       String
   heroDescription String
   heroImage       String?

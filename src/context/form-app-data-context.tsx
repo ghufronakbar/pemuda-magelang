@@ -4,6 +4,7 @@ import {
   getAppData,
   upsertAppDataAbout,
   upsertAppDataAboutItems,
+  upsertAppDataBase,
   upsertAppDataBranding,
   upsertAppDataFaq,
   upsertAppDataHero,
@@ -17,6 +18,8 @@ import {
   AppDataAboutItems,
   AppDataAboutItemsSchema,
   AppDataAboutSchema,
+  AppDataBase,
+  AppDataBaseSchema,
   AppDataBranding,
   AppDataBrandingSchema,
   AppDataFaq,
@@ -48,6 +51,7 @@ interface FormAppDataContext {
     privacy: UseFormReturn<AppDataPrivacy>;
     terms: UseFormReturn<AppDataTerms>;
     faq: UseFormReturn<AppDataFaq>;
+    base: UseFormReturn<AppDataBase>;
   };
   loading: boolean;
   onSubmit: {
@@ -60,6 +64,7 @@ interface FormAppDataContext {
     privacy: () => Promise<void>;
     terms: () => Promise<void>;
     faq: () => Promise<void>;
+    base: () => Promise<void>;
   };
   submitting: boolean;
 }
@@ -129,6 +134,13 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
       faq: "",
     },
   });
+  const formBase = useForm<AppDataBase>({
+    resolver: zodResolver(AppDataBaseSchema),
+    defaultValues: {
+      baseLogo: "",
+      footerText: "",
+    },
+  });
   useEffect(() => {
     setLoading(true);
     const fetchAppData = async () => {
@@ -181,6 +193,10 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
         });
         formFaq.reset({
           faq: res.pageFaq,
+        });
+        formBase.reset({
+          baseLogo: res.baseLogo,
+          footerText: res.footerText,
         });
       } catch (error) {
         console.error(error);
@@ -357,6 +373,24 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
     }
   });
 
+  const onSubmitBase = formBase.handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(data));
+      const res = await upsertAppDataBase(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Data berhasil diubah");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  });
+
   const onSubmit = {
     hero: onSubmitHero,
     about: onSubmitAbout,
@@ -367,6 +401,7 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
     privacy: onSubmitPrivacy,
     terms: onSubmitTerms,
     faq: onSubmitFaq,
+    base: onSubmitBase,
   };
 
   const form = {
@@ -379,6 +414,7 @@ const FormAppDataProvider = ({ children }: { children: React.ReactNode }) => {
     privacy: formPrivacy,
     terms: formTerms,
     faq: formFaq,
+    base: formBase,
   };
 
   return (

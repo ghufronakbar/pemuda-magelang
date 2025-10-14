@@ -100,3 +100,11 @@ export const AppDataFaqSchema = z.object({
 });
 
 export type AppDataFaq = z.infer<typeof AppDataFaqSchema>;
+
+// Base Data
+export const AppDataBaseSchema = z.object({
+  baseLogo: z.string().min(1, "Gambar tidak valid"),
+  footerText: z.string().min(1, "Wajib diisi"),
+});
+
+export type AppDataBase = z.infer<typeof AppDataBaseSchema>;

@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "../providers/auth-provider";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
+import { getAppData } from "@/actions/app-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,13 +16,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Pemuda Magelang",
-    template: "%s | Pemuda Magelang",
-  },
-  description:
-    "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
+export const generateMetadata = async (): Promise<Metadata> => {
+  const appData = await getAppData();
+  return {
+    title: {
+      default: "Pemuda Magelang",
+      template: "%s | Pemuda Magelang",
+    },
+    description:
+      "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
+    icons: {
+      icon: appData.baseLogo || "/favicon.ico",
+    },
+  };
 };
 
 interface RootLayoutProps {

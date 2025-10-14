@@ -4,6 +4,7 @@ import { Navbar } from "@/components/custom/navbar";
 import { getAppData } from "@/actions/app-data";
 import { HubStatusEnum } from "@prisma/client";
 import { Session } from "next-auth";
+import { APP_NAME } from "@/constants";
 
 interface LandingLayoutProps {
   session: Session | null;
@@ -32,11 +33,16 @@ export const LandingLayout = async ({
   }));
   return (
     <div className="w-full min-h-screen bg-gray-50 text-foreground">
-      <Navbar session={session} categoriesHubs={categoriesHubs} />
+      <Navbar session={session} categoriesHubs={categoriesHubs} logo={appData.baseLogo} />
       <div className="flex-1">{children}</div>
       <Footer
         zhubLinks={mappedHubsLink}
         socials={appData.appSocialMedias}
+        brand={{
+          name: APP_NAME,
+          logo: appData.baseLogo,
+          description: appData.footerText,
+        }}
         bottomLinks={[
           { label: "Privasi", href: "/privacy" },
           { label: "Ketentuan", href: "/terms" },

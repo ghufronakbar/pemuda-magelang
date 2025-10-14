@@ -16,6 +16,7 @@ import {
   FileText,
   Shield,
   HelpCircle,
+  BookIcon,
 } from "lucide-react";
 
 import { FormHero } from "./form-hero";
@@ -29,6 +30,7 @@ import { FormTerms } from "./form-terms";
 import { FormFaq } from "./form-faq";
 import { FormKategoriZhub } from "./form-kategori-zhub";
 import { DataCategoryHub } from "../(zhub)/(components)/(category)/table-zhub-category";
+import { FormBase } from "./form-base";
 
 type ShowForm =
   | "hero"
@@ -39,7 +41,8 @@ type ShowForm =
   | "privacy"
   | "terms"
   | "faq"
-  | "kategori-zhub";
+  | "kategori-zhub"
+  | "base";
 
 interface FormAppDataProps {
   shows: ShowForm[];
@@ -130,6 +133,12 @@ export function FormAppData({ shows, zhubCategories }: FormAppDataProps) {
 
   // Website management sections with tabs
   const websiteTabs = [
+    {
+      value: "base",
+      label: "Informasi Dasar",
+      icon: BookIcon,
+      show: shows.includes("base"),
+    },
     { value: "hero", label: "Hero", icon: Home, show: shows.includes("hero") },
     {
       value: "about",
@@ -217,6 +226,12 @@ export function FormAppData({ shows, zhubCategories }: FormAppDataProps) {
           </TabsList>
         </div>
       </div>
+
+      {shows.includes("base") && (
+        <TabsContent value="base" className="mt-6">
+          <FormBase />
+        </TabsContent>
+      )}
 
       {shows.includes("hero") && (
         <TabsContent value="hero" className="mt-6">

@@ -59,6 +59,7 @@ const ManajemenPage = async () => {
               "partners",
               "socials",
               "kategori-zhub",
+              "base",
             ]}
             zhubCategories={mappedCategories}
           />

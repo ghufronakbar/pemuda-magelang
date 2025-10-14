@@ -11,10 +11,10 @@ import { CdnImage } from "./cdn-image";
 
 export interface FooterProps {
   className?: string;
-  brand?: {
+  brand: {
     name: string;
-    logo?: string;
-    description?: string;
+    logo: string;
+    description: string;
   };
   socials: AppSocialMedia[];
   bottomLinks: { label: string; href: string }[];
@@ -23,15 +23,9 @@ export interface FooterProps {
 
 export function Footer({
   className,
-  brand = {
-    name: "Pemuda Magelang",
-    logo: LOGO, // ganti sesuai asetmu
-    description:
-      "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
-  },
+  brand,
   socials,
   bottomLinks,
-  zhubLinks,
 }: FooterProps) {
   const columns = [
     {

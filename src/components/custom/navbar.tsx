@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { APP_NAME, LOGO } from "@/constants";
+import { APP_NAME } from "@/constants";
 import { cn } from "@/lib/utils";
 
 import {
@@ -57,9 +57,10 @@ interface LinkItem {
 interface NavbarProps {
   session: Session | null;
   categoriesHubs: { label: string; href: string }[];
+  logo: string;
 }
 
-export function Navbar({ session, categoriesHubs }: NavbarProps) {
+export function Navbar({ session, categoriesHubs, logo }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
@@ -138,7 +139,7 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
         {/* Left: Logo */}
         <Link href="/" aria-label="Beranda" className="flex items-center gap-2">
           <CdnImage
-            uniqueKey={LOGO}
+            uniqueKey={logo}
             alt="Logo"
             width={36}
             height={36}
@@ -232,6 +233,7 @@ export function Navbar({ session, categoriesHubs }: NavbarProps) {
             dashboardHref={dashboardHref}
             session={session}
             itemLinks={LINK_ITEMS}
+            logo={logo}
           />
         </div>
       </div>
@@ -329,6 +331,7 @@ function MobileMenu({
   dashboardHref,
   session,
   itemLinks,
+  logo,
 }: {
   open: boolean;
   setOpen: (v: boolean) => void;
@@ -336,6 +339,7 @@ function MobileMenu({
   dashboardHref: string;
   session: Session | null;
   itemLinks: LinkItem[];
+  logo: string;
 }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -352,7 +356,7 @@ function MobileMenu({
         <SheetHeader className="items-start border-b px-4 pb-3 pt-4">
           <SheetTitle className="flex items-center gap-2">
             <CdnImage
-              uniqueKey={LOGO}
+              uniqueKey={logo}
               alt="Logo"
               width={28}
               height={28}

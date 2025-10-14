@@ -212,6 +212,8 @@ export async function GET() {
         data: {
           id: ID_APP_DATA,
           // HERO SECTION
+          baseLogo: "/static/logo.png",
+          footerText: "Platform kolaborasi untuk karya, komunitas, dan kegiatan kebudayaan.",
           heroTitle: "Pemuda Magelang",
           heroDescription:
             "Wadah kolaborasi talenta Kota Magelang — temukan komunitas, bangun portofolio, dan bertumbuh bersama.",

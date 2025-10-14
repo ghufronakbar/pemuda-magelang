@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import {
   AppDataAboutItemsSchema,
   AppDataAboutSchema,
+  AppDataBaseSchema,
   AppDataBrandingSchema,
   AppDataFaqSchema,
   AppDataHeroSchema,
@@ -37,6 +38,8 @@ const _getAppData = async (): Promise<AppDataReturnData> => {
     },
   })) || {
     id: "",
+    baseLogo: "",
+    footerText: "",
     // HERO
     heroTitle: "",
     heroDescription: "",
@@ -87,6 +90,8 @@ export const upsertAppDataHero = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: data.heroTitle,
         heroDescription: data.heroDescription,
         heroImage: data.heroImage,
@@ -129,6 +134,8 @@ export const upsertAppDataAbout = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -170,6 +177,8 @@ export const upsertAppDataAboutItems = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -222,6 +231,8 @@ export const upsertAppDataBranding = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -266,6 +277,8 @@ export const upsertAppDataPartners = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -319,6 +332,8 @@ export const upsertAppDataSocialMedias = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -371,6 +386,8 @@ export const upsertAppDataPrivacy = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -411,6 +428,8 @@ export const upsertAppDataTerms = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -451,6 +470,8 @@ export const upsertAppDataFaq = async (formData: FormData) => {
   if (!appData) {
     appData = await db.appData.create({
       data: {
+        baseLogo: "",
+        footerText: "",
         heroTitle: "",
         heroDescription: "",
         heroImage: "",
@@ -470,6 +491,50 @@ export const upsertAppDataFaq = async (formData: FormData) => {
       where: { id: appData.id },
       data: {
         pageFaq: data.faq,
+      },
+    });
+  }
+  revalidateTag("app-data");
+  return { ok: true, result: appData };
+};
+
+export const upsertAppDataBase = async (formData: FormData) => {
+  const payload = formData.get("payload");
+  if (!payload) {
+    return { error: "Payload tidak ditemukan" };
+  }
+  const parseData = AppDataBaseSchema.safeParse(JSON.parse(payload as string));
+  if (!parseData.success) {
+    return { error: parseData.error.message };
+  }
+  const data = parseData.data;
+  let appData = await db.appData.findFirst();
+  if (!appData) {
+    appData = await db.appData.create({
+      data: {
+        baseLogo: data.baseLogo,
+        footerText: data.footerText,
+        heroTitle: "",
+        heroDescription: "",
+        heroImage: "",
+        aboutTitle: "",
+        aboutDescription: "",
+        aboutImage: "",
+        brandingTitle: "",
+        brandingDescription: "",
+        brandingVideo: "",
+        pageTerms: "",
+        pagePrivacy: "",
+        pageFaq: "",
+      },
+    });
+  }
+  if (appData.id) {
+    await db.appData.update({
+      where: { id: appData.id },
+      data: {
+        baseLogo: data.baseLogo,
+        footerText: data.footerText,
       },
     });
   }
