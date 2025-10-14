@@ -1,20 +1,30 @@
 "use server";
 import { mailer } from "@/lib/mailer";
 import { db } from "@/lib/db";
-import {
-  JWT_RESET_PASSWORD_SECRET,
-  NODEMAILER_FROM,
-} from "@/constants/nodemailer";
+import { JWT_RESET_PASSWORD_SECRET } from "@/constants/nodemailer";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { BASE_URL, APP_NAME } from "@/constants";
 import bcrypt from "bcryptjs";
+import { getAppData } from "@/actions/app-data";
+import { cdnUrlWithBaseUrl } from "@/components/custom/cdn-image";
 
 // --- Helper: build safe URL path ---
 const resetPasswordLink = (token: string) =>
   `${BASE_URL.replace(/\/$/, "")}/reset-password/${token}`;
 
-const LOGO_EMAIL = "https://pemuda.magelangkota.go.id/favicon.ico";
+const getLogoEmail = async () => {
+  try {
+    const appData = await getAppData();
+    return (
+      cdnUrlWithBaseUrl(appData.baseLogo) ||
+      "https://pemuda.magelangkota.go.id/favicon.ico"
+    );
+  } catch (error) {
+    console.error(error);
+    return "https://pemuda.magelangkota.go.id/favicon.ico";
+  }
+};
 
 // Warna aman untuk email (hex)
 const colorEmail = {
@@ -40,9 +50,11 @@ type ResetPasswordDecodedSchemaType = z.infer<
 function buildResetEmail({
   firstName,
   url,
+  logo,
 }: {
   firstName: string;
   url: string;
+  logo: string;
 }) {
   const preheader = `Tautan reset password ${APP_NAME} berlaku selama 10 menit.`;
   const subject = `Reset Password ${APP_NAME}`;
@@ -83,7 +95,7 @@ function buildResetEmail({
             <!-- Header -->
             <tr>
               <td align="center" style="padding:24px;">
-                <img src="${LOGO_EMAIL}" alt="${APP_NAME}" width="40" height="40" style="border-radius:8px; display:block;" />
+                <img src="${logo}" alt="${APP_NAME}" width="40" height="40" style="border-radius:8px; display:block;" />
                 <div style="font:600 18px/1.4 system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial; color:${colorEmail.text}; margin-top:8px;">${APP_NAME}</div>
               </td>
             </tr>
@@ -207,8 +219,9 @@ export const sendEmailForgotPassword = async (email: string) => {
 
     const url = resetPasswordLink(resetPasswordToken);
     const firstName = (user.name ?? "").trim().split(/\s+/)[0] || "Pengguna";
+    const logo = await getLogoEmail();
 
-    const { subject, text, html } = buildResetEmail({ firstName, url });
+    const { subject, text, html } = buildResetEmail({ firstName, url, logo });
 
     await mailer.sendMail({
       from: `${APP_NAME}`,
