@@ -123,7 +123,7 @@ const makeGetDetailArticle = (
 ) =>
   unstable_cache(
     async () => _getDetailArticle(slug, session, ip),
-    [`detail-article:${slug}`, "v1"],
+    [`detail-article:${slug}:${ip}`, "v1"],
     { tags: [`detail-article:${slug}`], revalidate: 300 }
   );
 

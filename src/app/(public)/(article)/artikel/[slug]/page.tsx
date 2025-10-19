@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: Params) {
 const DetailArtikelPage = async ({ params }: Params) => {
   const { slug } = await params;
   const [user, ip] = await Promise.all([auth(), getIp()]);
+  console.log("ip address", ip);
   const { data: article, likedStatus } = await getDetailArticle(
     slug,
     user,
