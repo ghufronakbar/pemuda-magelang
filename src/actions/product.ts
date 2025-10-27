@@ -37,8 +37,9 @@ export const getAllProducts = makeGetProducts();
 // GET DETAIL PRODUCTS
 
 const _getDetailProduct = async (slug: string) => {
+  const normalizedSlug = decodeURIComponent(slug);
   const product = await db.product.findUnique({
-    where: { slug },
+    where: { slug: normalizedSlug },
     include: {
       talent: {
         include: {

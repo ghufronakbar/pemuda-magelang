@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Params) {
 const GaleriDetailPage = async ({ params }: Params) => {
   const { slug } = await params;
   const product = await getDetailProduct(slug)();
+  console.log("GET_DETAIL_PRODUCT", product);
 
   if (!product || product.talent.status !== TalentStatusEnum.approved) {
     return notFound();
