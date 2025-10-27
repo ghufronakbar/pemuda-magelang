@@ -157,6 +157,7 @@ const _createUpdateHub = async (formData: FormData) => {
         image: input.data.image,
         ctaLink: input.data.ctaLink,
         hubCategoryId: input.data.hubCategoryId,
+        status: input.data.status,
         slug: generateSlug(input.data.name),
       },
     });

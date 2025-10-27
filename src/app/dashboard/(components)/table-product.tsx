@@ -289,7 +289,9 @@ export function TableProduct({
                   )}
 
                   <TableCell className="text-right">
-                    {typeof p.price === "number" ? formatIDR(p.price) : "-"}
+                    <div className="max-w-[120px] truncate">
+                      {typeof p.price === "number" ? formatIDR(p.price) : "-"}
+                    </div>
                   </TableCell>
 
                   <TableCell>
