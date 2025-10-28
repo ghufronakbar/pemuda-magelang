@@ -1,12 +1,10 @@
-"use client";
-
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HERO_IMAGE } from "@/constants";
 import { CdnImage } from "@/components/custom/cdn-image";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 export interface HeroSectionProps {
   title?: string;
@@ -16,6 +14,7 @@ export interface HeroSectionProps {
   countTalent: number;
   countCommunity: number;
   countZhub: number;
+  session: Session | null;
 }
 
 export function HeroSection({
@@ -26,8 +25,9 @@ export function HeroSection({
   countTalent,
   countCommunity,
   countZhub,
+  session,
 }: HeroSectionProps) {
-  const { status } = useSession();
+  const isAuthed = !!session;
   return (
     <section className={cn("relative overflow-hidden", className)}>
       <div className="absolute inset-0 z-10 w-full h-full">
@@ -59,9 +59,7 @@ export function HeroSection({
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild size="lg" className="w-full sm:w-auto shadow-sm">
-              <Link
-                href={status === "unauthenticated" ? "/register" : "/komunitas"}
-              >
+              <Link href={isAuthed ? "/komunitas" : "/register"}>
                 Gabung Komunitas
               </Link>
             </Button>

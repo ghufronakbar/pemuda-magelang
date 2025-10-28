@@ -1,4 +1,3 @@
-// components/galeri/galeri-detail.tsx
 "use client";
 
 import * as React from "react";
@@ -33,7 +32,7 @@ export interface GalleryDetailProps {
 }
 
 export function GaleriDetail({ product, className }: GalleryDetailProps) {
-  const { slug, title, images, description, price, tags, talent } = product;
+  const { slug, title, images, price, tags, talent, description } = product;
 
   const [current, setCurrent] = React.useState(0);
   const safeImages = images?.length ? images : [PLACEHOLDER_IMAGE];
@@ -79,13 +78,18 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
     el.scrollBy({ left: 320, behavior: "smooth" });
   }, []);
 
+  // ==== State & helpers untuk deskripsi ====
   const maxLenDescription = 100;
-  const lenDescription = description?.length ?? 0;
   const [isShowAllDescription, setIsShowAllDescription] = React.useState(false);
-  const descriptionEllipsis = isShowAllDescription
-    ? description
-    : description?.slice(0, maxLenDescription) + "...";
-  const isLongDescription = lenDescription > maxLenDescription;
+
+  const desc = description ?? ""; // hindari undefined
+  const isLongDescription = desc.length > maxLenDescription;
+
+  // Teks yang ditampilkan
+  const visibleDescription =
+    isShowAllDescription || !isLongDescription
+      ? desc
+      : desc.slice(0, maxLenDescription).trimEnd();
 
   return (
     <section
@@ -199,28 +203,30 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
               </div>
 
               {/* Talent */}
-              <div className="flex items-center gap-3">
-                <Avatar className="h-11 w-11">
-                  <AvatarImage
-                    src={cdnUrl(talent.profilePicture ?? "")}
-                    alt={talent.name}
-                  />
-                  <AvatarFallback>{getInitials(talent.name)}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium">
-                    {talent.name}
-                  </div>
-                  <div className="truncate text-xs text-muted-foreground">
-                    {talent.profession} • {talent.industry}
+              <div className="flex flex-col w-full gap-2">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage
+                      src={cdnUrl(talent.profilePicture ?? "")}
+                      alt={talent.name}
+                    />
+                    <AvatarFallback>{getInitials(talent.name)}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-medium">
+                      {talent.name}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      {talent.profession} • {talent.industry}
+                    </div>
                   </div>
                 </div>
-                <div className="ml-auto flex flex-col gap-2">
-                  <Button asChild size="sm" variant="outline">
+                <div className="w-full flex flex-row flex-wrap justify-between gap-2">
+                  <Button asChild size="sm" variant="outline" className="flex-1">
                     <Link href={`/talenta/${talent.slug}`}>Lihat Profil</Link>
                   </Button>
                   {ctaHref && (
-                    <Button asChild size="sm" className="shadow-sm">
+                    <Button asChild size="sm" className="shadow-sm flex-1">
                       <Link
                         href={ctaHref}
                         target="_blank"
@@ -276,23 +282,26 @@ export function GaleriDetail({ product, className }: GalleryDetailProps) {
               </div>
 
               {/* Description */}
-              <div
-                className={cn(
-                  "prose prose-neutral max-w-none text-sm",
-                  isShowAllDescription && "line-clamp-none"
-                )}
-              >
-                <p className="whitespace-pre-wrap">{descriptionEllipsis}</p>
+              <div className="prose prose-neutral max-w-none text-sm">
+                <p id="product-desc" className="whitespace-pre-wrap">
+                  {visibleDescription}
+                  {!isShowAllDescription && isLongDescription ? "…" : ""}
+                </p>
               </div>
-              <span
-                className="text-xs text-muted-foreground"
-                onClick={() => setIsShowAllDescription(!isShowAllDescription)}
-              >
-                {isLongDescription &&
-                  (isShowAllDescription
+
+              {isLongDescription && (
+                <button
+                  type="button"
+                  className="mt-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  onClick={() => setIsShowAllDescription((v) => !v)}
+                  aria-expanded={isShowAllDescription}
+                  aria-controls="product-desc"
+                >
+                  {isShowAllDescription
                     ? "Lihat lebih sedikit"
-                    : "Lihat selengkapnya")}
-              </span>
+                    : "Lihat selengkapnya"}
+                </button>
+              )}
 
               {/* Tags moved below description */}
               {tags?.length ? (

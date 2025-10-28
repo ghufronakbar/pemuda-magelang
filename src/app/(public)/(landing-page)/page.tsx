@@ -1,17 +1,15 @@
-// removed HubSection
-// import { HubCardProps, HubSection } from "./(section)/hub-section";
 import { AboutSection } from "./(section)/about-section";
 import { HeroSection } from "./(section)/hero-section";
-// removed ArticleSectionLanding
-// import { ArticleSectionLanding } from "./(section)/article-section-landing";
 import { PartnerSection } from "./(section)/partner-section";
 import { MenuSection } from "./(section)/menu-section";
 import { BrandingSection } from "./(section)/branding-section";
 import { getAppData } from "@/actions/app-data";
 import { getAllTalents } from "@/actions/talent";
 import { getAllCommunities } from "@/actions/community";
+import { auth } from "@/auth";
 
 const LandingPage = async () => {
+  const session = await auth();
   const [appData, talents, communities] = await Promise.all([
     getAppData(),
     getAllTalents(),
@@ -48,6 +46,7 @@ const LandingPage = async () => {
         countTalent={countTalent}
         countCommunity={countCommunity}
         countZhub={countZhub}
+        session={session}
       />
       <AboutSection
         className="py-26 min-h-screen"

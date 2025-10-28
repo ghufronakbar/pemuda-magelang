@@ -49,9 +49,10 @@ export function CommunityCard({
       </div>
 
       {/* Avatar overlap */}
-      <div className="relative">
-        <div className="absolute -top-8 left-4">
-          <Avatar className="h-16 w-16 ring-2 ring-background shadow-sm">
+      <CardContent className="pt-4">
+        {/* Header row: Avatar overlap + single-line text */}
+        <div className="-mt-8 flex items-center gap-3">
+          <Avatar className="h-16 w-16 shrink-0 ring-2 ring-background shadow-sm">
             <AvatarImage
               src={cdnUrl(profileImage ?? "")}
               alt={name}
@@ -59,17 +60,22 @@ export function CommunityCard({
             />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
-        </div>
-      </div>
 
-      <CardContent className="pt-10">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="truncate text-base font-semibold">{name}</h3>
-            <p className="truncate text-sm text-muted-foreground line-clamp-2">
+          {/* Single line: name • profession */}
+          <h3
+            className="min-w-0 flex-1 truncate text-base flex flex-col"
+            title={name + " - " + description}
+            aria-label={name}
+          >
+            <span className="font-semibold">{name}</span>
+            <span className="font-normal text-muted-foreground">
               {description}
-            </p>
-          </div>
+            </span>
+          </h3>
+        </div>
+
+        {/* Badge di bawah */}
+        <div className="mt-3">
           <Badge variant="secondary" className="shrink-0">
             {category}
           </Badge>

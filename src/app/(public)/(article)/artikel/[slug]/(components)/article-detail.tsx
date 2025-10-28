@@ -121,15 +121,18 @@ export async function ArticleDetail({
               </Avatar>
               <div className="min-w-0">
                 <div className="truncate text-sm font-medium">{authorName}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {authorRoleOrProfession} • {publishedDate} • {reading} •{" "}
-                  {_count.trackViews}x dibaca
+                <div className=" text-xs text-muted-foreground">
+                  {authorRoleOrProfession} • {reading} • {_count.trackViews}x
+                  dibaca
+                </div>
+                <div className=" text-xs text-muted-foreground">
+                  {publishedDate}
                 </div>
               </div>
             </LinkOrNot>
           </div>
           <CardAction>
-            <div className="flex items-center gap-3 mt-4 sm:mt-0">
+            <div className="hidden md:flex items-center gap-3 mt-4 sm:mt-0">
               <ActionButtonArticle
                 article={article}
                 onLikeArticle={handleLikeArticle}
@@ -137,6 +140,13 @@ export async function ArticleDetail({
               />
             </div>
           </CardAction>
+          <div className="flex md:hidden items-center gap-3 mt-4 sm:mt-0">
+            <ActionButtonArticle
+              article={article}
+              onLikeArticle={handleLikeArticle}
+              session={session}
+            />
+          </div>
         </CardHeader>
 
         <CardContent>

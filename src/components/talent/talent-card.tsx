@@ -12,7 +12,7 @@ export interface TalentCardProps {
   bannerImage: string | null;
   slug: string;
   profession: string;
-  industry: string; // e.g "Technology", "Art", "Design", "Music", "Film", "Writing"
+  industry: string;
   className?: string;
 }
 
@@ -26,6 +26,7 @@ export function TalentCard({
   className,
 }: TalentCardProps) {
   const initials = getInitials(name);
+  const headerLine = `${name} • ${profession}`;
 
   return (
     <Card
@@ -35,7 +36,7 @@ export function TalentCard({
       )}
     >
       {/* Banner */}
-      <div className="relative h-24 w-full sm:h-28 bg-muted">
+      <div className="relative h-24 w-full bg-muted sm:h-28">
         {bannerImage ? (
           <CdnImage
             uniqueKey={bannerImage}
@@ -43,15 +44,14 @@ export function TalentCard({
             fill
             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
             className="object-cover"
-            priority={false}
           />
         ) : null}
       </div>
 
-      {/* Avatar overlap */}
-      <div className="relative">
-        <div className="absolute -top-8 left-4">
-          <Avatar className="h-16 w-16 ring-2 ring-background shadow-sm">
+      <CardContent className="pt-4">
+        {/* Header row: Avatar overlap + single-line text */}
+        <div className="-mt-8 flex items-center gap-3">
+          <Avatar className="h-16 w-16 shrink-0 ring-2 ring-background shadow-sm">
             <AvatarImage
               src={cdnUrl(profileImage ?? "")}
               alt={name}
@@ -59,17 +59,22 @@ export function TalentCard({
             />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
-        </div>
-      </div>
 
-      <CardContent className="pt-10">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="truncate text-base font-semibold">{name}</h3>
-            <p className="truncate text-sm text-muted-foreground">
+          {/* Single line: name • profession */}
+          <h3
+            className="min-w-0 flex-1 truncate text-base flex flex-col"
+            title={headerLine}
+            aria-label={headerLine}
+          >
+            <span className="font-semibold">{name}</span>
+            <span className="font-normal text-muted-foreground">
               {profession}
-            </p>
-          </div>
+            </span>
+          </h3>
+        </div>
+
+        {/* Badge di bawah */}
+        <div className="mt-3">
           <Badge variant="secondary" className="shrink-0">
             {industry}
           </Badge>
@@ -77,9 +82,7 @@ export function TalentCard({
       </CardContent>
 
       <CardFooter className="flex items-center justify-between">
-        <div className="hidden text-xs text-muted-foreground sm:block">
-          {/* Ruang kecil untuk status singkat / tagline jika dibutuhkan */}
-        </div>
+        <div className="hidden text-xs text-muted-foreground sm:block" />
         <Button asChild size="sm" className="ml-auto">
           <Link href={"/talenta/" + slug} aria-label={`Lihat profil ${name}`}>
             Lihat Profil

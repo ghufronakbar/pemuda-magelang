@@ -40,7 +40,7 @@ function LikeSubmitButton({
       {pending ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : liked === "yes" ? (
-        <FaHeart className="h-4 w-4" />
+        <FaHeart className="h-4 w-4 text-destructive" />
       ) : (
         <FaRegHeart className="h-4 w-4" />
       )}
