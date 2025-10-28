@@ -87,7 +87,7 @@ export function CommunityCard({
           {/* Ruang kecil untuk status singkat / tagline jika dibutuhkan */}
         </div>
         <Button asChild size="sm" className="ml-auto">
-          <Link href={"/komunitas/" + slug} aria-label={`Lihat profil ${name}`}>
+          <Link href={"/komunitas/" + encodeURIComponent(slug)} aria-label={`Lihat profil ${name}`}>
             Lihat Profil
           </Link>
         </Button>

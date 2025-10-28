@@ -35,7 +35,7 @@ export function ArticleListCard({
           "flex flex-col md:flex-row gap-4 p-4 justify-between",
           "border-b"
         )}
-        href={`/artikel/${slug}`}
+        href={`/artikel/${encodeURIComponent(slug)}`}
         aria-label={`Baca artikel: ${title}`}
       >
         <div className="w-full md:w-1/2 lg:w-2/3">

@@ -7,13 +7,15 @@ import { getAppData } from "@/actions/app-data";
 import { getAllTalents } from "@/actions/talent";
 import { getAllCommunities } from "@/actions/community";
 import { auth } from "@/auth";
+import { getAllHubs } from "@/actions/zhub";
 
 const LandingPage = async () => {
   const session = await auth();
-  const [appData, talents, communities] = await Promise.all([
+  const [appData, talents, communities, zhubs] = await Promise.all([
     getAppData(),
     getAllTalents(),
     getAllCommunities(),
+    getAllHubs(),
   ]);
 
   type PartnerLite = { type?: string };
@@ -34,7 +36,9 @@ const LandingPage = async () => {
   const countCommunity = communities.filter(
     (community: HasStatus) => community?.status === "approved"
   ).length;
-  const countZhub = 0;
+  const countZhub = zhubs
+    .flatMap((zhub) => zhub.hubs)
+    .filter((hub) => hub?.status === "active").length;
 
   return (
     <main>

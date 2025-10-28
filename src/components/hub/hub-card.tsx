@@ -84,7 +84,7 @@ export function HubCard({
 
       <CardFooter className="justify-end mt-auto">
         <Button asChild size="sm">
-          <Link href={"/zhub/" + slug} aria-label={`Buka program ${title}`}>
+          <Link href={"/zhub/" + encodeURIComponent(slug)} aria-label={`Buka program ${title}`}>
             Lihat Program
           </Link>
         </Button>
@@ -94,7 +94,7 @@ export function HubCard({
 
   return (
     <Link
-      href={"/zhub/" + slug}
+      href={"/zhub/" + encodeURIComponent(slug)}
       aria-label={`Buka program ${title}`}
       className="group block"
     >

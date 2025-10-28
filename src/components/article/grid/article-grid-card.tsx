@@ -29,7 +29,7 @@ export function ArticleGridCard({
 
   return (
     <Link
-      href={"/artikel/" + slug}
+      href={"/artikel/" + encodeURIComponent(slug)}
       aria-label={`Baca artikel: ${title}`}
       className="group block"
     >

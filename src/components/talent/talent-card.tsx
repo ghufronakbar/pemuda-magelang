@@ -84,7 +84,7 @@ export function TalentCard({
       <CardFooter className="flex items-center justify-between">
         <div className="hidden text-xs text-muted-foreground sm:block" />
         <Button asChild size="sm" className="ml-auto">
-          <Link href={"/talenta/" + slug} aria-label={`Lihat profil ${name}`}>
+          <Link href={"/talenta/" + encodeURIComponent(slug)} aria-label={`Lihat profil ${name}`}>
             Lihat Profil
           </Link>
         </Button>
