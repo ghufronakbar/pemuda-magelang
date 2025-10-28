@@ -199,7 +199,7 @@ export function FormArticle({ type }: FormArticleProps) {
             />
           </CardContent>
         </Card>
-        <div className="flex flex-row gap-2 mt-4">
+        <div className="flex flex-row gap-2 mt-4 mb-16">
           <Button
             type="submit"
             variant="outline"
