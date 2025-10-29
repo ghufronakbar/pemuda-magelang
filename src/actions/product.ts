@@ -88,6 +88,7 @@ const _setStatusProduct = async (slug: string, formData: FormData) => {
   if (!isInclude) {
     return { ok: false, error: "Status tidak valid" };
   }
+  console.log("STATUS FROM SET STATUS PRODUCT",formData.get("status"));
   const product = await db.product.update({
     where: { slug },
     data: { status: formData.get("status") as ProductStatusEnum },

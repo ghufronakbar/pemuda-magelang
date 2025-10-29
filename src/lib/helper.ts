@@ -66,7 +66,8 @@ const stripAt = (s: string) => {
 }
 
 export const generateSlug = (title: string) => {
-  return `${title.toLowerCase().replace(/ /g, "-")}`;
+  const seconds = Date.now();
+  return `${title.toLowerCase().replace(/ /g, "-")}-${seconds}`;
 };
 
 export const formatIDDate = (d: Date | string) => {

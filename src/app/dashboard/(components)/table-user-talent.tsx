@@ -384,8 +384,16 @@ export function TableUserTalent({
 
                 {type === "talenta" && u.status && (
                   <>
-                    <TableCell>{u.profession ?? "-"}</TableCell>
-                    <TableCell>{u.industry ?? "-"}</TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px] truncate">
+                        {u.profession ?? "-"}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px] truncate">
+                        {u.industry ?? "-"}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <TalentStatusBadge status={u.status} />
                     </TableCell>

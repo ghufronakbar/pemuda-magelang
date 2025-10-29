@@ -13,11 +13,11 @@ export const Pagination = ({
   setPage,
 }: PaginationProps) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-row flex-wrap items-center justify-between">
       <div className="text-xs text-muted-foreground">
         Halaman {currentPage} / {totalPages}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-row flex-wrap items-center gap-2">
         <Button
           variant="outline"
           size="sm"

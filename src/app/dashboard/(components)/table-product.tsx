@@ -282,7 +282,7 @@ export function TableProduct({
                       <div className="max-w-[200px] truncate">
                         {p.talent.name}
                       </div>
-                      <div className="text-[11px] text-muted-foreground truncate">
+                      <div className="max-w-[200px] text-[11px] text-muted-foreground truncate">
                         {p.talent.profession} • {p.talent.industry}
                       </div>
                     </TableCell>
@@ -476,14 +476,12 @@ function ActionButtons({
         </Button>
       )}
 
-      {!isAdmin && (
-        <AlertConfirmation onConfirm={handleDelete}>
-          <Button variant="destructive">
-            <Trash2 className="mr-2 h-4 w-4" />
-            Hapus
-          </Button>
-        </AlertConfirmation>
-      )}
+      <AlertConfirmation onConfirm={handleDelete}>
+        <Button variant="destructive">
+          <Trash2 className="mr-2 h-4 w-4" />
+          Hapus
+        </Button>
+    </AlertConfirmation>
 
       {!isAdmin && status === "draft" && (
         <form action={(fd) => handleSetStatus(fd)}>

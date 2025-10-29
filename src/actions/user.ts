@@ -65,11 +65,13 @@ export const getAllUsers = makeGetUsers();
 // DELETE USER
 
 const _deleteUser = async (id: string) => {
+  // FUFUFAFA
   const user = await db.user.delete({
     where: { id },
     select: { talent: { select: { id: true, slug: true } } },
   });
   revalidateTag(`all-users`);
+  revalidateTag(`communities`);
   revalidateTag(`detail-user:${id}`);
   revalidateTag(`talents`);
   revalidateTag(`detail-talent:${user.talent?.id}`);
