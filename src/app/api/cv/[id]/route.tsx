@@ -210,14 +210,17 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
             <View
               style={[
                 styles.avatar,
-                { justifyContent: "center", alignItems: "center" },
+                {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
               ]}
             >
               <Text>{(talent.name || "T").slice(0, 1).toUpperCase()}</Text>
             </View>
           )}
 
-          <View style={styles.titleWrap}>
+          <View style={{...styles.titleWrap, width: "67%"}}>
             <Text style={styles.name}>{safeText(talent.name)}</Text>
             <Text style={styles.sub}>
               {safeText(talent.profession)}

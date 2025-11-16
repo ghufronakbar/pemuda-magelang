@@ -633,7 +633,7 @@ function ActionButtons({
       {/* View */}
       {item.type === "talenta" && item.status === "approved" && (
         <Button asChild variant="outline">
-          <Link href={`/talenta/${item.slug}`} target="_blank">
+          <Link href={`/talenta/${encodeURIComponent(item.slug ?? "")}`} target="_blank">
             <Eye className="mr-2 h-4 w-4" />
             Lihat
           </Link>

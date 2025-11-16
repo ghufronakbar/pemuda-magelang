@@ -352,7 +352,7 @@ function ActionButtons({
   return (
     <div className="flex items-center gap-2">
       <Button asChild variant="secondary" size="sm">
-        <Link href={`/zhub/${item.slug}`} target="_blank">
+        <Link href={`/zhub/${encodeURIComponent(item.slug ?? "")}`} target="_blank">
           Lihat
         </Link>
       </Button>

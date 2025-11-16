@@ -118,7 +118,7 @@ export const TopArticleCard = ({ data, className }: TopArticleCardProps) => {
                 </TableCell>
                 <TableCell>
                   <Link
-                    href={`/artikel/${item.slug}`}
+                    href={`/artikel/${encodeURIComponent(item.slug ?? "")}`}
                     target="_blank"
                     className="cursor-pointer"
                   >
