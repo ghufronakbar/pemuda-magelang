@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "public"."Hub" ALTER COLUMN "ctaLink" DROP NOT NULL,
-ALTER COLUMN "ctaLink" DROP DEFAULT;
