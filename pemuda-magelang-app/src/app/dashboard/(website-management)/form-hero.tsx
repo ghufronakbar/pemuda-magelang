@@ -1,0 +1,121 @@
+import { useFormAppData } from "@/context/form-app-data-context";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { ImageUploader } from "@/components/custom/image-uploader";
+import { Button } from "@/components/ui/button";
+import { Loader2, Save } from "lucide-react";
+import { Form } from "@/components/ui/form";
+
+export const FormHero = () => {
+  const { form, loading, onSubmit } = useFormAppData();
+
+  if (loading) {
+    return (
+      <Card className="min-h-[400px]">
+        <CardHeader>
+          <CardTitle>Memuat Data</CardTitle>
+          <CardDescription>Harap tunggu</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="h-10 w-full rounded bg-muted" />
+          <div className="h-10 w-full rounded bg-muted" />
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <Form {...form.hero}>
+      <form onSubmit={onSubmit.hero}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Hero</CardTitle>
+            <CardDescription>
+              Judul, deskripsi, gambar & statistik ringkas di landing.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col gap-4 flex-1">
+                <FormField
+                  control={form.hero.control}
+                  name="heroTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Judul</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Judul hero…" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.hero.control}
+                  name="heroDescription"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Deskripsi</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={6}
+                          placeholder="Deskripsi hero…"
+                          className="resize-none min-h-[150px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex-1">
+                <FormField
+                  control={form.hero.control}
+                  name="heroImage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Gambar (Banner Hero)</FormLabel>
+                      <FormControl>
+                        <ImageUploader
+                          image={field.value}
+                          setImage={field.onChange}
+                          id="heroImage"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end">
+              <Button type="submit" disabled={form.hero.formState.isSubmitting}>
+                {form.hero.formState.isSubmitting ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                Simpan
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </form>
+    </Form>
+  );
+};
