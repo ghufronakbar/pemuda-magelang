@@ -44,7 +44,7 @@ services:
     # [PENTING] HAPUS PORTS! 
     # Database tidak boleh diakses langsung dari internet (Port 5432).
     # Aplikasi akses lewat jaringan internal Docker.
-    # ports:
+    ports: !reset []
     #   - "5432:5432" 
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -60,6 +60,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     # [PENTING] HAPUS PORTS!
     # API MinIO hanya diakses oleh Nginx (untuk gambar) dan App (untuk upload) via internal network.
+    ports: !reset []
     # ports:
     #   - "9000:9000"
     #   - "9001:9001"
