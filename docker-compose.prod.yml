@@ -84,9 +84,9 @@ services:
       - "443:443" # HTTPS (SSL)
     volumes:
       # Config Nginx Production
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      # Mount Sertifikat SSL (Dapatkan file ini dari IT Pemerintah atau Certbot)
-      - ./certs:/etc/nginx/certs
+      - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      # Mount seluruh folder Letsencrypt agar symlink terbaca
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     # [HAPUS] extra_hosts tidak diperlukan di Linux Server
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
