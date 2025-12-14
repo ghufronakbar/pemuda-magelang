@@ -1,0 +1,125 @@
+services:
+  # --- APP ---
+  app:
+    build:
+      context: ./pemuda-magelang-app
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2G
+    depends_on:
+      # App menunggu migrasi selesai dulu baru start
+      migrator:
+        condition: service_completed_successfully
+
+  # --- MIGRATOR (SERVICE BARU) ---
+  migrator:
+    # Kita gunakan image yang sama dengan app, tapi override command-nya
+    build:
+      context: ./pemuda-magelang-app
+      dockerfile: Dockerfile
+    # Command ini akan dijalankan sekali lalu container mati
+    command: npx prisma migrate deploy
+    environment:
+      # Perlu koneksi DB
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      db:
+        condition: service_started
+
+  # --- DATABASE ---
+  db:
+    image: postgres:16-alpine
+    container_name: pemuda_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      # Expose 5432 ke localhost agar Prisma di Mac bisa migrate/push
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # --- OBJECT STORAGE (GAMBAR) ---
+  minio:
+    image: minio/minio
+    container_name: pemuda_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      # API Port (diperlukan Next.js untuk upload via SDK)
+      - "9000:9000"
+      # Console UI (Buka localhost:9001 untuk bikin bucket manual)
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  minio-setup:
+    image: minio/mc
+    container_name: pemuda_minio_setup
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c " # Tunggu sebentar sampai MinIO siap sleep 5; # Login ke MinIO (gunakan host 'minio' port 9000) /usr/bin/mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; # Buat Bucket (Ignore error jika sudah ada) /usr/bin/mc mb --ignore-existing myminio/${S3_BUCKET_NAME}; # Set Policy jadi Public (Download) /usr/bin/mc anonymous set download myminio/${S3_BUCKET_NAME}; echo '✅ MinIO Bucket & Policy Configured!'; exit 0; "
+
+  # --- REVERSE PROXY ---
+  gateway:
+    image: nginx:alpine
+    container_name: pemuda_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    extra_hosts:
+      # Memastikan Nginx bisa mengenali 'host.docker.internal' di Linux/Mac
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+      - minio
+
+  backup-service:
+    build: ./pemuda-magelang-backup
+    container_name: pemuda_backup
+    restart: always
+    depends_on:
+      - db
+      - minio
+    volumes:
+      # Mount folder agar state.json persisten (tidak hilang saat restart container)
+      - ./pemuda-magelang-backup/state.json:/app/state.json
+    environment:
+      # Database Config
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+      # MinIO Config
+      - S3_ENDPOINT=http://minio:9000
+      - S3_ACCESS_KEY=${MINIO_ROOT_USER}
+      - S3_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+
+      # CLOUDINARY
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+
+volumes:
+  postgres_data:
+  minio_data:

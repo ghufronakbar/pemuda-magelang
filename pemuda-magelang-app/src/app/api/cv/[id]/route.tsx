@@ -21,7 +21,7 @@ import type {
 } from "@prisma/client";
 import { socialMediaPlatformEnum } from "@/enum/social-media-platform-enum";
 import { id as idLocale } from "date-fns/locale";
-import { cdnUrlWithBaseUrl } from "@/components/custom/cdn-image";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -203,7 +203,7 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
         <View style={styles.header}>
           {talent.profilePicture ? (
             <Image
-              src={cdnUrlWithBaseUrl(talent.profilePicture)}
+              src={cdnUrl(talent.profilePicture)}
               style={styles.avatar}
             />
           ) : (
@@ -371,7 +371,7 @@ function CvDocument({ talent }: { talent: TalentWithRelations }) {
                     ) : null}
                     {a.image ? (
                       <Image
-                        src={cdnUrlWithBaseUrl(a.image ?? "")}
+                        src={cdnUrl(a.image ?? "")}
                         style={styles.thumb}
                       />
                     ) : null}

@@ -1,26 +1,25 @@
-// "use client";
 // src/components/custom/cdn-image.tsx
 import Image, { ImageProps } from "next/image";
 import { forwardRef } from "react";
-import { BASE_URL, CDN_URL } from "@/constants";
+import { NEXT_PUBLIC_IMAGE_PREFIX } from "@/constants/s3";
 
-export function cdnUrl(key: string) {
-  if (key.startsWith("http")) return key;
-  if (key.startsWith("/static")) return key;
-  const base = (CDN_URL || "").replace(/\/+$/, "");
-  const rel = key.replace(/^\/+/, "");
-  return `${base}/${rel}`;
+export function cdnUrl(key: string): string {
+  if (!key) return ""
+  if (key.startsWith("http")) return key
+  if (key.includes("static")) return key
+  return `${NEXT_PUBLIC_IMAGE_PREFIX}${key}`;
 }
 
-export function cdnUrlWithBaseUrl(key: string) {
-  return `${BASE_URL}${cdnUrl(key)}`;
-}
 
 type Props = Omit<ImageProps, "src"> & { uniqueKey: string };
 
 export const CdnImage = forwardRef<HTMLImageElement, Props>(
   ({ uniqueKey, alt, ...rest }, ref) => {
     const src = cdnUrl(uniqueKey);
+    // return <div className="w-full h-full">
+    //   <Image ref={ref} src={src} alt={alt ?? ""} {...rest} unoptimized />
+    //   <span>{src}</span>
+    // </div>
     return <Image ref={ref} src={src} alt={alt ?? ""} {...rest} unoptimized />;
   }
 );

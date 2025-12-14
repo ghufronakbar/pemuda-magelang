@@ -7,7 +7,7 @@ import { z } from "zod";
 import { BASE_URL, APP_NAME } from "@/constants";
 import bcrypt from "bcryptjs";
 import { getAppData } from "@/actions/app-data";
-import { cdnUrlWithBaseUrl } from "@/components/custom/cdn-image";
+import { cdnUrl } from "@/components/custom/cdn-image";
 
 // --- Helper: build safe URL path ---
 const resetPasswordLink = (token: string) =>
@@ -17,7 +17,7 @@ const getLogoEmail = async () => {
   try {
     const appData = await getAppData();
     return (
-      cdnUrlWithBaseUrl(appData.baseLogo) ||
+      cdnUrl(appData.baseLogo) ||
       "https://pemuda.magelangkota.go.id/favicon.ico"
     );
   } catch (error) {
