@@ -88,6 +88,8 @@ services:
       - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
       # Mount seluruh folder Letsencrypt agar symlink terbaca
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      # [BARU] Mount folder maintenance agar bisa kirim sinyal ke Nginx
+      - ./nginx/maintenance:/etc/nginx/maintenance_control
     # [HAPUS] extra_hosts tidak diperlukan di Linux Server
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
