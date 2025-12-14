@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 // [TAMBAH] Import CreateBucketCommand dan HeadBucketCommand
@@ -12,8 +13,8 @@ const S3_CONFIG = {
     endpoint: 'http://localhost:9000',
     region: 'us-east-1',
     credentials: {
-        accessKeyId: 'minio_admin',
-        secretAccessKey: '4saMitakaWangyy1919'
+        accessKeyId: process.env.S3_ACCESS_KEY,
+        secretAccessKey: process.env.S3_SECRET_KEY
     },
     forcePathStyle: true
 };
